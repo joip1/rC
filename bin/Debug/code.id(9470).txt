@@ -1,0 +1,6 @@
+str myself >> rodrigo
+Write &>Eu sou o <&
+WriteStr &>myself<&
+newline
+Write &> era eu <&
+save = true

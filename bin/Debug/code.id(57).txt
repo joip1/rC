@@ -1,0 +1,3 @@
+save = true
+number myNumber >> 5
+Write &>myNumber<&

@@ -1,0 +1,22 @@
+number myAge >> 12
+str myName >> Rodrigo
+str myLastName >> Cabaco
+str myDadAge >> 45
+str myMomsAge >> 40
+str mySistersAge >> 9
+str myDog >> Mia
+str myCat >> Lucy
+Write &>My name is: <&
+WriteStr &>myName, myLastName <&
+newline
+Write &>My age is: <&'
+
+
+WriteNum &> myAge <&
+newline
+Write &> These are my Family's ages: <&
+WriteStr &>myDadAge, myMomsAge, mySistersAge
+newline
+Write &>These are my pets <&
+WriteStr &> myDog, myCat <&
+save = true

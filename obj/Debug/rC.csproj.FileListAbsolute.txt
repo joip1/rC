@@ -1,0 +1,7 @@
+C:\Users\Rodrigo\source\repos\rC\bin\Debug\rC.exe.config
+C:\Users\Rodrigo\source\repos\rC\bin\Debug\rC.exe
+C:\Users\Rodrigo\source\repos\rC\bin\Debug\rC.pdb
+C:\Users\Rodrigo\source\repos\rC\obj\Debug\rC.csprojAssemblyReference.cache
+C:\Users\Rodrigo\source\repos\rC\obj\Debug\rC.csproj.CoreCompileInputs.cache
+C:\Users\Rodrigo\source\repos\rC\obj\Debug\rC.exe
+C:\Users\Rodrigo\source\repos\rC\obj\Debug\rC.pdb
