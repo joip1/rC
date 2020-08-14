@@ -1,0 +1,92 @@
+# rC
+Open Source Programming Language Created By Rodrigo Cabaço =)
+This is a free and totaly open source compiler with rC built-in.
+Feel free to use it!
+
+
+
+
+Docs and Methods:
+
+
+Variable defenitions:
+
+string:
+str name >> value
+  
+  
+  
+number:
+number name >> value
+
+
+Output / Write:
+
+
+
+Write &>something to print <&
+
+
+
+Writing a string:
+WriteStr &> variable name <&
+
+
+
+Writing a number:
+WriteNum &> variable name <&
+                               
+PLEASE NOTE THAT EVERY THING YOU WRITE STAYS ON THE SAME LINE UNTIL YOU WRITE "newline"!
+example:
+
+
+str name >> rodrigo  
+str age >> 12  
+Write &>My name and age are: <&  
+newline  
+WriteStr &>name<&  
+WriteNum &>age<&  
+
+Output:
+My name and age are: 
+rodrigo 112
+
+
+
+
+
+example 2:
+str name >> rodrigo
+str age >> 12
+Write &>My name and age are: <&
+WriteStr &>name<&
+WriteNum &>age<&
+
+Output:
+My name and age are: rodrigo 12
+
+
+
+
+
+Modifying a Line:
+
+line.modify(line number): new line content
+
+
+
+
+Saving and outputing your code to a log:
+
+In order to save your code you must type: "save(this)" in your last line of code.
+
+
+
+
+Compiling your code:
+
+When you are finished and want to test or compile your code, simply type: rcompiler.compile 
+
+
+
+< Rodrigo Cabaço, rC >
