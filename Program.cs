@@ -16,7 +16,7 @@ namespace rC
         {
             string readline;
             List<string> codeLines = new List<string>();
-            string[] varTypes = new string[] { "number", "str", "save(this)", "Write", "WriteStr", "WriteNum"};
+            string[] varTypes = new string[] { "number", "str", "save(this)", "Write", "WriteStr", "WriteNum" };
             string[] methods = new string[] { "Write", "WriteStr", "WriteNum" };
 
 
@@ -26,19 +26,19 @@ namespace rC
             while ((readline = Console.ReadLine()).ToLower() != "rcompiler.compile")
             {
 
-                
+
                 if (varTypes.Any(readline.StartsWith))
                 {
                     Console.Clear();
                     foreach (var line in codeLines)
                     {
-                        if(line == "save(this)")
+                        if (line == "save(this)")
                         {
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.Write(codeLines.IndexOf(line) + " " + line + "\n");
                             Console.ResetColor();
                         }
-                        if (methods.Any(line.StartsWith) && line != "save(this)")
+                         else if (methods.Any(line.StartsWith) && line != "save(this)")
                         {
                             Console.ResetColor();
                             Console.Write(codeLines.IndexOf(line) + " ");
@@ -54,7 +54,7 @@ namespace rC
                                 Console.Write(" <---- Invalid Syntax\n");
                             }
                         }
-                        if (varTypes.Any(line.StartsWith) && methods.Any(line.StartsWith) == false && line != "save(this)")
+                        else if (varTypes.Any(line.StartsWith) && methods.Any(line.StartsWith) == false && line != "save(this)")
                         {
                             Console.ResetColor();
                             Console.Write(codeLines.IndexOf(line) + " ");
@@ -70,9 +70,13 @@ namespace rC
                                 Console.Write(" <---- Invalid Syntax\n");
                             }
                         }
-                       
+                        else
+                        {
+                            Console.Write(codeLines.IndexOf(line) + " " + line + "\n");
+                        }
+
                     }
-                    if(methods.Any(readline.StartsWith) == false && readline != "save(this)")
+                    if (methods.Any(readline.StartsWith) == false && readline != "save(this)")
                     {
                         Console.ResetColor();
                         Console.Write(codeLines.Count + " ");
@@ -89,7 +93,8 @@ namespace rC
                         }
 
 
-                    } else if (readline == "save(this)")
+                    }
+                    else if (readline == "save(this)")
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.Write(codeLines.Count + " " + readline + "\n");
@@ -117,7 +122,7 @@ namespace rC
 
 
                 }
-                
+
                 if (readline.StartsWith("line.modify") && readline.Contains(":"))
                 {
                     int modifyLineIndex = Convert.ToInt32(readline.Split(new[] { "line.modify(" }, StringSplitOptions.None).Last().Split(')').First());
@@ -134,12 +139,7 @@ namespace rC
                     {
                         if (varTypes.Any(modified.StartsWith))
                         {
-                            if (modified == "save(this)")
-                            {
-                                Console.ForegroundColor = ConsoleColor.Yellow;
-                                Console.Write(codeLines.IndexOf(modified) + " " + modified + "\n");
-                                Console.ResetColor();
-                            }
+
                             if (methods.Any(modified.StartsWith) == false && modified != "save(this)")
                             {
 
@@ -157,6 +157,12 @@ namespace rC
                                 {
                                     Console.Write(" <---- Invalid Syntax\n");
                                 }
+                            }
+                            else if (modified == "save(this)")
+                            {
+                                Console.ForegroundColor = ConsoleColor.Yellow;
+                                Console.Write(codeLines.IndexOf(modified) + " " + modified + "\n");
+                                Console.ResetColor();
                             }
                             else
                             {
@@ -176,7 +182,7 @@ namespace rC
                                 }
                             }
                         }
-                        
+
                     }
                 }
                 else
