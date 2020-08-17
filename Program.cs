@@ -17,9 +17,9 @@ namespace rC
         {
             string readline;
             List<string> codeLines = new List<string>();
-            string[] varTypes = new string[] { "number", "str", "save(this)", "Write", "WriteStr", "WriteNum" , "for"};
+            string[] varTypes = new string[] { "number", "str", "save(this)", "Write", "WriteStr", "WriteNum" , "for", "ReadLine"};
             string[] methods = new string[] { "Write", "WriteStr", "WriteNum" };
-            string [] loops = new string[] {"for"};
+            string [] loops = new string[] {"for", "$readline"};
 
             Console.Write("0 ");
 

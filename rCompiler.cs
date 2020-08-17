@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using System.Runtime.InteropServices;
 
 namespace rC
 {
@@ -24,18 +23,43 @@ namespace rC
             //read code line by line
             foreach (var line in code)
             {
-                if (line.Contains("number") && line.Contains(">>") && line.ToLower().StartsWith("for") == false && line.ToLower().Contains("in range %") == false && line.Contains("$>") == false)
+
+                if (line.ToLower().Contains("$readline"))
+                {
+                    Console.ReadLine();
+                }
+
+                if (line.Contains("number") && line.Contains(">>")
+                    && line.ToLower().StartsWith("for") == false 
+                    && line.ToLower().Contains("in range %") == false 
+                    && line.Contains("$>") == false)
                 {
                     try
                     {
                         if (numberNames.Contains(line.Split(' ')[1].Split('>').First()))
                         {
-                            numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(line.Split('>').Last().Split(' ').Last());
+                            if (line.ToLower().Contains("$readline") == false)
+                            {
+                                numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(line.Split('>').Last().Split(' ').Last());
+                            }
+                            else if (line.ToLower().Contains("$readline") == true)
+                            {
+                                numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(Console.ReadLine());
+                            }
                         }
                         else
                         {
-                            numberNames.Add(line.Split(' ')[1].Split('>').First());
-                            numberValues.Add(Convert.ToDouble(line.Split('>').Last().Split(' ').Last()));
+                            if (line.ToLower().Contains("$readline") == false)
+                            {
+                                numberNames.Add(line.Split(' ')[1].Split('>').First());
+                                numberValues.Add(Convert.ToDouble(line.Split('>').Last().Split(' ').Last()));
+                            }
+                            else if (line.ToLower().Contains("$readline") == true)
+                            {
+                                numberNames.Add(line.Split(' ')[1].Split('>').First());
+                                numberValues.Add(Convert.ToDouble(Console.ReadLine()));
+                            }
+                         
                         }
                     }
                     catch
@@ -45,18 +69,38 @@ namespace rC
                     }
                 }
 
-                if (line.Contains("str") && line.Contains(">>") && line.ToLower().StartsWith("for") == false && line.ToLower().Contains("in range %") == false && line.Contains("$>") == false)
+                //string definer
+                if (line.Contains("str")
+                    && line.Contains(">>")
+                    && line.ToLower().StartsWith("for") == false && line.ToLower().Contains("in range %") == false
+                    && line.Contains("$>") == false)
                 {
                     try
                     {
                         if (strNames.Contains(line.Split(' ')[1].Split('>').First()))
                         {
-                            strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = line.Split('>').Last();
+                            if(line.ToLower().Contains("$readline") == false)
+                            {
+                                strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = line.Split('>').Last();
+                            }
+                            else if (line.ToLower().Contains("$readline") == true)
+                            {
+                                strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Console.ReadLine();
+                            }
                         }
                         else
                         {
-                            strNames.Add(line.Split(' ')[1].Split('>').First());
-                            strValues.Add(line.Split('>').Last());
+
+                            if (line.ToLower().Contains("$readline") == false)
+                            {
+                                strNames.Add(line.Split(' ')[1].Split('>').First());
+                                strValues.Add(line.Split('>').Last());
+                            }
+                            else if (line.ToLower().Contains("$readline") == true)
+                            {
+                                strNames.Add(line.Split(' ')[1].Split('>').First());
+                                strValues.Add(Console.ReadLine());
+                            }
                         }
 
                     }
@@ -92,7 +136,11 @@ namespace rC
                     Console.Write(line.Split(new[] { "Write &>" }, StringSplitOptions.None).Last().ToString().Split(new[] { "<&" }, StringSplitOptions.None).First().ToString() + " ");
 
                 }
-                else if (line.Contains("WriteStr") && line.Contains("&>") && line.ToLower().StartsWith("for") == false && line.ToLower().Contains("in range %") == false && line.Contains("$>") == false)
+                else if (line.Contains("WriteStr")
+                    && line.Contains("&>") 
+                    && line.ToLower().StartsWith("for") == false 
+                    && line.ToLower().Contains("in range %") == false
+                    && line.Contains("$>") == false)
                 {
                     foreach (var name in strNames)
                     {
@@ -110,7 +158,11 @@ namespace rC
                     }
 
                 }
-                else if (line.Contains("WriteNum") && line.Contains("&>") && line.ToLower().StartsWith("for") == false && line.ToLower().Contains("in range %") == false && line.Contains("$>") == false)
+                else if (line.Contains("WriteNum") 
+                    && line.Contains("&>") 
+                    && line.ToLower().StartsWith("for") == false 
+                    && line.ToLower().Contains("in range %") == false
+                    && line.Contains("$>") == false)
                 {
                     foreach (var name in numberNames)
                     {
@@ -171,12 +223,6 @@ namespace rC
                     }
                     ForLoop(range, looper, loopContent, numberNames, numberValues, strNames, strValues);
                 }
-
-
-
-
-
-
 
             }
 

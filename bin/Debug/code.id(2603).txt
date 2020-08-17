@@ -1,4 +1,0 @@
-str me >> rodrigo
-Write &> me <&
-save = true
-this.rc.compiler.compile

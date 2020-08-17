@@ -1,7 +1,0 @@
-save = true
-//this is a comment!
-Write &> Hello
-Write &> Hello <&
-Write &> My Numbers are <&
-number number >> 10
-Write &> number <&

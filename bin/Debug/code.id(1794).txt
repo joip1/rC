@@ -1,4 +1,0 @@
-save = true
-str me > rodrigo
-
-Write &>me<&

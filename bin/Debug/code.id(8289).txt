@@ -1,8 +1,0 @@
-this.save = true
-str me >> rodrigo
-Write &> Hello<&
-Write &>me<&
-
-
-rodrigo  Hello
-rodrigo me
