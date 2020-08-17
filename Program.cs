@@ -38,7 +38,7 @@ namespace rC
                             Console.Write(codeLines.IndexOf(line) + " " + line + "\n");
                             Console.ResetColor();
                         }
-                         else if (methods.Any(line.StartsWith) && line != "save(this)")
+                         else if (methods.Any(line.Contains) && line != "save(this)")
                         {
                             Console.ResetColor();
                             Console.Write(codeLines.IndexOf(line) + " ");
@@ -54,7 +54,7 @@ namespace rC
                                 Console.Write(" <---- Invalid Syntax\n");
                             }
                         }
-                        else if (varTypes.Any(line.StartsWith) && methods.Any(line.StartsWith) == false && line != "save(this)")
+                        else if (varTypes.Any(line.Contains) && methods.Any(line.Contains) == false && line != "save(this)")
                         {
                             Console.ResetColor();
                             Console.Write(codeLines.IndexOf(line) + " ");
@@ -76,7 +76,7 @@ namespace rC
                         }
 
                     }
-                    if (methods.Any(readline.StartsWith) == false && readline != "save(this)")
+                    if (methods.Any(readline.Contains) == false && readline != "save(this)")
                     {
                         Console.ResetColor();
                         Console.Write(codeLines.Count + " ");
@@ -191,7 +191,12 @@ namespace rC
                     Console.Write("" + codeLines.Count + " ");
                 }
             }
-            rCompiler.Compile(codeLines);
+            Console.Clear();
+            List<string> numberNames = new List<string>();
+            List<double> numberValues = new List<double>();
+            List<string> strNames = new List<string>();
+            List<string> strValues = new List<string>();
+            rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues);
             Console.WriteLine("\n------------------------------------------------------\nCompiled, Output is Above\nPress enter to exit...");
             Console.ReadLine();
         }
