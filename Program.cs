@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Runtime.Remoting.Lifetime;
 
 namespace rC
 {
@@ -16,9 +17,9 @@ namespace rC
         {
             string readline;
             List<string> codeLines = new List<string>();
-            string[] varTypes = new string[] { "number", "str", "save(this)", "Write", "WriteStr", "WriteNum" };
+            string[] varTypes = new string[] { "number", "str", "save(this)", "Write", "WriteStr", "WriteNum" , "for"};
             string[] methods = new string[] { "Write", "WriteStr", "WriteNum" };
-
+            string [] loops = new string[] {"for"};
 
             Console.Write("0 ");
 
@@ -32,13 +33,13 @@ namespace rC
                     Console.Clear();
                     foreach (var line in codeLines)
                     {
-                        if (line == "save(this)")
+                        if (line == "save(this)" && loops.Any(line.Contains) == false)
                         {
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.Write(codeLines.IndexOf(line) + " " + line + "\n");
                             Console.ResetColor();
                         }
-                         else if (methods.Any(line.Contains) && line != "save(this)")
+                        else if (methods.Any(line.StartsWith) && line != "save(this)" && loops.Any(line.StartsWith) == false)
                         {
                             Console.ResetColor();
                             Console.Write(codeLines.IndexOf(line) + " ");
@@ -54,7 +55,7 @@ namespace rC
                                 Console.Write(" <---- Invalid Syntax\n");
                             }
                         }
-                        else if (varTypes.Any(line.Contains) && methods.Any(line.Contains) == false && line != "save(this)")
+                        else if (varTypes.Any(line.StartsWith) && loops.Any(line.StartsWith) == false && methods.Any(line.StartsWith) == false && line != "save(this)" && loops.Any(line.StartsWith) == false)
                         {
                             Console.ResetColor();
                             Console.Write(codeLines.IndexOf(line) + " ");
@@ -70,13 +71,23 @@ namespace rC
                                 Console.Write(" <---- Invalid Syntax\n");
                             }
                         }
+                        else if (loops.Any(line.StartsWith) && methods.Any(line.StartsWith) == false && line != "save(this)")
+                        {
+                            Console.ResetColor();
+                            Console.Write(codeLines.IndexOf(line) + " ");
+                            Console.ForegroundColor = ConsoleColor.Blue;
+                            Console.Write(line.Split(' ').First());
+                            Console.ResetColor();
+                            Console.Write(line.Split(new[] { line.Split(' ').First() }, StringSplitOptions.None).Last() + "\n");
+                            Console.ResetColor();
+                        }
                         else
                         {
                             Console.Write(codeLines.IndexOf(line) + " " + line + "\n");
                         }
 
                     }
-                    if (methods.Any(readline.Contains) == false && readline != "save(this)")
+                    if (methods.Any(readline.Contains) == false && readline != "save(this)"  && loops.Any(readline.Contains) == false)
                     {
                         Console.ResetColor();
                         Console.Write(codeLines.Count + " ");
@@ -98,6 +109,15 @@ namespace rC
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.Write(codeLines.Count + " " + readline + "\n");
+                        Console.ResetColor();
+                    }else if (loops.Any(readline.StartsWith))
+                    {
+                        Console.ResetColor();
+                        Console.Write(codeLines.Count + " ");
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.Write(readline.Split(' ').First());
+                        Console.ResetColor();
+                        Console.Write(readline.Split(new[] { readline.Split(' ').First() }, StringSplitOptions.None).Last() + "\n");
                         Console.ResetColor();
                     }
                     else
@@ -140,7 +160,7 @@ namespace rC
                         if (varTypes.Any(modified.StartsWith))
                         {
 
-                            if (methods.Any(modified.StartsWith) == false && modified != "save(this)")
+                            if (methods.Any(modified.StartsWith) == false && modified != "save(this)" && loops.Any(modified.StartsWith) == false)
                             {
 
 
@@ -162,6 +182,16 @@ namespace rC
                             {
                                 Console.ForegroundColor = ConsoleColor.Yellow;
                                 Console.Write(codeLines.IndexOf(modified) + " " + modified + "\n");
+                                Console.ResetColor();
+                            }
+                            else if (loops.Any(modified.StartsWith))
+                            {
+                                Console.ResetColor();
+                                Console.Write(codeLines.Count + " ");
+                                Console.ForegroundColor = ConsoleColor.Blue;
+                                Console.Write(modified.Split(' ').First());
+                                Console.ResetColor();
+                                Console.Write(modified.Split(new[] { modified.Split(' ').First() }, StringSplitOptions.None).Last() + "\n");
                                 Console.ResetColor();
                             }
                             else
