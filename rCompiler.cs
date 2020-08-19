@@ -241,7 +241,6 @@ namespace rC
 
                 }
 
-                //TODO REMOVE CODE WHEN EXECUTED
                 else if (line.ToLower().StartsWith("for") && line.ToLower().Contains("in range %") && line.Contains("$>"))
                 {
                     int range = 0;
