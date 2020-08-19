@@ -9,6 +9,8 @@ namespace rC
 {
     public class rCompiler
     {
+
+        //new to docs == for // readline // color // ;
         //receive every variable for further changes;
         public static void Compile(List<string> code, 
             List<string> numberNames, 
@@ -24,7 +26,26 @@ namespace rC
             foreach (var line in code)
             {
 
-                if (line.ToLower().Contains("$readline"))
+
+                //color indicators
+                if (line.ToLower() == "color.reset")
+                {
+                    Console.ResetColor();
+                }
+                if(line.ToLower() == "color.green")
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                }
+                if (line.ToLower() == "color.blue")
+                {
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                }
+                if (line.ToLower() == "color.red")
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                }
+
+                if (line.ToLower() == ("$readline"))
                 {
                     Console.ReadLine();
                 }
@@ -40,7 +61,14 @@ namespace rC
                         {
                             if (line.ToLower().Contains("$readline") == false)
                             {
-                                numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(line.Split('>').Last().Split(' ').Last());
+                                try
+                                {
+                                    numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(line.Split('>').Last().Split(' ').Last());
+                                }
+                                catch
+                                {
+                                    numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(line.Split('>').Last());
+                                }
                             }
                             else if (line.ToLower().Contains("$readline") == true)
                             {
@@ -52,7 +80,14 @@ namespace rC
                             if (line.ToLower().Contains("$readline") == false)
                             {
                                 numberNames.Add(line.Split(' ')[1].Split('>').First());
-                                numberValues.Add(Convert.ToDouble(line.Split('>').Last().Split(' ').Last()));
+                                try
+                                {
+                                    numberValues.Add(Convert.ToDouble(line.Split('>').Last().Split(' ').Last()));
+                                }
+                                catch
+                                {
+                                    numberValues.Add(Convert.ToDouble(line.Split('>').Last()));
+                                }
                             }
                             else if (line.ToLower().Contains("$readline") == true)
                             {
@@ -209,7 +244,23 @@ namespace rC
                 //TODO REMOVE CODE WHEN EXECUTED
                 else if (line.ToLower().StartsWith("for") && line.ToLower().Contains("in range %") && line.Contains("$>"))
                 {
-                    int range = Convert.ToInt32(line.ToLower().Split(new[] { "in range %" }, StringSplitOptions.None).Last().Split(new[] { " $>" }, StringSplitOptions.None).First());
+                    int range = 0;
+                    try
+                    {
+                        range = Convert.ToInt32(line.ToLower().Split(new[] { "in range %" }, StringSplitOptions.None).Last().Split(new[] { " $>" }, StringSplitOptions.None).First());
+                    }
+                    catch
+                    {
+                        try
+                        {
+                            range = Convert.ToInt32(numberValues[numberNames.IndexOf(line.ToLower().Split(new[] { "in range % " }, StringSplitOptions.None).Last().Split(new[] { " $>" }, StringSplitOptions.None).First())]);
+                        }
+                        catch
+                        {
+                            range = Convert.ToInt32(numberValues[numberNames.IndexOf(line.ToLower().Split(new[] { "in range %" }, StringSplitOptions.None).Last().Split(new[] { " $>" }, StringSplitOptions.None).First())]);
+                        }
+                    }
+
                     string looper = line.ToLower().Split(new[] { "for" }, StringSplitOptions.None).Last().Split(new[] { "in range %" }, StringSplitOptions.None).First();
                     var getContent = line.Split(new[] { "$>" }, StringSplitOptions.None);
                     List<string> loopContent = new List<string>();
@@ -225,7 +276,7 @@ namespace rC
                 }
 
             }
-
+            Console.ResetColor();
         }
         //receive every variable;
         public static void ForLoop(int range, 
@@ -241,6 +292,6 @@ namespace rC
                 Compile(loopContent, numberNames, numberValues, strNames, strValues);
             }
         }
-
+        
     }
 }

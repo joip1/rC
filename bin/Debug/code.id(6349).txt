@@ -1,0 +1,8 @@
+color.blue
+Write &>Enter Your Name:<&
+
+str name >> $readline
+newln
+Write &>Your name is: <&
+WriteStr &>name<&
+save(this)

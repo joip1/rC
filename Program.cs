@@ -17,9 +17,9 @@ namespace rC
         {
             string readline;
             List<string> codeLines = new List<string>();
-            string[] varTypes = new string[] { "number", "str", "save(this)", "Write", "WriteStr", "WriteNum" , "for", "ReadLine"};
-            string[] methods = new string[] { "Write", "WriteStr", "WriteNum" };
-            string [] loops = new string[] {"for", "$readline"};
+            string[] varTypes = new string[] { "number", "str", "save(this)", "Write", "WriteStr", "WriteNum" , "for", "color"};
+            string[] methods = new string[] { "Write", "WriteStr", "WriteNum"};
+            string [] loops = new string[] {"for", "color"};
 
             Console.Write("0 ");
 
@@ -157,8 +157,13 @@ namespace rC
                     Console.Clear();
                     foreach (var modified in codeLines)
                     {
+                        if (modified == "newline")
+                        {
+                            Console.WriteLine("newline");
+                        }
                         if (varTypes.Any(modified.StartsWith))
                         {
+                           
 
                             if (methods.Any(modified.StartsWith) == false && modified != "save(this)" && loops.Any(modified.StartsWith) == false)
                             {
