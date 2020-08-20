@@ -28,19 +28,19 @@ namespace rC
 
 
                 //color indicators
-                if (line.ToLower() == "color.reset")
+                if (line.ToLower().Contains("color.reset"))
                 {
                     Console.ResetColor();
                 }
-                if(line.ToLower() == "color.green")
+                else if(line.ToLower().Contains("color.green"))
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
                 }
-                if (line.ToLower() == "color.blue")
+                else if (line.ToLower().Contains("color.blue"))
                 {
                     Console.ForegroundColor = ConsoleColor.Blue;
                 }
-                if (line.ToLower() == "color.red")
+                else if (line.ToLower().Contains("color.red"))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                 }
@@ -172,8 +172,8 @@ namespace rC
 
                 }
                 else if (line.Contains("WriteStr")
-                    && line.Contains("&>") 
-                    && line.ToLower().StartsWith("for") == false 
+                    && line.Contains("&>")
+                    && line.ToLower().StartsWith("for") == false
                     && line.ToLower().Contains("in range %") == false
                     && line.Contains("$>") == false)
                 {
@@ -193,9 +193,9 @@ namespace rC
                     }
 
                 }
-                else if (line.Contains("WriteNum") 
-                    && line.Contains("&>") 
-                    && line.ToLower().StartsWith("for") == false 
+                else if (line.Contains("WriteNum")
+                    && line.Contains("&>")
+                    && line.ToLower().StartsWith("for") == false
                     && line.ToLower().Contains("in range %") == false
                     && line.Contains("$>") == false)
                 {
@@ -221,10 +221,10 @@ namespace rC
                     //save
 
                 }
-                else if (line == "save(this)")
+                else if (line.StartsWith("save(this)") && line.Contains("as") == false)
                 {
                     id = new Random().Next(1, 10000);
-                    StreamWriter writer = File.CreateText("code.id(" + id + ").txt");
+                    StreamWriter writer = File.CreateText("code.id(" + id + ").rc");
                     foreach (var lineToSave in code)
                     {
                         writer.WriteLine(lineToSave);
@@ -234,6 +234,15 @@ namespace rC
                         Program.WriteId(id);
                     }
 
+                    writer.Close();
+                }
+                else if (line.StartsWith("save(this)") && line.Contains("as") == true)
+                {
+                    StreamWriter writer = File.CreateText(Console.ReadLine().Split(new[] { "as" }, StringSplitOptions.None).Last() + ".rc");
+                    foreach (var lineToSave in code)
+                    {
+                        writer.WriteLine(lineToSave);
+                    }
                     writer.Close();
                 }
                 else if (line == "save = false")
@@ -272,6 +281,31 @@ namespace rC
                         }
                     }
                     ForLoop(range, looper, loopContent, numberNames, numberValues, strNames, strValues);
+                }else if(line.StartsWith("load >>"))
+                {
+                    string fileToCompile = line.Split(new[] { "load >> " }, StringSplitOptions.None).Last();
+                    List<string> CompileFile = new List<string>();
+                    if(File.Exists(line.Split(new[] { "load >> " }, StringSplitOptions.None).Last()))
+                    {
+                        StreamReader reader = new StreamReader(fileToCompile);
+                        string lineReader;
+                        while((lineReader = reader.ReadLine()) != null)
+                        {
+                            CompileFile.Add(lineReader);
+                        }
+                        string isVisualizing;
+                        Console.WriteLine("Do you want to Visualize it's code (Y/n): ");
+                        isVisualizing = Console.ReadLine();
+                        if(isVisualizing.ToLower() != "n")
+                        {
+                            Console.WriteLine("\n" + fileToCompile + " Code: \n");
+                            foreach (var lineToShow in CompileFile)
+                            {
+                                Console.WriteLine(CompileFile.IndexOf(lineToShow) + " " + lineToShow);
+                            }
+                        }
+                        Compile(CompileFile, numberNames, numberValues, strNames, strValues);
+                    }
                 }
 
             }

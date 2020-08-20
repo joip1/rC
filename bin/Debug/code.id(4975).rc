@@ -1,0 +1,8 @@
+number idade >> 9
+str nome >> Margarida
+Write &> O meu nome é <&
+WriteStr &>nome<&
+newline
+Write &>A minha idade é <&
+WriteNum &>idade<&
+save(this)
