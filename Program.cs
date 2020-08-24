@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Runtime.Remoting.Lifetime;
+using System.Net.Cache;
 
 namespace rC
 {
@@ -17,23 +18,45 @@ namespace rC
         {
             string readline;
             List<string> codeLines = new List<string>();
-            string[] varTypes = new string[] { "number", "str", "save(this)", "Write", "WriteStr", "WriteNum" , "for", "color"};
+            string[] varTypes = new string[] { "number", "str", "save(this)", "Write", "WriteStr", "WriteNum" , "for", "color", "if"};
             string[] methods = new string[] { "Write", "WriteStr", "WriteNum"};
-            string [] loops = new string[] {"for", "color"};
+            string [] loops = new string[] {"for", "color", "if"};
+            bool isCompiling = true;
+            List<string> numberNames = new List<string>();
+            List<double> numberValues = new List<double>();
+            List<string> strNames = new List<string>();
+            List<string> strValues = new List<string>();
 
             Console.Write("0 ");
 
 
-            while ((readline = Console.ReadLine()).ToLower() != "rcompiler.compile")
+            while ((readline = Console.ReadLine()).ToLower() != "rcompiler.compile" && isCompiling == true)
             {
 
-
+                if(readline.Contains("load >> "))
+                {
+                    codeLines.Add(readline);
+                    rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues);
+                    isCompiling = false;
+                }
+                if(readline.ToLower() == "quit")
+                {
+                    Console.WriteLine("Exiting... \nCode Will Be Saved as a Temporary File");
+                    StreamWriter temp = File.CreateText("tempSave.rcode");
+                    foreach (var lineTemp in codeLines)
+                    {
+                        temp.WriteLine(lineTemp);
+                    }
+                    temp.Close();
+                    System.Threading.Thread.Sleep(1000);
+                    Environment.Exit(1);
+                }
                 if (varTypes.Any(readline.StartsWith))
                 {
                     Console.Clear();
                     foreach (var line in codeLines)
                     {
-                        if (line == "save(this)" && loops.Any(line.Contains) == false)
+                        if (line.StartsWith("save(this)") && loops.Any(line.Contains) == false)
                         {
                             Console.ForegroundColor = ConsoleColor.Yellow;
                             Console.Write(codeLines.IndexOf(line) + " " + line + "\n");
@@ -55,7 +78,7 @@ namespace rC
                                 Console.Write(" <---- Invalid Syntax\n");
                             }
                         }
-                        else if (varTypes.Any(line.StartsWith) && loops.Any(line.StartsWith) == false && methods.Any(line.StartsWith) == false && line != "save(this)" && loops.Any(line.StartsWith) == false)
+                        else if (varTypes.Any(line.StartsWith) && loops.Any(line.StartsWith) == false && methods.Any(line.StartsWith) == false && line.StartsWith("save(this)") == false && loops.Any(line.StartsWith) == false)
                         {
                             Console.ResetColor();
                             Console.Write(codeLines.IndexOf(line) + " ");
@@ -87,7 +110,7 @@ namespace rC
                         }
 
                     }
-                    if (methods.Any(readline.Contains) == false && readline != "save(this)"  && loops.Any(readline.Contains) == false)
+                    if (methods.Any(readline.Contains) == false && readline.Contains("save(this)") == false  && loops.Any(readline.Contains) == false)
                     {
                         Console.ResetColor();
                         Console.Write(codeLines.Count + " ");
@@ -105,7 +128,7 @@ namespace rC
 
 
                     }
-                    else if (readline == "save(this)")
+                    else if (readline.StartsWith("save(this)"))
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.Write(codeLines.Count + " " + readline + "\n");
@@ -227,10 +250,7 @@ namespace rC
                 }
             }
             Console.Clear();
-            List<string> numberNames = new List<string>();
-            List<double> numberValues = new List<double>();
-            List<string> strNames = new List<string>();
-            List<string> strValues = new List<string>();
+          
             rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues);
             Console.WriteLine("\n------------------------------------------------------\nCompiled, Output is Above\nPress enter to exit...");
             Console.ReadLine();

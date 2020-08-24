@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Runtime.CompilerServices;
 
 namespace rC
 {
@@ -27,6 +28,10 @@ namespace rC
             {
 
 
+                if (line.ToLower().StartsWith("sleep >>"))
+                {
+                    System.Threading.Thread.Sleep(Convert.ToInt32(line.Split('>').Last()));
+                }
                 //color indicators
                 if (line.ToLower().Contains("color.reset"))
                 {
@@ -224,7 +229,7 @@ namespace rC
                 else if (line.StartsWith("save(this)") && line.Contains("as") == false)
                 {
                     id = new Random().Next(1, 10000);
-                    StreamWriter writer = File.CreateText("code.id(" + id + ").rc");
+                    StreamWriter writer = File.CreateText("code.id(" + id + ").rcode");
                     foreach (var lineToSave in code)
                     {
                         writer.WriteLine(lineToSave);
@@ -238,16 +243,21 @@ namespace rC
                 }
                 else if (line.StartsWith("save(this)") && line.Contains("as") == true)
                 {
-                    StreamWriter writer = File.CreateText(Console.ReadLine().Split(new[] { "as" }, StringSplitOptions.None).Last() + ".rc");
+                    StreamWriter writer = File.CreateText(line.Split(new[] { "save(this) as " }, StringSplitOptions.None).Last() + ".rcode");
+                    Console.WriteLine("File Saved as " + (line.Split(new[] { "save(this) as " }, StringSplitOptions.None).Last() + ".rcode") + " in order to edit it, please do so using a text editor or visual studio.\nIn order to compile it, use the command load >>" + (line.Split(new[] { "save(this) as" }, StringSplitOptions.None).Last() + ".rcode"));
+                    Console.ResetColor();
                     foreach (var lineToSave in code)
                     {
-                        writer.WriteLine(lineToSave);
+                        if (line.StartsWith("save") == false)
+                        {
+                            writer.WriteLine(lineToSave);
+                        }
                     }
                     writer.Close();
                 }
                 else if (line == "save = false")
                 {
-
+                    id = 0;
                 }
 
                 else if (line.ToLower().StartsWith("for") && line.ToLower().Contains("in range %") && line.Contains("$>"))
@@ -281,31 +291,52 @@ namespace rC
                         }
                     }
                     ForLoop(range, looper, loopContent, numberNames, numberValues, strNames, strValues);
-                }else if(line.StartsWith("load >>"))
+                }else if(line.StartsWith("load >>") || line.StartsWith("compiler.load"))
                 {
                     string fileToCompile = line.Split(new[] { "load >> " }, StringSplitOptions.None).Last();
+                    Console.WriteLine(fileToCompile);
                     List<string> CompileFile = new List<string>();
-                    if(File.Exists(line.Split(new[] { "load >> " }, StringSplitOptions.None).Last()))
+                    try
                     {
                         StreamReader reader = new StreamReader(fileToCompile);
                         string lineReader;
-                        while((lineReader = reader.ReadLine()) != null)
+                        while ((lineReader = reader.ReadLine()) != null)
                         {
                             CompileFile.Add(lineReader);
                         }
                         string isVisualizing;
+
                         Console.WriteLine("Do you want to Visualize it's code (Y/n): ");
                         isVisualizing = Console.ReadLine();
-                        if(isVisualizing.ToLower() != "n")
+                        if (isVisualizing.ToLower() != "n")
                         {
-                            Console.WriteLine("\n" + fileToCompile + " Code: \n");
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                            Console.WriteLine("\n " + fileToCompile + " (Code): \n");
+                            Console.ResetColor();
                             foreach (var lineToShow in CompileFile)
                             {
                                 Console.WriteLine(CompileFile.IndexOf(lineToShow) + " " + lineToShow);
                             }
+                            Console.WriteLine("\n");
                         }
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.WriteLine("\n \n \n Output:");
+                        Console.ResetColor();
                         Compile(CompileFile, numberNames, numberValues, strNames, strValues);
+                        Console.WriteLine("");
                     }
+                    catch
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("ERROR: Couldn't find " + fileToCompile);
+                        Console.ResetColor();
+                    }
+                       
+                    
+                }else if (line.StartsWith("if") && line.Contains("(") && line.Contains(")"))
+                {
+                    string statement = line.Split(new[] { "if (" }, StringSplitOptions.None).Last().Split(')')[0];
+                    Console.WriteLine(statement);
                 }
 
             }
