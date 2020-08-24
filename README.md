@@ -12,7 +12,7 @@ Added Commands:
 
 New Methods:
 
--sleep >> miliseconds
+- sleep >> miliseconds
 
 Currently Working On:
 
