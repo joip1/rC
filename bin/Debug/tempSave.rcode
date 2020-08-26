@@ -1,1 +1,8 @@
-Write &>hi<&
+Write &>Hi<&
+number me >> 12
+str myName >> rodrigo
+color.red
+WriteNum &>me<&
+color.blue
+WriteStr &>myName<&
+save(this) as codeTesting

@@ -244,7 +244,8 @@ namespace rC
                 else if (line.StartsWith("save(this)") && line.Contains("as") == true)
                 {
                     StreamWriter writer = File.CreateText(line.Split(new[] { "save(this) as " }, StringSplitOptions.None).Last() + ".rcode");
-                    Console.WriteLine("File Saved as " + (line.Split(new[] { "save(this) as " }, StringSplitOptions.None).Last() + ".rcode") + " in order to edit it, please do so using a text editor or visual studio.\nIn order to compile it, use the command load >>" + (line.Split(new[] { "save(this) as" }, StringSplitOptions.None).Last() + ".rcode"));
+                    Console.ResetColor();
+                    Console.WriteLine("\nFile Saved as " + (line.Split(new[] { "save(this) as " }, StringSplitOptions.None).Last() + ".rcode") + " in order to edit it, please do so using a text editor or visual studio.\nIn order to compile it, use the command load >>" + (line.Split(new[] { "save(this) as" }, StringSplitOptions.None).Last() + ".rcode"));
                     Console.ResetColor();
                     foreach (var lineToSave in code)
                     {
