@@ -13,7 +13,8 @@ namespace rC
 
         //new to docs == for // readline // color // ;
         //receive every variable for further changes;
-        public static void Compile(List<string> code, 
+        public static void Compile(
+            List<string> code, 
             List<string> numberNames, 
             List<double> numberValues, 
             List<string> strNames, 
@@ -245,8 +246,11 @@ namespace rC
                 {
                     StreamWriter writer = File.CreateText(line.Split(new[] { "save(this) as " }, StringSplitOptions.None).Last() + ".rcode");
                     Console.ResetColor();
-                    Console.WriteLine("\nFile Saved as " + (line.Split(new[] { "save(this) as " }, StringSplitOptions.None).Last() + ".rcode") + " in order to edit it, please do so using a text editor or visual studio.\nIn order to compile it, use the command load >>" + (line.Split(new[] { "save(this) as" }, StringSplitOptions.None).Last() + ".rcode"));
+                    Console.Write("\nFile Saved as ");
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write(line.Split(new[] { "save(this) as " }, StringSplitOptions.None).Last() + ".rcode");
                     Console.ResetColor();
+                    Console.Write(" in order to edit it, please do so using a text editor or visual studio.\nIn order to compile it, use the command load >> " + (line.Split(new[] { "save(this) as" }, StringSplitOptions.None).Last() + ".rcode"));
                     foreach (var lineToSave in code)
                     {
                         if (line.StartsWith("save") == false)
@@ -260,7 +264,6 @@ namespace rC
                 {
                     id = 0;
                 }
-
                 else if (line.ToLower().StartsWith("for") && line.ToLower().Contains("in range %") && line.Contains("$>"))
                 {
                     int range = 0;
@@ -292,7 +295,8 @@ namespace rC
                         }
                     }
                     ForLoop(range, looper, loopContent, numberNames, numberValues, strNames, strValues);
-                }else if(line.StartsWith("load >>") || line.StartsWith("compiler.load"))
+                }
+                else if (line.StartsWith("load >>") || line.StartsWith("compiler.load"))
                 {
                     string fileToCompile = line.Split(new[] { "load >> " }, StringSplitOptions.None).Last();
                     Console.WriteLine(fileToCompile);
@@ -332,9 +336,10 @@ namespace rC
                         Console.WriteLine("ERROR: Couldn't find " + fileToCompile);
                         Console.ResetColor();
                     }
-                       
-                    
-                }else if (line.StartsWith("if") && line.Contains("(") && line.Contains(")"))
+
+
+                }
+                else if (line.StartsWith("if") && line.Contains("(") && line.Contains(")"))
                 {
                     string statement = line.Split(new[] { "if (" }, StringSplitOptions.None).Last().Split(')')[0];
                     Console.WriteLine(statement);

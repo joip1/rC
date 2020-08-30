@@ -41,7 +41,7 @@ namespace rC
                 }
                 if(readline.ToLower() == "quit")
                 {
-                    Console.WriteLine("Exiting... \nCode Will Be Saved as a Temporary File");
+                    Console.WriteLine("Exiting...\nCode Will Be Saved as a Temporary File");
                     StreamWriter temp = File.CreateText("tempSave.rcode");
                     foreach (var lineTemp in codeLines)
                     {
