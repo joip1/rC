@@ -32,16 +32,17 @@ namespace rC
             List<int> pixelXChar = new List<int>();
             List<int> pixelYChar = new List<int>();
             List<ConsoleColor> pixelColorsChar = new List<ConsoleColor>();
+            List<string> references = new List<string>();
 
             //read code line by line
             foreach (var line in code)
             {
                 if (line.ToLower() == "import pixel")
                 {
-                    isPixelImported = true;
+                    references.Add("pixel");
                 }
 
-                if (isPixelImported)
+                if (references.Contains("pixel"))
                 {
                     if (line.ToLower().StartsWith("pixel.draw"))
                     {
