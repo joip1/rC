@@ -18,20 +18,21 @@ namespace rC
         {
             string readline;
             List<string> codeLines = new List<string>();
-            string[] varTypes = new string[] { "number", "str", "save(this)", "Write","#", "WriteStr", "WriteNum" , "for", "color", "if", " ", "pixel", "import", "CreateFile"};
+            string[] varTypes = new string[] { "number", "str", "save(this)", "Write", "WriteStr", "WriteNum" , "for", "color", "if", " ", "pixel", "import"};
             string[] methods = new string[] { "Write", "WriteStr", "WriteNum"};
-            string [] loops = new string[] {"for", " ", "pixel" , "color", "if","CreateFile","#", "import", "str", "number"};
+            string [] loops = new string[] {"for", " ", "pixel" , "color", "if", "import"};
             bool isCompiling = true;
             List<string> numberNames = new List<string>();
             List<double> numberValues = new List<double>();
             List<string> strNames = new List<string>();
             List<string> strValues = new List<string>();
-       
+
             Console.Write("0 ");
 
 
             while ((readline = Console.ReadLine()).ToLower() != "rcompiler.compile" && isCompiling == true)
             {
+                Pixel.Draw(5, 10, ConsoleColor.Red);
 
                 if(readline.Contains("load >> "))
                 {
@@ -104,7 +105,7 @@ namespace rC
                             Console.Write(line.Split(new[] { line.Split(' ').First() }, StringSplitOptions.None).Last() + "\n");
                             Console.ResetColor();
                         }
-                       else
+                        else
                         {
                             Console.Write(codeLines.IndexOf(line) + " " + line + "\n");
                         }
@@ -116,7 +117,7 @@ namespace rC
                         Console.Write(codeLines.Count + " ");
                         Console.ForegroundColor = ConsoleColor.Magenta;
                         Console.Write(readline.Split(' ').First());
-                        //onsole.ForegroundColor = ConsoleColor.White;
+                        Console.ForegroundColor = ConsoleColor.White;
                         try
                         {
                             Console.Write(" " + readline.Split(' ')[1] + " >>" + readline.Split('>').Last() + "\n");
@@ -252,8 +253,7 @@ namespace rC
             Console.Clear();
           
             rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues);
-
-            //Console.WriteLine("\n------------------------------------------------------\nCompiled, Output is Above\nPress enter to exit...");
+            Console.WriteLine("\n------------------------------------------------------\nCompiled, Output is Above\nPress enter to exit...");
             Console.ReadLine();
         }
         public static void WriteId(int id)
