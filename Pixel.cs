@@ -24,7 +24,7 @@ namespace rC
             var startPixelTop = Console.CursorTop;
 
             Console.SetCursorPosition(x, y);
-            Console.BackgroundColor = colorToDraw;
+            Console.ForegroundColor = colorToDraw;
             Console.Write(characterToDraw);
             Console.ResetColor();
             Console.SetCursorPosition(0, startPixelTop);

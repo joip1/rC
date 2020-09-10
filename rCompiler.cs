@@ -10,7 +10,7 @@ namespace rC
 {
     public class rCompiler
     {
-
+        //fix: 
         //new to docs == for // readline // color // ;
         //receive every variable for further changes;
         public static void Compile(
@@ -24,7 +24,6 @@ namespace rC
             //values and indicators
 
             int id = 0;
-            bool isPixelImported = false;
             List<int> pixelX = new List<int>();
             List<int> pixelY = new List<int>();
             List<ConsoleColor> pixelColors = new List<ConsoleColor>();
@@ -37,11 +36,23 @@ namespace rC
             //read code line by line
             foreach (var line in code)
             {
-                if (line.ToLower() == "import pixel")
-                {
-                    references.Add("pixel");
-                }
 
+                if(line.ToLower() == "clearall")
+                {
+                    Console.Clear();
+                }
+                else if (line.StartsWith("import"))
+                {
+                    if (line.ToLower() == "import pixel")
+                    {
+                        references.Add("pixel");
+                    }
+                    else if (line.ToLower() == "import split")
+                    {
+                        references.Add("split");
+                    }
+                }
+               
                 if (references.Contains("pixel"))
                 {
                     if (line.ToLower().StartsWith("pixel.draw"))
@@ -307,7 +318,7 @@ namespace rC
                             {
                                 if (nametoCheck == name || nametoCheck == "&>" + name || nametoCheck == name + "<&" || nametoCheck == "&>" + name + "<&")
                                 {
-                                    Console.Write(strValues[strNames.IndexOf(name)] + line.Split(new[] { name }, StringSplitOptions.None)[1].Split(new[] { "<&" }, StringSplitOptions.None).First());
+                                    Console.Write(numberValues[numberNames.IndexOf(name)] + line.Split(new[] { name }, StringSplitOptions.None)[1].Split(new[] { "<&" }, StringSplitOptions.None).First());
                                 }
                             }
                             catch
