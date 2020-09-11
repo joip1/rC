@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using System.Runtime.Remoting.Lifetime;
 using System.Net.Cache;
 
 namespace rC

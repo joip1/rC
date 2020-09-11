@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using System.Runtime.CompilerServices;
 
 namespace rC
 {
     public class rCompiler
     {
+        //added with ubuntu
         //fix: 
         //new to docs == for // readline // color // ;
         //receive every variable for further changes;
@@ -37,9 +37,9 @@ namespace rC
             foreach (var line in code)
             {
 
-                if(line.ToLower() == "clearall")
+                if(line.ToLower() == "clear")
                 {
-                    Console.Clear();
+                    Console.Clear();  
                 }
                 else if (line.StartsWith("import"))
                 {
