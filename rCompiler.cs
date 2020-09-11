@@ -36,6 +36,19 @@ namespace rC
             //read code line by line
             foreach (var line in code)
             {
+                foreach (var str in strNames)
+                {
+                    if(line.StartsWith("str(" + str)&&line.Contains('+')&&line.Contains(')'))
+                    {
+                        try
+                        {
+                            strValues[strNames.IndexOf(str)]= strValues[strNames.IndexOf(str)]+strValues[strNames.IndexOf(line.Split('+')[1].Split(')').First())];               
+                        }catch
+                        {
+                            strValues[strNames.IndexOf(str)]= strValues[strNames.IndexOf(str)]+line.Split('+')[1].Split(')').First();
+                        } 
+                    }
+                }
 
                 if(line.ToLower() == "clear")
                 {
@@ -307,6 +320,7 @@ namespace rC
                     && line.ToLower().StartsWith("for") == false
                     && line.ToLower().Contains("in range %") == false
                     && line.Contains("$>") == false)
+                
                 {
                     foreach (var name in numberNames)
                     {
@@ -421,7 +435,7 @@ namespace rC
                     string lineReader;
                     while ((lineReader = reader.ReadLine()) != null)
                     {
-                        CompileFile.Add(lineReader);
+                       CompileFile.Add(lineReader);
                     }
                     string isVisualizing;
 
