@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using System.Runtime.CompilerServices;
 
 namespace rC
 {
     public class rCompiler
     {
+        //added with ubuntu
         //fix: 
         //new to docs == for // readline // color // ;
         //receive every variable for further changes;
@@ -37,9 +37,68 @@ namespace rC
             foreach (var line in code)
             {
 
-                if(line.ToLower() == "clearall")
+             //to lower
+             /*USAGE
+             ___________________________________________________________________________________________________
+             str f >> 
+             str name >>$readline
+             toLower (f>>name)      <---- gets the value of name.toLower and assigns it to the variable f
+             toLower (name)    <---- gets the value of name.toLower and assigns it to itself
+             __________________________________________________________________________________________________*/
+                if(line.StartsWith("toLower (")&&line.Contains(")")&&line.Contains(">>")){
+                    if(strNames.Contains(line.Split(new [] {"toLower ("}, StringSplitOptions.None).Last().Split(new [] {">>"}, StringSplitOptions.None).First())){
+                        if(strNames.Contains(line.Split(new [] {">>"}, StringSplitOptions.None).Last().Split(')').First())){
+                            strValues[strNames.IndexOf(line.Split(new [] {"toLower ("}, StringSplitOptions.None).Last().Split(new [] {">>"}, StringSplitOptions.None).First())]=strValues[strNames.IndexOf(line.Split(new [] {">>"}, StringSplitOptions.None).Last().Split(')').First())].ToLower();
+                        }else
+                        {
+                            strValues[strNames.IndexOf(line.Split(new [] {"toLower ("}, StringSplitOptions.None).Last().Split(new [] {">>"}, StringSplitOptions.None).First())]=line.Split(new [] {">>"}, StringSplitOptions.None).Last().Split(')').First().ToLower(); 
+                        }
+                    }
+
+                }else if(line.StartsWith("toLower (")&&line.Contains(")")&&line.Contains(">>")==false)
                 {
-                    Console.Clear();
+                    try
+                    {
+                        strValues[strNames.IndexOf(line.Split(new [] {"toLower ("}, StringSplitOptions.None).Last().Split(')').First())]=strValues[strNames.IndexOf(line.Split(new [] {"toLower ("}, StringSplitOptions.None).Last().Split(')').First())].ToLower();
+                    }
+                    catch
+                    {
+                        
+                    }
+                }
+
+
+            //toUpper
+
+
+                foreach (var str in strNames)
+                {
+                    if(line.StartsWith("str (" + str)&&line.Contains('+')&&line.Contains(')') || line.StartsWith("str(" + str)&&line.Contains('+')&&line.Contains(')'))
+                    {
+                        if(line.Split('+')[1].Split(')').First()!="$readline" && str !="$readline"){
+                        try
+                        {
+                            strValues[strNames.IndexOf(str)]= strValues[strNames.IndexOf(str)]+strValues[strNames.IndexOf(line.Split('+')[1].Split(')').First())];               
+                        }catch
+                        {
+                            strValues[strNames.IndexOf(str)]= strValues[strNames.IndexOf(str)]+line.Split('+')[1].Split(')').First();
+                        } 
+                        }else if(str=="$readline"){
+                            try {
+                                strValues[strNames.IndexOf(line.Split('+')[1].Split(')').First())] = Console.ReadLine() + strValues[strNames.IndexOf(line.Split('+')[1].Split(')').First())];
+                            }catch
+                            {
+
+                            }
+                        }else if(line.Split('+')[1].Split(')').First()=="$readline"){
+                             strValues[strNames.IndexOf(str)]=strValues[strNames.IndexOf(str)]+Console.ReadLine();
+                        }
+                    }
+                }
+
+                if(line.ToLower() == "clear")
+                {
+                    Console.Clear();  
                 }
                 else if (line.StartsWith("import"))
                 {
@@ -307,6 +366,7 @@ namespace rC
                     && line.ToLower().StartsWith("for") == false
                     && line.ToLower().Contains("in range %") == false
                     && line.Contains("$>") == false)
+                
                 {
                     foreach (var name in numberNames)
                     {
@@ -421,7 +481,7 @@ namespace rC
                     string lineReader;
                     while ((lineReader = reader.ReadLine()) != null)
                     {
-                        CompileFile.Add(lineReader);
+                       CompileFile.Add(lineReader);
                     }
                     string isVisualizing;
 
