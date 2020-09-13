@@ -38,6 +38,12 @@ namespace rC
                     rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues);
                     isCompiling = false;
                 }
+                if(readline.Contains("compile >> "))
+                {
+                    codeLines.Add(readline);
+                    rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues);
+                    isCompiling = false;
+                }
                 if(readline.ToLower() == "quit")
                 {
                     Console.WriteLine("Exiting...\nCode Will Be Saved as a Temporary File");

@@ -512,7 +512,27 @@ namespace rC
                 }
 
 
-            }
+            }else if(line.StartsWith("compile >> "))
+                {
+                    List<string> CompileFile = new List<string>();
+                    string fileToCompile = line.Split(new [] { "compile >> "}, StringSplitOptions.None).Last();
+
+                    try
+                    {
+                        StreamReader reader = new StreamReader(fileToCompile);
+                        string lineReader;
+                        while ((lineReader = reader.ReadLine()) != null)
+                        {
+                            CompileFile.Add(lineReader);
+                        }
+                    }
+                    catch
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("File Not Found / Compilation Error!");
+                        Console.ResetColor();
+                    }
+                 }
             else if (line.StartsWith("if") && line.Contains("(") && line.Contains(")"))
             {
                 string statement = line.Split(new[] { "if (" }, StringSplitOptions.None).Last().Split(')')[0];
