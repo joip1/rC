@@ -75,7 +75,7 @@ namespace rC
                 {
                     if(line.StartsWith("str (" + str)&&line.Contains('+')&&line.Contains(')') || line.StartsWith("str(" + str)&&line.Contains('+')&&line.Contains(')'))
                     {
-                        if(line.Split('+')[1].Split(')').First()!="$readline" && str !="$readline"){
+                        if(line.Split('+')[1].Split(')').First()!="$readline" || str !="$readline"){
                         try
                         {
                             strValues[strNames.IndexOf(str)]= strValues[strNames.IndexOf(str)]+strValues[strNames.IndexOf(line.Split('+')[1].Split(')').First())];               
