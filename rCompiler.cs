@@ -525,6 +525,7 @@ namespace rC
                         {
                             CompileFile.Add(lineReader);
                         }
+                        Compile(CompileFile, numberNames, numberValues, strNames, strValues);
                     }
                     catch
                     {
