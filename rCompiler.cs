@@ -512,7 +512,7 @@ namespace rC
                 }
 
 
-            }else if(line.StartsWith("compile >> "))
+            }else if(line.StartsWith("compile >>"))
                 {
                     List<string> CompileFile = new List<string>();
                     string fileToCompile = line.Split(new [] { "compile >> "}, StringSplitOptions.None).Last();
@@ -529,8 +529,11 @@ namespace rC
                     }
                     catch
                     {
+          
+                        Compile(CompileFile, numberNames, numberValues, strNames, strValues);
+                        
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("File Not Found / Compilation Error!");
+                        Console.WriteLine("File Not Found / Compilation Error! \n(Make Sure You Leave a Space Between the indicators (>>) ex: compile >> filename.rcode");
                         Console.ResetColor();
                     }
                  }

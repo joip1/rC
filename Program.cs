@@ -38,7 +38,7 @@ namespace rC
                     rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues);
                     isCompiling = false;
                 }
-                if(readline.Contains("compile >> "))
+                if(readline.StartsWith("compile >>"))
                 {
                     codeLines.Add(readline);
                     rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues);
