@@ -853,12 +853,12 @@ namespace rC
                         }
 
                     }
-                    else if (line.Contains("num(") && line.Split(new [] {"&else"}, StringSplitOptions.None).First().Contains(">"))
+                    else if (line.Contains("num(") && line.Contains("+>"))
                     {
                         try
                         {
-                            if (numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { ">" }, StringSplitOptions.None).First())]
-                                > numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { ">" }, StringSplitOptions.None).Last().Split(')').First())])
+                            if (numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { "+>" }, StringSplitOptions.None).First())]
+                                > numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "+>" }, StringSplitOptions.None).Last().Split(')').First())])
                             {
                                 Compile(loopContent, numberNames, numberValues, strNames, strValues);
                             }
@@ -885,12 +885,12 @@ namespace rC
                         }
 
                     }
-                    else if (line.Contains("num(") && line.Contains("<"))
+                    else if (line.Contains("num(") && line.Contains("<-"))
                     {
                         try
                         {
-                            if (numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { "<" }, StringSplitOptions.None).First())]
-                                < numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "<" }, StringSplitOptions.None).Last().Split(')').First())])
+                            if (numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { "<-" }, StringSplitOptions.None).First())]
+                                < numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { "<-" }, StringSplitOptions.None).Last().Split(')').First())])
                             {
                                 Compile(loopContent, numberNames, numberValues, strNames, strValues);
                             }

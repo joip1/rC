@@ -1,0 +1,3 @@
+number me >>12
+number f >>112
+if (num(f>=me)) $>Write &>true<& &else
