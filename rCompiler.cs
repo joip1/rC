@@ -526,12 +526,11 @@ namespace rC
                             CompileFile.Add(lineReader);
                         }
                         Compile(CompileFile, numberNames, numberValues, strNames, strValues);
+                        Console.Write("\n");
                     }
                     catch
                     {
-          
-                        Compile(CompileFile, numberNames, numberValues, strNames, strValues);
-                        
+                                 
                         Console.ForegroundColor = ConsoleColor.Red;
                         Console.WriteLine("File Not Found / Compilation Error! \n(Make Sure You Leave a Space Between the indicators (>>) ex: compile >> filename.rcode");
                         Console.ResetColor();
@@ -540,8 +539,82 @@ namespace rC
             else if (line.StartsWith("if") && line.Contains("(") && line.Contains(")"))
             {
                 string statement = line.Split(new[] { "if (" }, StringSplitOptions.None).Last().Split(')')[0];
-                Console.WriteLine(statement);
-            }
+                    var getContent = line.Split(new[] { "$>" }, StringSplitOptions.None);
+                    List<string> loopContent = new List<string>();
+
+                    foreach (var content in getContent)
+                    {
+                        if (content.ToLower().StartsWith("if") == false && content.ToLower().Contains("(") == false && content.Contains("$>") == false)
+                        {
+                            loopContent.Add(content);
+                        }
+                    }
+
+                    if (line.Contains("str(") && line.Contains("=="))
+                    {
+                        try
+                        {
+                            if (strValues[strNames.IndexOf(line.Split(new[] { "str(" }, StringSplitOptions.None).Last().Split(new[] { "==" }, StringSplitOptions.None).First())]
+                                == strValues[strNames.IndexOf(line.Split(new[] { "==" }, StringSplitOptions.None).Last().Split(')').First())])
+                            {
+                                Compile(loopContent, numberNames, numberValues, strNames, strValues);
+                            }
+                            else
+                            {
+                                if (line.Contains("&else"))
+                                {
+                                    string newStatement = line.Split(new[] { "&else" }, StringSplitOptions.None).Last();
+                                    var getElseContent = newStatement.Split(new[] { "->" }, StringSplitOptions.None);
+                                    List<string> loopElseContent = new List<string>();
+                                    foreach (var content in getElseContent)
+                                    {
+                                        if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false)
+                                        {
+                                            loopElseContent.Add(content);
+                                        }
+                                    }
+                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues);
+                                }
+                            }
+                        }
+                        catch
+                        {
+                        }
+
+                    }
+                    else if (line.Contains("str(") && line.Contains("!="))
+                    {
+                        try
+                        {
+                            if (strValues[strNames.IndexOf(line.Split(new[] { "str(" }, StringSplitOptions.None).Last().Split(new[] { "!=" }, StringSplitOptions.None).First())]
+                                != strValues[strNames.IndexOf(line.Split(new[] { "!=" }, StringSplitOptions.None).Last().Split(')').First())])
+                            {
+                                Compile(loopContent, numberNames, numberValues, strNames, strValues);
+                            }
+                            else
+                            {
+                                if (line.Contains("&else"))
+                                {
+                                    string newStatement = line.Split(new[] { "&else" }, StringSplitOptions.None).Last();
+                                    var getElseContent = newStatement.Split(new[] { "->" }, StringSplitOptions.None);
+                                    List<string> loopElseContent = new List<string>();
+                                    foreach (var content in getElseContent)
+                                    {
+                                        if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false)
+                                        {
+                                            loopElseContent.Add(content);
+                                        }
+                                    }
+                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues);
+                                }
+                            }
+                        }
+                        catch
+                        {
+                        }
+                    }
+                    
+                }
 
         }
             if(pixelColors.Count >= 1 && pixelX.Count >=1 && pixelY.Count >= 1)
