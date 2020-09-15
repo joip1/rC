@@ -49,7 +49,7 @@ WriteNum &>age<&
 
 Output:
 My name and age are: 
-rodrigo 112
+rodrigo 12
 
 
 
@@ -65,9 +65,33 @@ WriteNum &>age<&
 Output:
 My name and age are: rodrigo 12
 
+-----------------------------------------------------------
+FOR statements:
 
+for x in range % 3 $>Write &>hi<& &>newline
 
+output:
+hi
+hi
+hi
 
+if statements:
+
+number me >>12
+number f >>12
+if (me<f) $>Write &>true<& &else ->Write &>false<&
+
+num + num:
+
+number me >>12
+number him >>13
+
+me*him
+
+WriteNum &>me<&
+
+output:
+156
 
 Modifying a Line:
 
