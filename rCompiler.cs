@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Net;
 
 namespace rC
 {
@@ -42,13 +43,17 @@ namespace rC
                 {
                     if (line == num.ToString() + "++")
                     {
-                        numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)]++;
+                        double newNum = numberValues[numberNames.IndexOf(num)];
+                        newNum++;
+                        numberValues[numberNames.IndexOf(num)] = newNum;
                     }
-                    if (line == num.ToString() + "+")
+                    if (line.StartsWith(num.ToString() + "+"))
                     {
                         try
                         {
-                            numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)]+Convert.ToDouble(line.Split('+').First());
+                            double newNum = numberValues[numberNames.IndexOf(num)];
+                            newNum = newNum+Convert.ToDouble(line.Split('+').Last());
+                            numberValues[numberNames.IndexOf(num)] = newNum;
                         }
                         catch
                         {
@@ -58,7 +63,9 @@ namespace rC
                                 {
                                     if(line.Split('+').Last() == getNum)
                                     {
-                                        numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] + numberValues[numberNames.IndexOf(getNum)];
+                                        double newNum = numberValues[numberNames.IndexOf(num)];
+                                        newNum = newNum + numberValues[numberNames.IndexOf(getNum)];
+                                        numberValues[numberNames.IndexOf(num)] = newNum;
                                     }
                                 }
                             }
@@ -68,7 +75,7 @@ namespace rC
                             }
                         }
                     }
-                    if (line == num.ToString() + "-")
+                    if (line.StartsWith(num.ToString() + "-"))
                     {
                         try
                         {
@@ -92,7 +99,7 @@ namespace rC
                             }
                         }
                     }
-                    if (line == num.ToString() + "/")
+                    if (line.StartsWith(num.ToString() + "/"))
                     {
                         try
                         {
@@ -116,7 +123,7 @@ namespace rC
                             }
                         }
                     }
-                    if (line == num.ToString() + "*")
+                    if (line.StartsWith(num.ToString() + "*"))
                     {
                         try
                         {
