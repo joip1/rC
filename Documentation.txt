@@ -79,7 +79,12 @@ if statements:
 
 number me >>12
 number f >>12
-if (me<f) $>Write &>true<& &else ->Write &>false<&
+if (me<-f) $>Write &>true<& &else ->Write &>false<&
+if (me<=f) $>Write &>true<& &else ->Write &>false<&
+if (me+>f) $>Write &>true<& &else ->Write &>false<&
+
+notes: > = +>
+       < = <-
 
 num + num:
 
