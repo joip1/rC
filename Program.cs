@@ -42,7 +42,9 @@ namespace rC
                 {
                     codeLines.Add(readline);
                     rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues);
-                    isCompiling = false;
+                    Console.ReadLine();
+                    Environment.Exit(1);
+                    //isCompiling = false;
                 }
                 if(readline.ToLower() == "quit")
                 {

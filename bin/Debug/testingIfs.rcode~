@@ -1,0 +1,7 @@
+number me >>12
+number him >>13
+
+WriteNum &>me<&
+
+
+for x in range % 5 $>me++ $>him++ $>WriteNum &>me<& $>newline $>WriteNum &>him<& $>newline

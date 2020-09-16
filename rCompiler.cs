@@ -326,7 +326,7 @@ namespace rC
                 Console.ReadLine();
             }
 
-            if (line.Contains("number") && line.Contains(">>")
+            if (line.StartsWith("number") && line.Contains(">>")
                 && line.ToLower().StartsWith("for") == false
                 && line.ToLower().Contains("in range %") == false
                 && line.Contains("$>") == false)
@@ -640,6 +640,7 @@ namespace rC
                         }
                         Compile(CompileFile, numberNames, numberValues, strNames, strValues);
                         Console.Write("\n");
+                        reader.Close();
                     }
                     catch
                     {
@@ -652,12 +653,12 @@ namespace rC
             else if (line.StartsWith("if") && line.Contains("(") && line.Contains(")"))
             {
                 string statement = line.Split(new[] { "if (" }, StringSplitOptions.None).Last().Split(')')[0];
-                    var getContent = line.Split(new[] { "$>" }, StringSplitOptions.None);
+                    var getContent = line.Split(new[] { "!>" }, StringSplitOptions.None);
                     List<string> loopContent = new List<string>();
 
                     foreach (var content in getContent)
                     {
-                        if (content.ToLower().StartsWith("if") == false && content.ToLower().Contains("(") == false && content.Contains("$>") == false)
+                        if (content.ToLower().StartsWith("if") == false && content.ToLower().Contains("(") == false && content.Contains("!>") == false)
                         {
                             loopContent.Add(content);
                         }
@@ -690,7 +691,7 @@ namespace rC
                                 }
                             }
                         }
-                        catch
+                        catch 
                         {
                         }
 
@@ -864,8 +865,7 @@ namespace rC
                             }
                             else
                             {
-                                if (line.Contains("&else"))
-                                {
+               
                                     string newStatement = line.Split(new[] { "&else" }, StringSplitOptions.None).Last();
                                     var getElseContent = newStatement.Split(new[] { "->" }, StringSplitOptions.None);
                                     List<string> loopElseContent = new List<string>();
@@ -877,7 +877,7 @@ namespace rC
                                         }
                                     }
                                     Compile(loopElseContent, numberNames, numberValues, strNames, strValues);
-                                }
+                                
                             }
                         }
                         catch
@@ -896,8 +896,7 @@ namespace rC
                             }
                             else
                             {
-                                if (line.Contains("&else"))
-                                {
+                                
                                     string newStatement = line.Split(new[] { "&else" }, StringSplitOptions.None).Last();
                                     var getElseContent = newStatement.Split(new[] { "->" }, StringSplitOptions.None);
                                     List<string> loopElseContent = new List<string>();
@@ -909,8 +908,8 @@ namespace rC
                                         }
                                     }
                                     Compile(loopElseContent, numberNames, numberValues, strNames, strValues);
-                                }
                             }
+                            
                         }
                         catch
                         {
@@ -920,6 +919,17 @@ namespace rC
 
 
                 }
+
+
+               /* foreach (var item in numberValues)
+                {
+                    Console.WriteLine(item);
+                }
+                foreach (var d in numberNames)
+                {
+                    Console.WriteLine(d);
+                }*/
+              //  StoreValues.Store();
 
         }
             if(pixelColors.Count >= 1 && pixelX.Count >=1 && pixelY.Count >= 1)
@@ -947,11 +957,13 @@ namespace rC
         List<string> strNames,
         List<string> strValues)
     {
+            //Compile(loopContent, numberNames,  numberValues,  strNames,  strValues);
         for (int x = 0; x < range; x++)
         {
             Compile(loopContent, numberNames, numberValues, strNames, strValues);
         }
     }
+
 
     }
 } 
