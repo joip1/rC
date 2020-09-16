@@ -14,6 +14,7 @@ namespace rC
         //fix: 
         //new to docs == for // readline // color // ;
         //receive every variable for further changes;
+        //operationg may be first -> change split to last in var + var = newVar(int)
         public static void Compile(
             List<string> code,
             List<string> numberNames,
@@ -127,7 +128,7 @@ namespace rC
                     {
                         try
                         {
-                            numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)]*Convert.ToDouble(line.Split('*').First());
+                            numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)]*Convert.ToDouble(line.Split('*').Last());
                         }
                         catch
                         {
