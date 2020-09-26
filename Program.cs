@@ -17,9 +17,9 @@ namespace rC
         {
             string readline;
             List<string> codeLines = new List<string>();
-            string[] varTypes = new string[] { "number", "str", "save(this)", "Write","#", "WriteStr", "WriteNum" , "for", "color", "if", " ", "pixel", "import", "CreateFile", "toLower", "toUpper"};
+            string[] varTypes = new string[] { "number", "str", "save(this)", "Write","#", "WriteStr", "WriteNum" ,"sleep","for", "color", "if", " ", "pixel", "import", "CreateFile", "toLower", "toUpper"};
             string[] methods = new string[] { "Write", "WriteStr", "WriteNum"};
-            string [] loops = new string[] {"for", " ", "pixel" , "color", "if","CreateFile","#", "import", "str", "number", "toLower", "toUpper"};
+            string [] loops = new string[] {"for", " ","sleep", "pixel" , "color", "if","CreateFile","#", "import", "str", "number", "toLower", "toUpper"};
             bool isCompiling = true;
             List<string> numberNames = new List<string>();
             List<double> numberValues = new List<double>();

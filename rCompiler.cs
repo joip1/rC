@@ -294,7 +294,21 @@ namespace rC
                 }
                 if (line.ToLower().StartsWith("sleep >>"))
                 {
-                    System.Threading.Thread.Sleep(Convert.ToInt32(line.Split('>').Last()));
+                    try
+                    {
+                        System.Threading.Thread.Sleep(Convert.ToInt32(line.Split('>').Last()));
+                    }
+                    catch
+                    {
+                        try
+                        {
+                            System.Threading.Thread.Sleep(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split('>').Last())]));
+                        }
+                        catch
+                        {
+                            System.Threading.Thread.Sleep(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "> " }, StringSplitOptions.None).Last())]));
+                        }
+                    }
                 }
                 //color indicators
                 if (line.ToLower().Contains("color.reset"))
