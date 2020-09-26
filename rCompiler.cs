@@ -80,7 +80,7 @@ namespace rC
                     {
                         try
                         {
-                            numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] - Convert.ToDouble(line.Split('-').First());
+                            numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] - Convert.ToDouble(line.Split('-').Last());
                         }
                         catch
                         {
@@ -104,7 +104,8 @@ namespace rC
                     {
                         try
                         {
-                            numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] / Convert.ToDouble(line.Split('/').First());
+                            numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] / Convert.ToDouble(line.Split('/').Last());
+                   
                         }
                         catch
                         {
