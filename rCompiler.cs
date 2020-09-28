@@ -42,6 +42,20 @@ namespace rC
 
                 if (line.StartsWith("#") == false)
                 {
+                    if (line.ToLower().StartsWith("setcursorpos:"))
+                    {
+                        try
+                        {
+                            Console.SetCursorPosition(Convert.ToInt32(line.ToLower().Split(new[] { "setcursorpos:" }, StringSplitOptions.None).Last().Split(',').First()), Convert.ToInt32(Convert.ToInt32(line.ToLower().Split(new[] { "setcursorpos:" }, StringSplitOptions.None).Last().Split(',').Last())));
+                        }
+                        catch
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("INVALID SYNTAX IN LINE " + code.IndexOf(line) + "(" + line + ")");
+                            Console.ResetColor();
+                        }
+                    }
+
                     if (line.ToLower().StartsWith("compile_lines_from_file"))
                     {
                         string fileToCompile = "";
