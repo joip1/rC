@@ -46,7 +46,7 @@ namespace rC
                     {
                         try
                         {
-                            Console.SetCursorPosition(Convert.ToInt32(line.ToLower().Split(new[] { "setcursorpos:" }, StringSplitOptions.None).Last().Split(',').First()), Convert.ToInt32(Convert.ToInt32(line.ToLower().Split(new[] { "setcursorpos:" }, StringSplitOptions.None).Last().Split(',').Last())));
+                            Console.SetCursorPosition(Convert.ToInt32(line.ToLower().Split(new[] { "setcursorpos:" }, StringSplitOptions.None).Last().Split(',').First()), Convert.ToInt32(line.ToLower().Split(new[] { "setcursorpos:" }, StringSplitOptions.None).Last().Split(',').Last()));
                         }
                         catch
                         {
@@ -1071,26 +1071,26 @@ namespace rC
                     }
                 }
             }
-        Console.ResetColor();
-            }
-    //receive every variable;
-    public static void ForLoop(int range,
-        string looper,
-        List<string> loopContent,
-        List<string> numberNames,
-        List<double> numberValues,
-        List<string> strNames,
-        List<string> strValues,
-        List<string> references)
-    {
-            //Compile(loopContent, numberNames,  numberValues,  strNames,  strValues);
-        for (int x = 0; x < range; x++)
-        {
-            Compile(loopContent, numberNames, numberValues, strNames, strValues, references);
+            Console.ResetColor();
         }
-    }
+        //receive every variable;
+        public static void ForLoop(int range,
+            string looper,
+            List<string> loopContent,
+            List<string> numberNames,
+            List<double> numberValues,
+            List<string> strNames,
+            List<string> strValues,
+            List<string> references)
+        {
+            //Compile(loopContent, numberNames,  numberValues,  strNames,  strValues);
+            for (int x = 0; x < range; x++)
+            {
+                Compile(loopContent, numberNames, numberValues, strNames, strValues, references);
+            }
+        }
 
 
     }
-} 
+}
 

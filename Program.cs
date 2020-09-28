@@ -23,28 +23,31 @@ namespace rC
         {
             string readline;
             List<string> codeLines = new List<string>();
-            string[] varTypes = new string[] { "number", "str", "save(this)", "Write","#", "WriteStr", "WriteNum" ,"sleep","for", "color","compile_lines", "if", " ", "pixel", "import", "CreateFile", "toLower", "toUpper"};
-            string[] methods = new string[] { "Write", "WriteStr", "WriteNum"};
-            string [] loops = new string[] {"for", "compile_lines"," ","setcursorpos:","sleep", "pixel" , "color", "if","CreateFile","#", "import", "str", "number", "toLower", "toUpper"};
+            string[] varTypes = new string[] { "number", "str", "save(this)", "Write", "#", "WriteStr", "WriteNum", "sleep", "for", "color", "compile_lines", "if", " ", "pixel", "import", "CreateFile", "toLower", "toUpper" };
+            string[] methods = new string[] { "Write", "WriteStr", "WriteNum" };
+            string[] loops = new string[] { "for", "compile_lines", " ", "setcursorpos:", "sleep", "pixel", "color", "if", "CreateFile", "#", "import", "str", "number", "toLower", "toUpper" };
             bool isCompiling = true;
             List<string> numberNames = new List<string>();
             List<double> numberValues = new List<double>();
             List<string> strNames = new List<string>();
             List<string> strValues = new List<string>();
             List<string> references = new List<string>();
-       
-            Console.Write("0 ");
+
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("#rC Started Successfully\n");
+            Console.ResetColor();
 
 
             while ((readline = Console.ReadLine()).ToLower() != "rcompiler.compile" && isCompiling == true)
             {
-
-                if (readline.StartsWith("create_file")){
+                
+                if (readline.StartsWith("create_file"))
+                {
                     File.CreateText(readline.Split(new[] { "create_file " }, StringSplitOptions.None).Last() + ".rcode");
                 }
                 else if (readline == "run_project")
                 {
-                    if(File.Exists("Main.rcode"))
+                    if (File.Exists("Main.rcode"))
                     {
                         string read;
                         StreamReader reader = File.OpenText("Main.rcode");
@@ -54,7 +57,7 @@ namespace rC
                             entryPoint_Code.Add(read);
                         }
                         rCompiler.Compile(entryPoint_Code, numberNames, numberValues, strNames, strValues, references);
-                        Console.Write("\n");                                                                                             
+                        Console.Write("\n");
                     }
                     else
                     {
@@ -91,30 +94,30 @@ namespace rC
                         Console.ResetColor();
                     }
                 }
-                else if(readline.ToLower().StartsWith("create_project "))
+                else if (readline.ToLower().StartsWith("create_project "))
                 {
                     var dirToCopy = Directory.CreateDirectory(readline.Split(new[] { "create_project " }, StringSplitOptions.None).Last());
                     File.CreateText(dirToCopy.FullName + @"\Main.rcode");
-                    File.Copy("rC.exe", dirToCopy.FullName+@"\rC.exe");
+                    File.Copy("rC.exe", dirToCopy.FullName + @"\rC.exe");
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("Project Created Successfully!");
                     Console.ResetColor();
                 }
 
-                else if(readline.Contains("load >> "))
+                else if (readline.Contains("load >> "))
                 {
                     codeLines.Add(readline);
                     rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues, references);
                     isCompiling = true;
                 }
-                else if(readline.StartsWith("compile >>") || readline.StartsWith("run >>"))
+                else if (readline.StartsWith("compile >>") || readline.StartsWith("run >>"))
                 {
                     codeLines.Add(readline);
                     rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues, references);
                     Console.ReadLine();
                     //isCompiling = false;
                 }
-                else if(readline.ToLower() == "quit")
+                else if (readline.ToLower() == "quit")
                 {
                     Console.WriteLine("Exiting...\nCode Will Be Saved as a Temporary File");
                     StreamWriter temp = File.CreateText("tempSave.rcode");
@@ -179,13 +182,13 @@ namespace rC
                             Console.Write(line.Split(new[] { line.Split(' ').First() }, StringSplitOptions.None).Last() + "\n");
                             Console.ResetColor();
                         }
-                       else
+                        else
                         {
                             Console.Write(codeLines.IndexOf(line) + " " + line + "\n");
                         }
 
                     }
-                    if (methods.Any(readline.Contains) == false && readline.Contains("save(this)") == false  && loops.Any(readline.Contains) == false)
+                    if (methods.Any(readline.Contains) == false && readline.Contains("save(this)") == false && loops.Any(readline.Contains) == false)
                     {
                         Console.ResetColor();
                         Console.Write(codeLines.Count + " ");
@@ -208,7 +211,8 @@ namespace rC
                         Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.Write(codeLines.Count + " " + readline + "\n");
                         Console.ResetColor();
-                    }else if (loops.Any(readline.StartsWith))
+                    }
+                    else if (loops.Any(readline.StartsWith))
                     {
                         Console.ResetColor();
                         Console.Write(codeLines.Count + " ");
@@ -261,7 +265,7 @@ namespace rC
                         }
                         if (varTypes.Any(modified.StartsWith))
                         {
-                           
+
 
                             if (methods.Any(modified.StartsWith) == false && modified != "save(this)" && loops.Any(modified.StartsWith) == false)
                             {
@@ -320,12 +324,12 @@ namespace rC
                 }
                 else
                 {
-                    codeLines.Add(readline);
-                    Console.Write("" + codeLines.Count + " ");
+                    //codeLines.Add(readline);
+                    //Console.Write("" + codeLines.Count + " ");
                 }
             }
             Console.Clear();
-          
+
             rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues, references);
 
             //Console.WriteLine("\n------------------------------------------------------\nCompiled, Output is Above\nPress enter to exit...");
