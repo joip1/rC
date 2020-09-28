@@ -10,6 +10,12 @@ Added Commands:
 - compiler.load >> filename.rcode
 - quit
 - save(this) as filename (no .rcode)
+- create_project projectName
+- upgrade_project projectPath
+- restore_project projectPath
+- run_project (when inside project directory)
+- create_file filename
+
 
 New Methods:
 
