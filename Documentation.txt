@@ -3,8 +3,13 @@ Open Source Programming Language Created By Rodrigo Cabaço =)
 This is a free and totaly open source compiler with rC built-in.
 Feel free to use it!
 
+Creating and Managing Projects:
 
-
+create_project projectName
+upgrade_project projectPath
+restore_project projectPath
+run_project (when inside project directory)
+create_file filename
 
 Docs and Methods:
 
