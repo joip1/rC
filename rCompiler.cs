@@ -41,12 +41,13 @@ namespace rC
             {
                 if (line.ToLower().StartsWith("compile_lines_from_file"))
                 {
+                    string fileToCompile="";
                     try
                     {
                         int firstIndex = Convert.ToInt32(line.Split('(').Last().Split(',')[1]);
                         int lastIndex = Convert.ToInt32(line.Split('(').Last().Split(',').Last().Split(')').First());
                         lastIndex++;
-                        string fileToCompile = line.ToLower().Split(new [] { "file:"}, StringSplitOptions.None).Last().Split(',').First();
+                        fileToCompile = line.ToLower().Split(new[] { "file:" }, StringSplitOptions.None).Last().Split(',').First();
 
                         if (!File.Exists(fileToCompile + ".rcode"))
                         {
@@ -69,9 +70,29 @@ namespace rC
                     }
                     catch
                     {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("INVALID SYNTAX IN LINE " + code.IndexOf(line) + "("+line+")");
-                        Console.ResetColor();
+                        try
+                        {
+                            fileToCompile = line.ToLower().Split(new[] { "file:" }, StringSplitOptions.None).Last().Split(',').First();
+                            if (line.Split('(').Last().Split(',').Last().Split(')').First().ToLower() == "all")
+                            {
+                                StreamReader specificLine_Compiler = File.OpenText(fileToCompile + ".rcode");
+                                string lineReading;
+                                List<string> linesFromFile = new List<string>();
+                                while ((lineReading = specificLine_Compiler.ReadLine()) != null)
+                                {
+                                    linesFromFile.Add(lineReading);
+                                }
+                                specificLine_Compiler.Close();
+                                Compile(linesFromFile, numberNames, numberValues, strNames, strValues, references);
+                            }
+                        }
+                        catch
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("INVALID SYNTAX IN LINE " + code.IndexOf(line) + "(" + line + ")");
+                            Console.ResetColor();
+                        }
+                     
                     }
                 }
 
@@ -512,9 +533,9 @@ namespace rC
                 if (line.Contains("Write") && line.Contains("&>") && line.Contains("<&") && line.Contains("WriteStr") == false && line.Contains("WriteNum") == false && line.ToLower().StartsWith("for") == false && line.ToLower().Contains("in range %") == false && line.Contains("$>") == false)
                 {
                     //check if it is a number 
-                    var matchesNumber = numberNames.Where(x => line.Contains(line.Split(new[] { "Write &>" }, StringSplitOptions.None).Last().ToString().Split(new[] { "<&" }, StringSplitOptions.None).First().ToString()));
+                    //var matchesNumber = numberNames.Where(x => line.Contains(line.Split(new[] { "Write &>" }, StringSplitOptions.None).Last().ToString().Split(new[] { "<&" }, StringSplitOptions.None).First().ToString()));
 
-                    Console.Write(line.Split(new[] { "Write &>" }, StringSplitOptions.None).Last().ToString().Split(new[] { "<&" }, StringSplitOptions.None).First().ToString() + " ");
+                    Console.Write(line.Split(new[] { "Write &>" }, StringSplitOptions.None).Last().ToString().Split(new[] { "<&" }, StringSplitOptions.None).First().ToString());
 
                 }
                 else if (line.Contains("WriteStr")
