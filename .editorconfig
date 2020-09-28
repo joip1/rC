@@ -1,0 +1,4 @@
+﻿[*.cs]
+
+# CS2001: Source file 'C:\Users\Rodrigo\source\repos\rC\rCompiler.cs' could not be found.
+dotnet_diagnostic.CS2001.severity = none
