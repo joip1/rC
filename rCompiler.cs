@@ -14,13 +14,15 @@ namespace rC
         //fix: 
         //new to docs == for // readline // color // ;
         //receive every variable for further changes;
+        //compile_lines_from_file (file:filename(no suffix rcode),1,5)
         //operationg may be first -> change split to last in var + var = newVar(int)
         public static void Compile(
             List<string> code,
             List<string> numberNames,
             List<double> numberValues,
             List<string> strNames,
-            List<string> strValues)
+            List<string> strValues,
+            List<string> references)
         {
 
             //values and indicators
@@ -33,15 +35,67 @@ namespace rC
             List<int> pixelXChar = new List<int>();
             List<int> pixelYChar = new List<int>();
             List<ConsoleColor> pixelColorsChar = new List<ConsoleColor>();
-            List<string> references = new List<string>();
 
             //read code line by line
             foreach (var line in code)
             {
+                if (line.ToLower().StartsWith("compile_lines_from_file"))
+                {
+                    try
+                    {
+                        int firstIndex = Convert.ToInt32(line.Split('(').Last().Split(',')[1]);
+                        int lastIndex = Convert.ToInt32(line.Split('(').Last().Split(',').Last().Split(')').First());
+                        lastIndex++;
+                        string fileToCompile = line.ToLower().Split(new [] { "file:"}, StringSplitOptions.None).Last().Split(',').First();
 
+                        if (!File.Exists(fileToCompile + ".rcode"))
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("ERROR: File Does Not Exist (Line " + code.IndexOf(line) + ")(" + line + ")");
+                            Console.ResetColor();
+                        }
+                        else
+                        {
+                            StreamReader specificLine_Compiler = File.OpenText(fileToCompile + ".rcode");
+                            string lineReading;
+                            List<string> linesFromFile = new List<string>();
+                            while ((lineReading = specificLine_Compiler.ReadLine()) != null)
+                            {
+                                linesFromFile.Add(lineReading);
+                            }
+                            specificLine_Compiler.Close();
+                            Compile(linesFromFile.GetRange(firstIndex, lastIndex - (firstIndex)), numberNames, numberValues, strNames, strValues, references);
+                        }
+                    }
+                    catch
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("INVALID SYNTAX IN LINE " + code.IndexOf(line) + "("+line+")");
+                        Console.ResetColor();
+                    }
+                }
+
+                else if (line.ToLower().StartsWith("compile_lines"))
+                {
+             
+                    try
+                    {
+                        int firstIndex = Convert.ToInt32(line.Split('(').Last().Split(',').First());
+                        int lastIndex = Convert.ToInt32(line.Split('(').Last().Split(',').Last().Split(')').First());
+                        lastIndex++;
+                        Compile(code.GetRange(firstIndex, lastIndex - (firstIndex)), numberNames, numberValues, strNames, strValues, references);
+                    }
+                    catch
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("INVALID SYNTAX IN LINE " + code.IndexOf(line) + "(" + line + ")");
+                        Console.ResetColor();
+                    }
+                }
 
              foreach(var num in numberNames)
                 {
+                    
                     if (line == num.ToString() + "++")
                     {
                         double newNum = numberValues[numberNames.IndexOf(num)];
@@ -295,7 +349,21 @@ namespace rC
                 }
                 if (line.ToLower().StartsWith("sleep >>"))
                 {
-                    System.Threading.Thread.Sleep(Convert.ToInt32(line.Split('>').Last()));
+                    try
+                    {
+                        System.Threading.Thread.Sleep(Convert.ToInt32(line.Split('>').Last()));
+                    }
+                    catch
+                    {
+                        try
+                        {
+                            System.Threading.Thread.Sleep(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split('>').Last())]));
+                        }
+                        catch
+                        {
+                            System.Threading.Thread.Sleep(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "> " }, StringSplitOptions.None).Last())]));
+                        }
+                    }
                 }
                 //color indicators
                 if (line.ToLower().Contains("color.reset"))
@@ -576,14 +644,14 @@ namespace rC
                 var getContent = line.Split(new[] { "$>" }, StringSplitOptions.None);
                 List<string> loopContent = new List<string>();
 
-                foreach (var    content in getContent)
+                foreach (var content in getContent)
                 {
                     if (content.ToLower().StartsWith("for") == false && content.ToLower().Contains("in range %") == false && content.Contains("$>") == false)
                     {
                         loopContent.Add(content);
                     }
                 }
-                ForLoop(range, looper, loopContent, numberNames, numberValues, strNames, strValues);
+                ForLoop(range, looper, loopContent, numberNames, numberValues, strNames, strValues, references);
             }
             else if (line.StartsWith("load >>") || line.StartsWith("compiler.load"))
             {
@@ -616,7 +684,7 @@ namespace rC
                     Console.ForegroundColor = ConsoleColor.Cyan;
                     Console.WriteLine("\n \n \n Output:");
                     Console.ResetColor();
-                    Compile(CompileFile, numberNames, numberValues, strNames, strValues);
+                    Compile(CompileFile, numberNames, numberValues, strNames, strValues, references);
                     Console.WriteLine("");
                 }
                 catch
@@ -630,7 +698,7 @@ namespace rC
             }else if(line.StartsWith("compile >>"))
                 {
                     List<string> CompileFile = new List<string>();
-                    string fileToCompile = line.Split(new [] { "compile >> "}, StringSplitOptions.None).Last();
+                    string fileToCompile = line.Split(new [] { ">> "}, StringSplitOptions.None).Last();
 
                     try
                     {
@@ -640,7 +708,7 @@ namespace rC
                         {
                             CompileFile.Add(lineReader);
                         }
-                        Compile(CompileFile, numberNames, numberValues, strNames, strValues);
+                        Compile(CompileFile, numberNames, numberValues, strNames, strValues, references);
                         Console.Write("\n");
                         reader.Close();
                     }
@@ -673,7 +741,7 @@ namespace rC
                             if (strValues[strNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "str(" }, StringSplitOptions.None).Last().Split(new[] { "==" }, StringSplitOptions.None).First())]
                                 == strValues[strNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "==" }, StringSplitOptions.None).Last().Split(')').First())])
                             {
-                                Compile(loopContent, numberNames, numberValues, strNames, strValues);
+                                Compile(loopContent, numberNames, numberValues, strNames, strValues,references);
                             }
                             else
                             {
@@ -689,7 +757,7 @@ namespace rC
                                             loopElseContent.Add(content);
                                         }
                                     }
-                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues);
+                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references);
                                 }
                             }
                         }
@@ -705,7 +773,7 @@ namespace rC
                             if (strValues[strNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "str(" }, StringSplitOptions.None).Last().Split(new[] { "!=" }, StringSplitOptions.None).First())]
                                 != strValues[strNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "!=" }, StringSplitOptions.None).Last().Split(')').First())])
                             {
-                                Compile(loopContent, numberNames, numberValues, strNames, strValues);
+                                Compile(loopContent, numberNames, numberValues, strNames, strValues, references);
                             }
                             else
                             {
@@ -721,7 +789,7 @@ namespace rC
                                             loopElseContent.Add(content);
                                         }
                                     }
-                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues);
+                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references);
                                 }
                             }
                         }
@@ -736,7 +804,7 @@ namespace rC
                             if (numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { "==" }, StringSplitOptions.None).First())]
                                 == numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "==" }, StringSplitOptions.None).Last().Split(')').First())])
                             {
-                                Compile(loopContent, numberNames, numberValues, strNames, strValues);
+                                Compile(loopContent, numberNames, numberValues, strNames, strValues, references);
                             }
                             else
                             {
@@ -752,7 +820,7 @@ namespace rC
                                             loopElseContent.Add(content);
                                         }
                                     }
-                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues);
+                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references);
                                 }
                             }
                         }
@@ -768,7 +836,7 @@ namespace rC
                             if (numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { "!=" }, StringSplitOptions.None).First())]
                                 != numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "!=" }, StringSplitOptions.None).Last().Split(')').First())])
                             {
-                                Compile(loopContent, numberNames, numberValues, strNames, strValues);
+                                Compile(loopContent, numberNames, numberValues, strNames, strValues, references);
                             }
                             else
                             {
@@ -784,7 +852,7 @@ namespace rC
                                             loopElseContent.Add(content);
                                         }
                                     }
-                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues);
+                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references);
                                 }
                             }
                         }
@@ -799,7 +867,7 @@ namespace rC
                             if (numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { ">=" }, StringSplitOptions.None).First())]
                                 >= numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { ">=" }, StringSplitOptions.None).Last().Split(')').First())])
                             {
-                                Compile(loopContent, numberNames, numberValues, strNames, strValues);
+                                Compile(loopContent, numberNames, numberValues, strNames, strValues, references);
                             }
                             else
                             {
@@ -815,7 +883,7 @@ namespace rC
                                             loopElseContent.Add(content);
                                         }
                                     }
-                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues);
+                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references);
                                 }
                             }
                         }
@@ -831,7 +899,7 @@ namespace rC
                             if (numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { "<=" }, StringSplitOptions.None).First())]
                                 <= numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "<=" }, StringSplitOptions.None).Last().Split(')').First())])
                             {
-                                Compile(loopContent, numberNames, numberValues, strNames, strValues);
+                                Compile(loopContent, numberNames, numberValues, strNames, strValues, references);
                             }
                             else
                             {
@@ -847,7 +915,7 @@ namespace rC
                                             loopElseContent.Add(content);
                                         }
                                     }
-                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues);
+                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references);
                                 }
                             }
                         }
@@ -863,7 +931,7 @@ namespace rC
                             if (numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { "+>" }, StringSplitOptions.None).First())]
                                 > numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "+>" }, StringSplitOptions.None).Last().Split(')').First())])
                             {
-                                Compile(loopContent, numberNames, numberValues, strNames, strValues);
+                                Compile(loopContent, numberNames, numberValues, strNames, strValues, references);
                             }
                             else
                             {
@@ -878,7 +946,7 @@ namespace rC
                                             loopElseContent.Add(content);
                                         }
                                     }
-                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues);
+                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references);
                                 
                             }
                         }
@@ -894,7 +962,7 @@ namespace rC
                             if (numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { "<-" }, StringSplitOptions.None).First())]
                                 < numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { "<-" }, StringSplitOptions.None).Last().Split(')').First())])
                             {
-                                Compile(loopContent, numberNames, numberValues, strNames, strValues);
+                                Compile(loopContent, numberNames, numberValues, strNames, strValues, references);
                             }
                             else
                             {
@@ -909,7 +977,7 @@ namespace rC
                                             loopElseContent.Add(content);
                                         }
                                     }
-                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues);
+                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references);
                             }
                             
                         }
@@ -957,12 +1025,13 @@ namespace rC
         List<string> numberNames,
         List<double> numberValues,
         List<string> strNames,
-        List<string> strValues)
+        List<string> strValues,
+        List<string> references)
     {
             //Compile(loopContent, numberNames,  numberValues,  strNames,  strValues);
         for (int x = 0; x < range; x++)
         {
-            Compile(loopContent, numberNames, numberValues, strNames, strValues);
+            Compile(loopContent, numberNames, numberValues, strNames, strValues, references);
         }
     }
 
