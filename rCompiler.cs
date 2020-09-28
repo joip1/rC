@@ -295,21 +295,7 @@ namespace rC
                 }
                 if (line.ToLower().StartsWith("sleep >>"))
                 {
-                    try
-                    {
-                        System.Threading.Thread.Sleep(Convert.ToInt32(line.Split('>').Last()));
-                    }
-                    catch
-                    {
-                        try
-                        {
-                            System.Threading.Thread.Sleep(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split('>').Last())]));
-                        }
-                        catch
-                        {
-                            System.Threading.Thread.Sleep(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "> " }, StringSplitOptions.None).Last())]));
-                        }
-                    }
+                    System.Threading.Thread.Sleep(Convert.ToInt32(line.Split('>').Last()));
                 }
                 //color indicators
                 if (line.ToLower().Contains("color.reset"))
@@ -590,7 +576,7 @@ namespace rC
                 var getContent = line.Split(new[] { "$>" }, StringSplitOptions.None);
                 List<string> loopContent = new List<string>();
 
-                foreach (var content in getContent)
+                foreach (var    content in getContent)
                 {
                     if (content.ToLower().StartsWith("for") == false && content.ToLower().Contains("in range %") == false && content.Contains("$>") == false)
                     {
