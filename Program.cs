@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
-using System.Net.Cache;
 
 namespace rC
 {
@@ -12,19 +11,27 @@ namespace rC
     class Program
     {
 
+        //NEW STUFF:
+        //create_project directory\projectName
+        //upgrade_project directory\projectName
+        //run >> name
+        //compile_lines / compile_lines_from_file (file:file,0,1)
+        //create_file filename
+        //run_project : runs the project
 
         static void Main(string[] args)
         {
             string readline;
             List<string> codeLines = new List<string>();
-            string[] varTypes = new string[] { "number", "str", "save(this)", "Write","#", "WriteStr", "WriteNum" , "for", "color", "if", " ", "pixel", "import", "CreateFile", "toLower", "toUpper"};
+            string[] varTypes = new string[] { "number", "str", "save(this)", "Write","#", "WriteStr", "WriteNum" ,"sleep","for", "color","compile_lines", "if", " ", "pixel", "import", "CreateFile", "toLower", "toUpper"};
             string[] methods = new string[] { "Write", "WriteStr", "WriteNum"};
-            string [] loops = new string[] {"for", " ", "pixel" , "color", "if","CreateFile","#", "import", "str", "number", "toLower", "toUpper"};
+            string [] loops = new string[] {"for", "compile_lines"," ","sleep", "pixel" , "color", "if","CreateFile","#", "import", "str", "number", "toLower", "toUpper"};
             bool isCompiling = true;
             List<string> numberNames = new List<string>();
             List<double> numberValues = new List<double>();
             List<string> strNames = new List<string>();
             List<string> strValues = new List<string>();
+            List<string> references = new List<string>();
        
             Console.Write("0 ");
 
@@ -32,21 +39,81 @@ namespace rC
             while ((readline = Console.ReadLine()).ToLower() != "rcompiler.compile" && isCompiling == true)
             {
 
-                if(readline.Contains("load >> "))
-                {
-                    codeLines.Add(readline);
-                    rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues);
-                    isCompiling = false;
+                if (readline.StartsWith("create_file")){
+                    File.CreateText(readline.Split(new[] { "create_file " }, StringSplitOptions.None).Last() + ".rcode");
                 }
-                if(readline.StartsWith("compile >>"))
+                else if (readline == "run_project")
+                {
+                    if(File.Exists("Main.rcode"))
+                    {
+                        string read;
+                        StreamReader reader = File.OpenText("Main.rcode");
+                        List<string> entryPoint_Code = new List<string>();
+                        while ((read = reader.ReadLine()) != null)
+                        {
+                            entryPoint_Code.Add(read);
+                        }
+                        rCompiler.Compile(entryPoint_Code, numberNames, numberValues, strNames, strValues, references);
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Entry Point Main.rcode Not Found, Please Run the Command: restore_project");
+                        Console.ResetColor();
+                    }
+                }
+                //RESTORING PROJECT
+                else if (readline.ToLower() == "restore_project")
+                {
+                    if (!File.Exists("Main.rcode"))
+                    {
+                        File.CreateText("Main.rcode");
+                    }
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("Project Restored Successfully!");
+                    Console.ResetColor();
+                }
+                else if (readline.ToLower().StartsWith("upgrade_project"))
+                {
+                    if (File.Exists(readline.Split(new[] { "upgrade_project " }, StringSplitOptions.None).Last() + @"\Main.rcode"))
+                    {
+                        File.Delete(readline.Split(new[] { "upgrade_project " }, StringSplitOptions.None).Last() + @"\rC.exe");
+                        File.Copy("rC.exe", readline.Split(new[] { "upgrade_project " }, StringSplitOptions.None).Last() + @"\rC.exe");
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("Project Upgraded Successfully!");
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Project not Found, Please Create a Project Using create_project or Restore the Current Project Using: restore_project");
+                        Console.ResetColor();
+                    }
+                }
+                else if(readline.ToLower().StartsWith("create_project "))
+                {
+                    var dirToCopy = Directory.CreateDirectory(readline.Split(new[] { "create_project " }, StringSplitOptions.None).Last());
+                    File.CreateText(dirToCopy.FullName + @"\Main.rcode");
+                    File.Copy("rC.exe", dirToCopy.FullName+@"\rC.exe");
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("Project Created Successfully!");
+                    Console.ResetColor();
+                }
+
+                else if(readline.Contains("load >> "))
                 {
                     codeLines.Add(readline);
-                    rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues);
+                    rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues, references);
+                    isCompiling = true;
+                }
+                else if(readline.StartsWith("compile >>") || readline.StartsWith("run >>"))
+                {
+                    codeLines.Add(readline);
+                    rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues, references);
                     Console.ReadLine();
-                    Environment.Exit(1);
                     //isCompiling = false;
                 }
-                if(readline.ToLower() == "quit")
+                else if(readline.ToLower() == "quit")
                 {
                     Console.WriteLine("Exiting...\nCode Will Be Saved as a Temporary File");
                     StreamWriter temp = File.CreateText("tempSave.rcode");
@@ -258,7 +325,7 @@ namespace rC
             }
             Console.Clear();
           
-            rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues);
+            rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues, references);
 
             //Console.WriteLine("\n------------------------------------------------------\nCompiled, Output is Above\nPress enter to exit...");
             Console.ReadLine();
