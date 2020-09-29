@@ -56,6 +56,7 @@ namespace rC
                         {
                             entryPoint_Code.Add(read);
                         }
+                        reader.Close();
                         rCompiler.Compile(entryPoint_Code, numberNames, numberValues, strNames, strValues, references);
                         Console.Write("\n");
                     }
