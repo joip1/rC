@@ -114,8 +114,8 @@ namespace rC
                 {
                     if (File.Exists(readline.Split(new[] { "upgrade_project " }, StringSplitOptions.None).Last() + @"\Main.rcode"))
                     {
-                        File.Delete(readline.Split(new[] { "upgrade_project " }, StringSplitOptions.None).Last() + @"\rC.exe");
-                        File.Copy("rC.exe", readline.Split(new[] { "upgrade_project " }, StringSplitOptions.None).Last() + @"\rC.exe");
+                        File.Delete(readline.Split(new[] { "upgrade_project " }, StringSplitOptions.None).Last() + @"\Run_Program.exe");
+                        File.Copy("rC.exe", readline.Split(new[] { "upgrade_project " }, StringSplitOptions.None).Last() + @"\Run_Program.exe");
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("Project Upgraded Successfully!");
                         Console.ResetColor();
@@ -134,7 +134,7 @@ namespace rC
                     StreamWriter ConfigWriter = File.CreateText(dirToCopy.FullName + @"\run_config.rconfig");
                     ConfigWriter.WriteLine("init:Main.rcode");
                     ConfigWriter.Close();
-                    File.Copy("rC.exe", dirToCopy.FullName + @"\rC.exe");
+                    File.Copy("rC.exe", dirToCopy.FullName + @"\Run_Program.exe");
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("Project Created Successfully!");
                     Console.ResetColor();
