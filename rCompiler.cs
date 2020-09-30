@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using rC;
 using System.Linq;
 
 namespace rC
@@ -335,10 +336,27 @@ namespace rC
                             try
                             {
                                 //add to normal pixel
-                                int x = Convert.ToInt32(line.ToLower().Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First());
-                                int y = Convert.ToInt32(line.ToLower().Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First());
-                                pixelX.Add(Convert.ToInt32(line.ToLower().Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First()));
-                                pixelY.Add(Convert.ToInt32(line.ToLower().Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First()));
+                                
+                                    int x = Convert.ToInt32(line.ToLower().Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First());
+                                    int y = Convert.ToInt32(line.ToLower().Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First());
+
+
+                                try
+                                {
+                                    pixelX.Add(Convert.ToInt32(line.ToLower().Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First()));
+                                }
+                                catch
+                                {
+                                    pixelX.Add(Convert.ToInt32(numberValues[numberNames.IndexOf(line.ToLower().Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First())]));
+                                }
+                                try
+                                {
+                                    pixelY.Add(Convert.ToInt32(line.ToLower().Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First()));
+                                }
+                                catch
+                                {
+                                    pixelY.Add(Convert.ToInt32(numberValues[numberNames.IndexOf(line.ToLower().Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First())]));
+                                }
                                 string color = line.ToLower().Split(new[] { "color:" }, StringSplitOptions.None).Last().Split(' ').First();
 
 
@@ -354,6 +372,18 @@ namespace rC
                                 {
                                     pixelColors.Add(ConsoleColor.Blue);
                                 }
+                                else if (color == "magenta")
+                                {
+                                    pixelColors.Add(ConsoleColor.Magenta);
+                                }
+                                else if (color == "green")
+                                {
+                                    pixelColors.Add(ConsoleColor.Green);
+                                }
+                                else if (color == "yellow")
+                                {
+                                    pixelColors.Add(ConsoleColor.Yellow);
+                                }
 
                             }
                             catch
@@ -368,8 +398,22 @@ namespace rC
                                 //add to char
                                 int x = Convert.ToInt32(line.ToLower().Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First());
                                 int y = Convert.ToInt32(line.ToLower().Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First());
-                                pixelXChar.Add(Convert.ToInt32(line.ToLower().Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First()));
-                                pixelYChar.Add(Convert.ToInt32(line.ToLower().Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First()));
+                                try
+                                {
+                                    pixelXChar.Add(Convert.ToInt32(line.ToLower().Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First()));
+                                }
+                                catch
+                                {
+                                    pixelXChar.Add(Convert.ToInt32(numberValues[numberNames.IndexOf(line.ToLower().Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First())]));
+                                }
+                                try
+                                {
+                                    pixelYChar.Add(Convert.ToInt32(line.ToLower().Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First()));
+                                }
+                                catch
+                                {
+                                    pixelYChar.Add(Convert.ToInt32(numberValues[numberNames.IndexOf(line.ToLower().Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First())]));
+                                }
                                 string color = line.ToLower().Split(new[] { "color:" }, StringSplitOptions.None).Last().Split(' ').First();
                                 string characterToDraw = line.ToLower().Split(new[] { "char:" }, StringSplitOptions.None).Last().Split(' ').First();
                                 charachtersToDraw.Add(characterToDraw);
@@ -386,7 +430,18 @@ namespace rC
                                 {
                                     pixelColorsChar.Add(ConsoleColor.Blue);
                                 }
-
+                                else if (color == "magenta")
+                                {
+                                    pixelColorsChar.Add(ConsoleColor.Magenta);
+                                }
+                                else if (color == "green")
+                                {
+                                    pixelColorsChar.Add(ConsoleColor.Green);
+                                }
+                                else if (color == "yellow")
+                                {
+                                    pixelColorsChar.Add(ConsoleColor.Yellow);
+                                }
 
 
                             }
@@ -454,7 +509,7 @@ namespace rC
                         {
                             if (numberNames.Contains(line.Split(' ')[1].Split('>').First()))
                             {
-                                if (line.ToLower().StartsWith("$readline") == false)
+                                if (line.ToLower().Contains("$readline") == false)
                                 {
                                     try
                                     {
@@ -465,14 +520,14 @@ namespace rC
                                         numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(line.Split('>').Last());
                                     }
                                 }
-                                else if (line.ToLower().StartsWith("$readline") == true)
+                                else if (line.ToLower().Contains("$readline") == true)
                                 {
                                     numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(Console.ReadLine());
                                 }
                             }
                             else
                             {
-                                if (line.ToLower().StartsWith("$readline") == false)
+                                if (line.ToLower().Contains("$readline") == false)
                                 {
                                     numberNames.Add(line.Split(' ')[1].Split('>').First());
                                     try
@@ -484,7 +539,7 @@ namespace rC
                                         numberValues.Add(Convert.ToDouble(line.Split('>').Last()));
                                     }
                                 }
-                                else if (line.ToLower().StartsWith("$readline") == true)
+                                else if (line.ToLower().Contains("$readline") == true)
                                 {
                                     numberNames.Add(line.Split(' ')[1].Split('>').First());
                                     numberValues.Add(Convert.ToDouble(Console.ReadLine()));
