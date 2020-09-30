@@ -125,7 +125,7 @@ namespace rC
                         }
                         catch
                         {
-                            if (line.Split('(').Last().Split(',').First().ToLower() == "all")
+                            if (line.Split('(').Last().Split(')').First().ToLower() == "all")
                             {
                                 Compile(code, numberNames, numberValues, strNames, strValues, references);
                             }
