@@ -7,12 +7,12 @@ Newest Update Changes:
 
 In a for loop make sure to not leave spaces between expressions;
 
-EX:
-for x in range % 5 $>f++ $>WriteNum &>f<&
-output: 00000
+EX:     
+-for x in range % 5 $>f++ $>WriteNum &>f<&    
+-output: 00000    
 EX2:
-for x in range % 5 $>f++$>WriteNum &>f<&
-output: 12345
+-for x in range % 5 $>f++$>WriteNum &>f<&    
+-output: 12345    
 
 Added Commands:
 - load >> filename.rcode
