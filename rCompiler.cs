@@ -1073,8 +1073,7 @@ namespace rC
 
             {
                 //Compile(loopContent, numberNames,  numberValues,  strNames,  strValues);
-                numberValues.Add(0);
-                numberNames.Add(looper);
+
             for (int x = 0; x < range; x++)
                 {
                     numberValues[numberNames.IndexOf(looper)] = x;
