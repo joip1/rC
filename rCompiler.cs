@@ -336,9 +336,7 @@ namespace rC
                             try
                             {
                                 //add to normal pixel
-                                
-                                    int x = Convert.ToInt32(line.ToLower().Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First());
-                                    int y = Convert.ToInt32(line.ToLower().Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First());
+
 
 
                                 try
@@ -396,9 +394,7 @@ namespace rC
                             try
                             {
                                 //add to char
-                                int x = Convert.ToInt32(line.ToLower().Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First());
-                                int y = Convert.ToInt32(line.ToLower().Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First());
-                                try
+                              try
                                 {
                                     pixelXChar.Add(Convert.ToInt32(line.ToLower().Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First()));
                                 }
