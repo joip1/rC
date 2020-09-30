@@ -41,22 +41,10 @@ namespace rC
 
                 if (line.StartsWith("#") == false)
                 {
-                    if(line.ToLower().StartsWith("try t>"))
+                  if(line.StartsWith("infinite ::>"))
                     {
-                        List<string> codeToCompile = line.ToLower().Split(new[] { "t>" }, StringSplitOptions.None).ToList();
-                        foreach (var linetotry in codeToCompile)
-                        {
-                            codeToCompile[codeToCompile.IndexOf(linetotry)] = linetotry.Split(new[] { "c>" }, StringSplitOptions.None).First();
-                        }
-                        List<string> catchCompile = line.ToLower().Split(new[] { "c>" }, StringSplitOptions.None).ToList();
-                        try
-                        {
-                            Compile(codeToCompile, numberNames, numberValues, strNames, strValues, references);
-                        }
-                        catch
-                        {
-                            Compile(catchCompile, numberNames, numberValues, strNames, strValues, references);
-                        }
+                        List<string> getContent = line.Split(new[] { "::>" }, StringSplitOptions.None).ToList();
+                        Compile(getContent, numberNames, numberValues, strNames, strValues, references);
                     }
 
                     if (line.ToLower().StartsWith("setcursor_top"))
