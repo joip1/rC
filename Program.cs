@@ -34,7 +34,6 @@ namespace rC
             List<string> references = new List<string>();
 
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("#rC Started Successfully\n");
             Console.ResetColor();
 
             if (File.Exists("run_config.rconfig"))
@@ -56,6 +55,15 @@ namespace rC
                             Console.ResetColor();
                         }
                     }
+                }
+            }
+            else
+            {
+                if (File.Exists("Main.rcode"))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("run_config File Does Not Exist, Please run: restore_project");
+                    Console.ResetColor();
                 }
             }
 
