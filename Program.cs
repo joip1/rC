@@ -42,9 +42,16 @@ namespace rC
                 {
                     if (readline_config.StartsWith("init:"))
                     {
-                        readConfig.Close();
                         if (File.Exists(readline_config.Split(':').Last())){
                             StreamReader reader_init = File.OpenText(readline_config.Split(':').Last());
+                            List<string> run_code = new List<string>();
+                            string line_init;
+                            while ((line_init = reader_init.ReadLine()) != null)
+                            {
+                                run_code.Add(line_init);
+                            }
+                            reader_init.Close();
+                            rCompiler.Compile(run_code, numberNames, numberValues, strNames, strValues, references);
                         }
                         else
                         {
@@ -54,6 +61,8 @@ namespace rC
                         }
                     }
                 }
+                readConfig.Close();
+
             }
             else
             {
