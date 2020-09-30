@@ -37,6 +37,27 @@ namespace rC
             Console.Write("#rC Started Successfully\n");
             Console.ResetColor();
 
+            if (File.Exists("run_config.rconfig"))
+            {
+                StreamReader readConfig = File.OpenText("run_config.rconfig");
+                string readline_config;
+                while ((readline_config = readConfig.ReadLine()) != null)
+                {
+                    if (readline_config.StartsWith("init:"))
+                    {
+                        readConfig.Close();
+                        if (File.Exists(readline_config.Split(':').Last())){
+                            StreamReader reader_init = File.OpenText(readline_config.Split(':').Last());
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Init File Does Not Exist, Change it in run_config.rconfig");
+                            Console.ResetColor();
+                        }
+                    }
+                }
+            }
 
             while ((readline = Console.ReadLine()).ToLower() != "rcompiler.compile" && isCompiling == true)
             {
@@ -60,6 +81,12 @@ namespace rC
                         rCompiler.Compile(entryPoint_Code, numberNames, numberValues, strNames, strValues, references);
                         Console.Write("\n");
                     }
+                    else if (!File.Exists("run_config.rconfig"))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Main Run Config: run_config not found, Please Run the Command: restore_project");
+                        Console.ResetColor();
+                    }
                     else
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
@@ -73,6 +100,11 @@ namespace rC
                     if (!File.Exists("Main.rcode"))
                     {
                         File.CreateText("Main.rcode");
+                    }else if (!File.Exists("run_config.rconfig"))
+                    {
+                        StreamWriter ConfigWriter = File.CreateText("run_config.rconfig");
+                        ConfigWriter.WriteLine("init:Main.rcode");
+                        ConfigWriter.Close();
                     }
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("Project Restored Successfully!");
@@ -99,6 +131,9 @@ namespace rC
                 {
                     var dirToCopy = Directory.CreateDirectory(readline.Split(new[] { "create_project " }, StringSplitOptions.None).Last());
                     File.CreateText(dirToCopy.FullName + @"\Main.rcode");
+                    StreamWriter ConfigWriter = File.CreateText(dirToCopy.FullName + @"\run_config.rconfig");
+                    ConfigWriter.WriteLine("init:Main.rcode");
+                    ConfigWriter.Close();
                     File.Copy("rC.exe", dirToCopy.FullName + @"\rC.exe");
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("Project Created Successfully!");
