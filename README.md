@@ -9,10 +9,11 @@ In a for loop make sure to not leave spaces between expressions;
 
 EX:     
 - for x in range % 5 $>f++ $>WriteNum &>f<&    
-- output: 00000    
-EX2:       
+output: 00000    
+
+       
 - for x in range % 5 $>f++$>WriteNum &>f<&    
-- output: 12345    
+output: 12345    
 
 Added Commands:
 - load >> filename.rcode
