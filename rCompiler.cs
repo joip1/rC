@@ -125,6 +125,10 @@ namespace rC
                         }
                         catch
                         {
+                            if (line.Split('(').Last().Split(',').First().ToLower()=="all")
+                            {
+                                Compile(code, numberNames, numberValues, strNames, strValues, references);
+                            }
                             Console.ForegroundColor = ConsoleColor.Red;
                             Console.WriteLine("INVALID SYNTAX IN LINE " + code.IndexOf(line) + "(" + line + ")");
                             Console.ResetColor();
