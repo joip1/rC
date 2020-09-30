@@ -5,8 +5,6 @@ Open Source Programming Language Created By Rodrigo Cabaço =) This is a free an
 
 Newest Update Changes:
 
-In a for loop make sure to not leave spaces between expressions;
-
 Added Commands:
 - load >> filename.rcode
 - compiler.load >> filename.rcode
