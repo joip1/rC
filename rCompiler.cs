@@ -415,27 +415,27 @@ namespace rC
                         }
                     }
                     //color indicators
-                    if (line.ToLower().Contains("color.reset"))
+                    if (line.ToLower().StartsWith("color.reset"))
                     {
                         Console.ResetColor();
                     }
-                    else if (line.ToLower().Contains("color.green"))
+                    else if (line.ToLower().StartsWith("color.green"))
                     {
                         Console.ForegroundColor = ConsoleColor.Green;
                     }
-                    else if (line.ToLower().Contains("color.blue"))
+                    else if (line.ToLower().StartsWith("color.blue"))
                     {
                         Console.ForegroundColor = ConsoleColor.Blue;
                     }
-                    else if (line.ToLower().Contains("color.red"))
+                    else if (line.ToLower().StartsWith("color.red"))
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                     }
-                    else if (line.ToLower().Contains("color.magenta"))
+                    else if (line.ToLower().StartsWith("color.magenta"))
                     {
                         Console.ForegroundColor = ConsoleColor.Magenta;
                     }
-                    else if (line.ToLower().Contains("color.yellow"))
+                    else if (line.ToLower().StartsWith("color.yellow"))
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow;
                     }
@@ -454,7 +454,7 @@ namespace rC
                         {
                             if (numberNames.Contains(line.Split(' ')[1].Split('>').First()))
                             {
-                                if (line.ToLower().Contains("$readline") == false)
+                                if (line.ToLower().StartsWith("$readline") == false)
                                 {
                                     try
                                     {
@@ -465,14 +465,14 @@ namespace rC
                                         numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(line.Split('>').Last());
                                     }
                                 }
-                                else if (line.ToLower().Contains("$readline") == true)
+                                else if (line.ToLower().StartsWith("$readline") == true)
                                 {
                                     numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(Console.ReadLine());
                                 }
                             }
                             else
                             {
-                                if (line.ToLower().Contains("$readline") == false)
+                                if (line.ToLower().StartsWith("$readline") == false)
                                 {
                                     numberNames.Add(line.Split(' ')[1].Split('>').First());
                                     try
@@ -484,7 +484,7 @@ namespace rC
                                         numberValues.Add(Convert.ToDouble(line.Split('>').Last()));
                                     }
                                 }
-                                else if (line.ToLower().Contains("$readline") == true)
+                                else if (line.ToLower().StartsWith("$readline") == true)
                                 {
                                     numberNames.Add(line.Split(' ')[1].Split('>').First());
                                     numberValues.Add(Convert.ToDouble(Console.ReadLine()));
@@ -500,7 +500,7 @@ namespace rC
                     }
 
                     //string definer
-                    if (line.Contains("str")
+                    if (line.StartsWith("str")
                         && line.Contains(">>")
                         && line.ToLower().StartsWith("for") == false && line.ToLower().Contains("in range %") == false
                         && line.Contains("$>") == false)
@@ -542,23 +542,17 @@ namespace rC
                         }
                     }
 
-                    if (line.Contains("list(str)") && line.ToLower().StartsWith("for") == false && line.ToLower().Contains("in range %") == false && line.Contains("$>") == false)
-                    {
-                        List<List<string>> listsStr = new List<List<string>>();
-                    }
-
-
 
 
 
 
                     //Write 
 
-                    if (line.ToLower().Contains("newline") || line.ToLower().Contains("newln"))
+                    if (line.ToLower().StartsWith("newline") || line.ToLower().StartsWith("newln"))
                     {
                         Console.WriteLine("");
                     }
-                    if (line.Contains("Write") && line.Contains("&>") && line.Contains("<&") && line.Contains("WriteStr") == false && line.Contains("WriteNum") == false && line.ToLower().StartsWith("for") == false && line.ToLower().Contains("in range %") == false && line.Contains("$>") == false)
+                    if (line.StartsWith("Write") && line.Contains("&>") && line.Contains("<&") && line.Contains("WriteStr") == false && line.Contains("WriteNum") == false && line.ToLower().StartsWith("for") == false && line.ToLower().Contains("in range %") == false && line.Contains("$>") == false)
                     {
                         //check if it is a number 
                         //var matchesNumber = numberNames.Where(x => line.Contains(line.Split(new[] { "Write &>" }, StringSplitOptions.None).Last().ToString().Split(new[] { "<&" }, StringSplitOptions.None).First().ToString()));
@@ -566,7 +560,7 @@ namespace rC
                         Console.Write(line.Split(new[] { "Write &>" }, StringSplitOptions.None).Last().ToString().Split(new[] { "<&" }, StringSplitOptions.None).First().ToString());
 
                     }
-                    else if (line.Contains("WriteStr")
+                    else if (line.StartsWith("WriteStr")
                         && line.Contains("&>")
                         && line.ToLower().StartsWith("for") == false
                         && line.ToLower().Contains("in range %") == false
@@ -593,7 +587,7 @@ namespace rC
                         }
 
                     }
-                    else if (line.Contains("WriteNum")
+                    else if (line.StartsWith("WriteNum")
                         && line.Contains("&>")
                         && line.ToLower().StartsWith("for") == false
                         && line.ToLower().Contains("in range %") == false
@@ -1076,7 +1070,6 @@ namespace rC
 
             for (int x = 0; x < range; x++)
                 {
-                    numberValues[numberNames.IndexOf(looper)] = x;
                     Compile(loopContent, numberNames, numberValues, strNames, strValues, references);
                 }
             }
