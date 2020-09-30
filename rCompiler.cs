@@ -41,11 +41,7 @@ namespace rC
 
                 if (line.StartsWith("#") == false)
                 {
-                  if(line.StartsWith("infinite ::>"))
-                    {
-                        List<string> getContent = line.Split(new[] { "::>" }, StringSplitOptions.None).ToList();
-                        Compile(getContent, numberNames, numberValues, strNames, strValues, references);
-                    }
+                   
 
                     if (line.ToLower().StartsWith("setcursor_top"))
                     {
