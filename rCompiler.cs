@@ -150,13 +150,18 @@ namespace rC
                     foreach (var num in numberNames)
                     {
 
-                        if (line == num.ToString() + "++")
+                        if (line.StartsWith(num.ToString() + "++"))
                         {
                             double newNum = numberValues[numberNames.IndexOf(num)];
                             newNum++;
                             numberValues[numberNames.IndexOf(num)] = newNum;
+                        }else if(line.StartsWith(num.ToString() + "--"))
+                        {
+                            double newNum = numberValues[numberNames.IndexOf(num)];
+                            newNum--;
+                            numberValues[numberNames.IndexOf(num)] = newNum;
                         }
-                        if (line.StartsWith(num.ToString() + "+"))
+                        else if (line.StartsWith(num.ToString() + "+"))
                         {
                             try
                             {
