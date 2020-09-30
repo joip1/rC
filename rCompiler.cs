@@ -520,7 +520,7 @@ namespace rC
                         Console.ReadLine();
                     }
 
-                    if (line.StartsWith("number") && line.Contains(">>")
+                    if (line.StartsWith("number ") || line.StartsWith("num ") && line.Contains(">>")
                         && line.ToLower().StartsWith("for") == false
                         && line.ToLower().Contains("in range %") == false
                         && line.Contains("$>") == false)

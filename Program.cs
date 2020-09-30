@@ -84,7 +84,8 @@ namespace rC
                 
                 if (readline.StartsWith("create_file"))
                 {
-                    File.CreateText(readline.Split(new[] { "create_file " }, StringSplitOptions.None).Last() + ".rcode");
+                    var file = File.CreateText(readline.Split(new[] { "create_file " }, StringSplitOptions.None).Last() + ".rcode");
+                    file.Close();
                 }
                 else if (readline == "run_project")
                 {
@@ -119,7 +120,8 @@ namespace rC
                 {
                     if (!File.Exists("Main.rcode"))
                     {
-                        File.CreateText("Main.rcode");
+                        var file = File.CreateText("Main.rcode");
+                        file.Close();
                     }else if (!File.Exists("run_config.rconfig"))
                     {
                         StreamWriter ConfigWriter = File.CreateText("run_config.rconfig");
