@@ -39,11 +39,11 @@ namespace rC
 
                 if (line.StartsWith("#") == false)
                 {
-                    if (line.ToLower().StartsWith("setcursorpos:"))
+                    if (line.ToLower().StartsWith("setcursor_top"))
                     {
                         try
                         {
-                            Console.SetCursorPosition(Convert.ToInt32(line.ToLower().Split(new[] { "setcursorpos:" }, StringSplitOptions.None).Last().Split(',').First()), Convert.ToInt32(line.ToLower().Split(new[] { "setcursorpos:" }, StringSplitOptions.None).Last().Split(',').Last()));
+                            Console.CursorTop = Convert.ToInt32(line.ToLower().Split(new[] { "setcursor_top:" }, StringSplitOptions.None).Last());
                         }
                         catch
                         {
@@ -52,8 +52,7 @@ namespace rC
                             Console.ResetColor();
                         }
                     }
-
-                    if (line.ToLower().StartsWith("compile_lines_from_file"))
+                    else if (line.ToLower().StartsWith("compile_lines_from_file"))
                     {
                         string fileToCompile = "";
                         try
@@ -701,7 +700,7 @@ namespace rC
                                 loopContent.Add(content);
                             }
                         }
-                        ForLoop(range, looper, loopContent, numberNames, numberValues, strNames, strValues, references);
+                        ForLoop(range, looper, loopContent);
                     }
                     else if (line.StartsWith("load >>") || line.StartsWith("compiler.load"))
                     {
@@ -1069,23 +1068,22 @@ namespace rC
                 }
             }
             Console.ResetColor();
-        }
-        //receive every variable;
-        public static void ForLoop(int range,
-            string looper,
-            List<string> loopContent,
-            List<string> numberNames,
-            List<double> numberValues,
-            List<string> strNames,
-            List<string> strValues,
-            List<string> references)
-        {
-            //Compile(loopContent, numberNames,  numberValues,  strNames,  strValues);
-            for (int x = 0; x < range; x++)
+           void ForLoop(int range,
+           string looper, List<string> loopContent)
+
             {
-                Compile(loopContent, numberNames, numberValues, strNames, strValues, references);
+                //Compile(loopContent, numberNames,  numberValues,  strNames,  strValues);
+                numberValues.Add(0);
+                numberNames.Add(looper);
+            for (int x = 0; x < range; x++)
+                {
+                    numberValues[numberNames.IndexOf(looper)] = x;
+                    Compile(loopContent, numberNames, numberValues, strNames, strValues, references);
+                }
             }
         }
+        //receive every variable;
+       
 
 
     }

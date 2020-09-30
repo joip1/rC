@@ -23,9 +23,9 @@ namespace rC
         {
             string readline;
             List<string> codeLines = new List<string>();
-            string[] varTypes = new string[] { "number", "str", "save(this)", "Write", "#", "WriteStr", "WriteNum", "sleep", "for", "color", "compile_lines", "if", " ", "pixel", "import", "CreateFile", "toLower", "toUpper" };
+            string[] varTypes = new string[] { "number", "str", "save(this)", "Write", "#", "WriteStr", "WriteNum", "sleep", "for", "color", "compile_lines", "if", "pixel", "import", "CreateFile", "toLower", "toUpper" };
             string[] methods = new string[] { "Write", "WriteStr", "WriteNum" };
-            string[] loops = new string[] { "for", "compile_lines", " ", "setcursorpos:", "sleep", "pixel", "color", "if", "CreateFile", "#", "import", "str", "number", "toLower", "toUpper" };
+            string[] loops = new string[] { "for", "compile_lines", "setcursorpos:", "sleep", "pixel", "color", "if", "CreateFile", "#", "import", "str", "number", "toLower", "toUpper" };
             bool isCompiling = true;
             List<string> numberNames = new List<string>();
             List<double> numberValues = new List<double>();
@@ -129,6 +129,9 @@ namespace rC
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("Project Restored Successfully!");
                     Console.ResetColor();
+                }else if (readline == "clrscr")
+                {
+                    Console.Clear();
                 }
                 else if (readline.ToLower().StartsWith("upgrade_project"))
                 {
@@ -185,7 +188,7 @@ namespace rC
                     System.Threading.Thread.Sleep(1000);
                     Environment.Exit(1);
                 }
-                if (varTypes.Any(readline.StartsWith))
+                /*if (varTypes.Any(readline.StartsWith))
                 {
                     Console.Clear();
                     foreach (var line in codeLines)
@@ -299,7 +302,7 @@ namespace rC
 
 
 
-                }
+                }*/
 
                 if (readline.StartsWith("line.modify") && readline.Contains(":"))
                 {
