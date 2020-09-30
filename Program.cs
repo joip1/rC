@@ -33,8 +33,6 @@ namespace rC
             List<string> strValues = new List<string>();
             List<string> references = new List<string>();
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.ResetColor();
 
             if (File.Exists("run_config.rconfig"))
             {
@@ -63,6 +61,11 @@ namespace rC
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("run_config File Does Not Exist, Please run: restore_project");
+                    Console.ResetColor();
+                }else
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("#rC Started Successfully");
                     Console.ResetColor();
                 }
             }
