@@ -979,7 +979,7 @@ namespace rC
                                 }
                                 else
                                 {
-
+                                    if (line.Contains("&else ->")) { 
                                     string newStatement = line.Split(new[] { "&else" }, StringSplitOptions.None).Last();
                                     var getElseContent = newStatement.Split(new[] { "->" }, StringSplitOptions.None);
                                     List<string> loopElseContent = new List<string>();
@@ -990,8 +990,11 @@ namespace rC
                                             loopElseContent.Add(content);
                                         }
                                     }
+
                                     Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references);
 
+
+                                }
                                 }
                             }
                             catch
@@ -1003,25 +1006,27 @@ namespace rC
                         {
                             try
                             {
-                                if (numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { "<-" }, StringSplitOptions.None).First())]
-                                    < numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { "<-" }, StringSplitOptions.None).Last().Split(')').First())])
-                                {
-                                    Compile(loopContent, numberNames, numberValues, strNames, strValues, references);
-                                }
-                                else
-                                {
-
+                            if (numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { "<-" }, StringSplitOptions.None).First())]
+                                < numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { "<-" }, StringSplitOptions.None).Last().Split(')').First())])
+                            {
+                                Compile(loopContent, numberNames, numberValues, strNames, strValues, references);
+                            }
+                            else
+                            {
+                                if (line.Contains("&else ->"))
+                                    { 
                                     string newStatement = line.Split(new[] { "&else" }, StringSplitOptions.None).Last();
-                                    var getElseContent = newStatement.Split(new[] { "->" }, StringSplitOptions.None);
-                                    List<string> loopElseContent = new List<string>();
-                                    foreach (var content in getElseContent)
+                                var getElseContent = newStatement.Split(new[] { "->" }, StringSplitOptions.None);
+                                List<string> loopElseContent = new List<string>();
+                                foreach (var content in getElseContent)
+                                {
+                                    if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false)
                                     {
-                                        if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false)
-                                        {
-                                            loopElseContent.Add(content);
-                                        }
+                                        loopElseContent.Add(content);
                                     }
-                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references);
+                                }
+                                Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references);
+                            }
                                 }
 
                             }
