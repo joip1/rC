@@ -33,6 +33,7 @@ namespace rC
             List<string> charachtersToDraw = new List<string>();
             List<int> pixelXChar = new List<int>();
             List<int> pixelYChar = new List<int>();
+            Random rand = new Random();
             List<ConsoleColor> pixelColorsChar = new List<ConsoleColor>();
 
             //read code line by line
@@ -41,7 +42,11 @@ namespace rC
 
                 if (line.StartsWith("#") == false)
                 {
-                   
+
+                    if (line == "exit")
+                    {
+                        Environment.Exit(1);
+                    }
 
                     if (line.ToLower().StartsWith("setcursor_top"))
                     {
@@ -146,7 +151,8 @@ namespace rC
                             double newNum = numberValues[numberNames.IndexOf(num)];
                             newNum++;
                             numberValues[numberNames.IndexOf(num)] = newNum;
-                        }else if(line.StartsWith(num.ToString() + "--"))
+                        }
+                        else if (line.StartsWith(num.ToString() + "--"))
                         {
                             double newNum = numberValues[numberNames.IndexOf(num)];
                             newNum--;
@@ -409,7 +415,7 @@ namespace rC
                             try
                             {
                                 //add to char
-                              try
+                                try
                                 {
                                     pixelXChar.Add(Convert.ToInt32(line.ToLower().Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First()));
                                 }
@@ -524,11 +530,25 @@ namespace rC
                                 {
                                     try
                                     {
-                                        numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(line.Split('>').Last().Split(' ').Last());
+                                        if (line.Split('>').Last().Contains("rand:"))
+                                        {
+                                            numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = rand.Next(Convert.ToInt32(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').First()), Convert.ToInt32(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').Last()));
+                                        }
+                                        else
+                                        {
+                                            numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(line.Split('>').Last().Split(' ').Last());
+                                        }
                                     }
                                     catch
                                     {
-                                        numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(line.Split('>').Last());
+                                        if (line.Split('>').Last().Contains("rand:"))
+                                        {
+                                            numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = rand.Next(Convert.ToInt32(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').First()), Convert.ToInt32(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').Last()));
+                                        }
+                                        else
+                                        {
+                                            numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(line.Split('>').Last());
+                                        }
                                     }
                                 }
                                 else if (line.ToLower().Contains("$readline") == true)
@@ -543,11 +563,24 @@ namespace rC
                                     numberNames.Add(line.Split(' ')[1].Split('>').First());
                                     try
                                     {
-                                        numberValues.Add(Convert.ToDouble(line.Split('>').Last().Split(' ').Last()));
+                                        if (line.Split('>').Last().Contains("rand:"))
+                                        {
+                                            numberValues.Add(rand.Next(Convert.ToInt32(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').First()), Convert.ToInt32(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').Last())));
+                                        }
+                                        else
+                                        {
+                                            numberValues.Add(Convert.ToDouble(line.Split('>').Last().Split(' ').Last()));
+                                        }
                                     }
                                     catch
                                     {
-                                        numberValues.Add(Convert.ToDouble(line.Split('>').Last()));
+                                        if (line.Split('>').Last().Contains("rand:"))
+                                        {
+                                            numberValues.Add(rand.Next(Convert.ToInt32(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').First()), Convert.ToInt32(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').Last())));
+                                        }
+                                        {
+                                            numberValues.Add(Convert.ToDouble(line.Split('>').Last()));
+                                        }
                                     }
                                 }
                                 else if (line.ToLower().Contains("$readline") == true)
@@ -875,7 +908,10 @@ namespace rC
                             {
                             }
 
-                        }
+                        }/*else if(line.Contains("str(") && line.Contains("contains("))
+                        {
+                            if(strValues[strNames.Contains("")])
+                        }*/
                         else if (line.Contains("str(") && line.Contains("!="))
                         {
                             try
@@ -1045,22 +1081,23 @@ namespace rC
                                 }
                                 else
                                 {
-                                    if (line.Contains("&else ->")) { 
-                                    string newStatement = line.Split(new[] { "&else" }, StringSplitOptions.None).Last();
-                                    var getElseContent = newStatement.Split(new[] { "->" }, StringSplitOptions.None);
-                                    List<string> loopElseContent = new List<string>();
-                                    foreach (var content in getElseContent)
+                                    if (line.Contains("&else ->"))
                                     {
-                                        if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false)
+                                        string newStatement = line.Split(new[] { "&else" }, StringSplitOptions.None).Last();
+                                        var getElseContent = newStatement.Split(new[] { "->" }, StringSplitOptions.None);
+                                        List<string> loopElseContent = new List<string>();
+                                        foreach (var content in getElseContent)
                                         {
-                                            loopElseContent.Add(content);
+                                            if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false)
+                                            {
+                                                loopElseContent.Add(content);
+                                            }
                                         }
+
+                                        Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references);
+
+
                                     }
-
-                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references);
-
-
-                                }
                                 }
                             }
                             catch
@@ -1072,27 +1109,27 @@ namespace rC
                         {
                             try
                             {
-                            if (numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { "<-" }, StringSplitOptions.None).First())]
-                                < numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { "<-" }, StringSplitOptions.None).Last().Split(')').First())])
-                            {
-                                Compile(loopContent, numberNames, numberValues, strNames, strValues, references);
-                            }
-                            else
-                            {
-                                if (line.Contains("&else ->"))
-                                    { 
-                                    string newStatement = line.Split(new[] { "&else" }, StringSplitOptions.None).Last();
-                                var getElseContent = newStatement.Split(new[] { "->" }, StringSplitOptions.None);
-                                List<string> loopElseContent = new List<string>();
-                                foreach (var content in getElseContent)
+                                if (numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { "<-" }, StringSplitOptions.None).First())]
+                                    < numberValues[numberNames.IndexOf(line.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { "<-" }, StringSplitOptions.None).Last().Split(')').First())])
                                 {
-                                    if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false)
-                                    {
-                                        loopElseContent.Add(content);
-                                    }
+                                    Compile(loopContent, numberNames, numberValues, strNames, strValues, references);
                                 }
-                                Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references);
-                            }
+                                else
+                                {
+                                    if (line.Contains("&else ->"))
+                                    {
+                                        string newStatement = line.Split(new[] { "&else" }, StringSplitOptions.None).Last();
+                                        var getElseContent = newStatement.Split(new[] { "->" }, StringSplitOptions.None);
+                                        List<string> loopElseContent = new List<string>();
+                                        foreach (var content in getElseContent)
+                                        {
+                                            if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false)
+                                            {
+                                                loopElseContent.Add(content);
+                                            }
+                                        }
+                                        Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references);
+                                    }
                                 }
 
                             }
@@ -1133,20 +1170,20 @@ namespace rC
                 }
             }
             Console.ResetColor();
-           void ForLoop(int range,
-           string looper, List<string> loopContent)
+            void ForLoop(int range,
+            string looper, List<string> loopContent)
 
             {
                 //Compile(loopContent, numberNames,  numberValues,  strNames,  strValues);
 
-            for (int x = 0; x < range; x++)
+                for (int x = 0; x < range; x++)
                 {
                     Compile(loopContent, numberNames, numberValues, strNames, strValues, references);
                 }
             }
         }
         //receive every variable;
-       
+
 
 
     }
