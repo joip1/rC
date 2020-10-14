@@ -32,7 +32,7 @@ namespace rC
             List<string> strNames = new List<string>();
             List<string> strValues = new List<string>();
             List<string> references = new List<string>();
-
+            
 
             if (File.Exists("run_config.rconfig"))
             {

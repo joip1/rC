@@ -35,10 +35,12 @@ namespace rC
 
             //read code line by line
             foreach (var line in code)
-            {   
+            {
+
+
+
                 if (numberNames.Contains("cursor_x"))
                 {
-                    Console.CursorLeft = Convert.ToInt32(numberValues[numberNames.IndexOf("cursor_x")]);
                     numberValues[numberNames.IndexOf("cursor_x")] = Console.CursorLeft;
                 }
                 else
@@ -48,7 +50,6 @@ namespace rC
                 }
                 if (numberNames.Contains("cursor_y"))
                 {
-                    Console.CursorTop = Convert.ToInt32(numberValues[numberNames.IndexOf("cursor_y")]);
                     numberValues[numberNames.IndexOf("cursor_y")] = Console.CursorTop;
                 }
                 else
@@ -56,16 +57,34 @@ namespace rC
                     numberValues.Add(Console.CursorTop);
                     numberNames.Add("cursor_y");
                 }
-              
+
+
                 if (line.StartsWith("#") == false)
                 {
-
+                    if (line.StartsWith("cursor_x >>"))
+                    {
+                        try{
+                        numberValues[numberNames.IndexOf("cursor_x")] = Convert.ToInt32(line.Split('>').Last());
+                        }catch{
+                           numberValues[numberNames.IndexOf("cursor_x")] = numberValues[numberNames.IndexOf(line.Split('>').Last())];
+                        }
+                        Console.CursorLeft = Convert.ToInt32(numberValues[numberNames.IndexOf("cursor_x")]);
+                    }
+                    else if (line.StartsWith("cursor_y >>"))
+                    {
+                        try{
+                        numberValues[numberNames.IndexOf("cursor_y")] = Convert.ToInt32(line.Split('>').Last());
+                        }catch{
+                            numberValues[numberNames.IndexOf("cursor_y")] = numberValues[numberNames.IndexOf(line.Split('>').Last())];
+                        }
+                        Console.CursorTop = Convert.ToInt32(numberValues[numberNames.IndexOf("cursor_y")]);
+                    }
                     if (line == "exit")
                     {
                         Environment.Exit(1);
                     }
+                    
 
-                   
                     else if (line.ToLower().StartsWith("compile_lines_from_file"))
                     {
                         string fileToCompile = "";
@@ -541,7 +560,7 @@ namespace rC
                                         }
                                         else
                                         {
-                                            numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(line.Split('>').Last().Split(' ').Last());
+                                            numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(line.Split('>').Last());
                                         }
                                     }
                                     catch
@@ -552,7 +571,7 @@ namespace rC
                                         }
                                         else
                                         {
-                                            numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(line.Split('>').Last());
+                                            numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = numberValues[numberNames.IndexOf(line.Split('>').Last())];
                                         }
                                     }
                                 }
@@ -574,7 +593,18 @@ namespace rC
                                         }
                                         else
                                         {
+                                            try{
                                             numberValues.Add(Convert.ToDouble(line.Split('>').Last().Split(' ').Last()));
+                                            }catch{
+                                                try{
+                                                numberValues.Add(numberValues[numberNames.IndexOf(line.Split('>').Last())]);
+                                                }
+                                                catch{
+                                                    Console.ForegroundColor = ConsoleColor.Red;
+                                                    Console.WriteLine("Fatal Error in line "+ code.IndexOf(line));
+                                                    Console.ResetColor();
+                                                }
+                                            }
                                         }
                                     }
                                     catch
