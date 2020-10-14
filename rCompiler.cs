@@ -426,27 +426,26 @@ namespace rC
                     {
                         if (line.ToLower().StartsWith("pixel.draw"))
                         {
-                            try
-                            {
+                            
                                 //add to normal pixel
 
 
 
                                 try
                                 {
-                                    pixelX.Add(Convert.ToInt32(line.ToLower().Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First()));
+                                    pixelX.Add(Convert.ToInt32(line.Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First()));
                                 }
                                 catch
                                 {
-                                    pixelX.Add(Convert.ToInt32(numberValues[numberNames.IndexOf(line.ToLower().Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First())]));
+                                    pixelX.Add(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First())]));
                                 }
                                 try
                                 {
-                                    pixelY.Add(Convert.ToInt32(line.ToLower().Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First()));
+                                    pixelY.Add(Convert.ToInt32(line.Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First()));
                                 }
                                 catch
                                 {
-                                    pixelY.Add(Convert.ToInt32(numberValues[numberNames.IndexOf(line.ToLower().Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First())]));
+                                    pixelY.Add(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First())]));
                                 }
                                 string color = line.ToLower().Split(new[] { "color:" }, StringSplitOptions.None).Last().Split(' ').First();
 
@@ -476,11 +475,8 @@ namespace rC
                                     pixelColors.Add(ConsoleColor.Yellow);
                                 }
 
-                            }
-                            catch
-                            {
-                                Console.WriteLine("Invalid Syntax In Line " + code.IndexOf(line));
-                            }
+                            
+                           
                         }
                         if (line.ToLower().StartsWith("pixel.drawchar"))
                         {
@@ -489,22 +485,22 @@ namespace rC
                                 //add to char
                                 try
                                 {
-                                    pixelXChar.Add(Convert.ToInt32(line.ToLower().Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First()));
+                                    pixelXChar.Add(Convert.ToInt32(line.Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First()));
                                 }
                                 catch
                                 {
-                                    pixelXChar.Add(Convert.ToInt32(numberValues[numberNames.IndexOf(line.ToLower().Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First())]));
+                                    pixelXChar.Add(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First())]));
                                 }
                                 try
                                 {
-                                    pixelYChar.Add(Convert.ToInt32(line.ToLower().Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First()));
+                                    pixelYChar.Add(Convert.ToInt32(line.Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First()));
                                 }
                                 catch
                                 {
                                     pixelYChar.Add(Convert.ToInt32(numberValues[numberNames.IndexOf(line.ToLower().Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First())]));
                                 }
                                 string color = line.ToLower().Split(new[] { "color:" }, StringSplitOptions.None).Last().Split(' ').First();
-                                string characterToDraw = line.Split(new[] { "character:" }, StringSplitOptions.None).Last().Split(' ').First();
+                                string characterToDraw = line.Split(new[] { "char:" }, StringSplitOptions.None).Last().Split(' ').First();
                                 charachtersToDraw.Add(characterToDraw);
 
                                 if (color == "white")
