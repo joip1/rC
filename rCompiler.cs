@@ -11,10 +11,7 @@ namespace rC
         //added with ubuntu
         //fix: 
         //TODO: MAKE TRY / CATCH STATEMENTS
-        //new to docs == for // readline // color // ;
-        //receive every variable for further changes;
-        //compile_lines_from_file (file:filename(no suffix rcode),1,5)
-        //operationg may be first -> change split to last in var + var = newVar(int)
+        //new to docs == for // readline // color //num cursor_x >> set, cursor_y >> set;
         public static void Compile(
             List<string> code,
             List<string> numberNames,
@@ -38,8 +35,28 @@ namespace rC
 
             //read code line by line
             foreach (var line in code)
-            {
-
+            {   
+                if (numberNames.Contains("cursor_x"))
+                {
+                    Console.CursorLeft = Convert.ToInt32(numberValues[numberNames.IndexOf("cursor_x")]);
+                    numberValues[numberNames.IndexOf("cursor_x")] = Console.CursorLeft;
+                }
+                else
+                {
+                    numberValues.Add(Console.CursorLeft);
+                    numberNames.Add("cursor_x");
+                }
+                if (numberNames.Contains("cursor_y"))
+                {
+                    Console.CursorTop = Convert.ToInt32(numberValues[numberNames.IndexOf("cursor_y")]);
+                    numberValues[numberNames.IndexOf("cursor_y")] = Console.CursorTop;
+                }
+                else
+                {
+                    numberValues.Add(Console.CursorTop);
+                    numberNames.Add("cursor_y");
+                }
+              
                 if (line.StartsWith("#") == false)
                 {
 
@@ -48,19 +65,7 @@ namespace rC
                         Environment.Exit(1);
                     }
 
-                    if (line.ToLower().StartsWith("setcursor_top"))
-                    {
-                        try
-                        {
-                            Console.CursorTop = Convert.ToInt32(line.ToLower().Split(new[] { "setcursor_top:" }, StringSplitOptions.None).Last());
-                        }
-                        catch
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("INVALID SYNTAX IN LINE " + code.IndexOf(line) + "(" + line + ")");
-                            Console.ResetColor();
-                        }
-                    }
+                   
                     else if (line.ToLower().StartsWith("compile_lines_from_file"))
                     {
                         string fileToCompile = "";
@@ -432,7 +437,7 @@ namespace rC
                                     pixelYChar.Add(Convert.ToInt32(numberValues[numberNames.IndexOf(line.ToLower().Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First())]));
                                 }
                                 string color = line.ToLower().Split(new[] { "color:" }, StringSplitOptions.None).Last().Split(' ').First();
-                                string characterToDraw = line.ToLower().Split(new[] { "char:" }, StringSplitOptions.None).Last().Split(' ').First();
+                                string characterToDraw = line.Split(new[] { "character:" }, StringSplitOptions.None).Last().Split(' ').First();
                                 charachtersToDraw.Add(characterToDraw);
 
                                 if (color == "white")
@@ -1174,10 +1179,18 @@ namespace rC
             string looper, List<string> loopContent)
 
             {
-                //Compile(loopContent, numberNames,  numberValues,  strNames,  strValues);
 
                 for (int x = 0; x < range; x++)
                 {
+                    if (numberNames.Contains("x"))
+                    {
+                        numberValues[numberNames.IndexOf("x")] = x;
+                    }
+                    else
+                    {
+                        numberValues.Add(x);
+                        numberNames.Add("x");
+                    }
                     Compile(loopContent, numberNames, numberValues, strNames, strValues, references);
                 }
             }

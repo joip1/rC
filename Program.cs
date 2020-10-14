@@ -139,7 +139,7 @@ namespace rC
                 {
                     if (File.Exists(readline.Split(new[] { "upgrade_project " }, StringSplitOptions.None).Last() + @"\Main.rcode"))
                     {
-                        File.Delete(readline.Split(new[] { "upgrade_project " }, StringSplitOptions.None).Last() + @"\Run_Program.exe");
+                            File.Delete(readline.Split(new[] { "upgrade_project " }, StringSplitOptions.None).Last() + @"\Run_Program.exe");
                         File.Copy("rC.exe", readline.Split(new[] { "upgrade_project " }, StringSplitOptions.None).Last() + @"\Run_Program.exe");
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("Project Upgraded Successfully!");
