@@ -36,7 +36,25 @@ namespace rC
             //read code line by line
             foreach (var line in code)
             {
+                if (numberNames.Contains("screen_width"))
+                {
+                    numberValues[numberNames.IndexOf("screen_width")] = Console.WindowWidth;
+                }
+                else
+                {
+                    numberNames.Add("screen_width");
+                    numberValues.Add(Console.WindowWidth);
 
+                }
+                if (numberNames.Contains("screen_height"))
+                {
+                    numberValues[numberNames.IndexOf("screen_height")] = Console.WindowHeight;
+                }
+                else
+                {
+                    numberNames.Add("screen_height");
+                    numberValues.Add(Console.WindowHeight);
+                }
 
 
                 if (numberNames.Contains("cursor_x"))
@@ -63,18 +81,48 @@ namespace rC
                 {
                     if (line.StartsWith("cursor_x >>"))
                     {
-                        try{
-                        numberValues[numberNames.IndexOf("cursor_x")] = Convert.ToInt32(line.Split('>').Last());
-                        }catch{
-                           numberValues[numberNames.IndexOf("cursor_x")] = numberValues[numberNames.IndexOf(line.Split('>').Last())];
+                        try
+                        {
+                            numberValues[numberNames.IndexOf("cursor_x")] = Convert.ToInt32(line.Split('>').Last());
+                        }
+                        catch
+                        {
+                            numberValues[numberNames.IndexOf("cursor_x")] = numberValues[numberNames.IndexOf(line.Split('>').Last())];
                         }
                         Console.CursorLeft = Convert.ToInt32(numberValues[numberNames.IndexOf("cursor_x")]);
                     }
+                    else if (line.StartsWith("screen_width >>"))
+                    {
+                        try
+                        {
+                            numberValues[numberNames.IndexOf("screen_width")] = Convert.ToInt32(line.Split('>').Last());
+                        }
+                        catch
+                        {
+                            numberValues[numberNames.IndexOf("screen_width")] = numberValues[numberNames.IndexOf(line.Split('>').Last())];
+                        }
+                        Console.WindowWidth = Convert.ToInt32(numberValues[numberNames.IndexOf("screen_width")]);
+                    }
+                    else if (line.StartsWith("screen_height >>"))
+                    {
+                        try
+                        {
+                            numberValues[numberNames.IndexOf("screen_height")] = Convert.ToInt32(line.Split('>').Last());
+                        }
+                        catch
+                        {
+                            numberValues[numberNames.IndexOf("screen_height")] = numberValues[numberNames.IndexOf(line.Split('>').Last())];
+                        }
+                        Console.WindowHeight = Convert.ToInt32(numberValues[numberNames.IndexOf("screen_height")]);
+                    }
                     else if (line.StartsWith("cursor_y >>"))
                     {
-                        try{
-                        numberValues[numberNames.IndexOf("cursor_y")] = Convert.ToInt32(line.Split('>').Last());
-                        }catch{
+                        try
+                        {
+                            numberValues[numberNames.IndexOf("cursor_y")] = Convert.ToInt32(line.Split('>').Last());
+                        }
+                        catch
+                        {
                             numberValues[numberNames.IndexOf("cursor_y")] = numberValues[numberNames.IndexOf(line.Split('>').Last())];
                         }
                         Console.CursorTop = Convert.ToInt32(numberValues[numberNames.IndexOf("cursor_y")]);
@@ -83,7 +131,7 @@ namespace rC
                     {
                         Environment.Exit(1);
                     }
-                    
+
 
                     else if (line.ToLower().StartsWith("compile_lines_from_file"))
                     {
@@ -92,7 +140,7 @@ namespace rC
                         {
                             int firstIndex = Convert.ToInt32(line.Split('(').Last().Split(',')[1]);
                             int lastIndex = Convert.ToInt32(line.Split('(').Last().Split(',').Last().Split(')').First());
-                            lastIndex++;
+                            firstIndex--;
                             fileToCompile = line.ToLower().Split(new[] { "file:" }, StringSplitOptions.None).Last().Split(',').First();
 
                             if (!File.Exists(fileToCompile + ".rcode"))
@@ -149,7 +197,7 @@ namespace rC
                         {
                             int firstIndex = Convert.ToInt32(line.Split('(').Last().Split(',').First());
                             int lastIndex = Convert.ToInt32(line.Split('(').Last().Split(',').Last().Split(')').First());
-                            lastIndex++;
+                            firstIndex--;
                             Compile(code.GetRange(firstIndex, lastIndex - (firstIndex)), numberNames, numberValues, strNames, strValues, references);
                         }
                         catch
@@ -593,15 +641,20 @@ namespace rC
                                         }
                                         else
                                         {
-                                            try{
-                                            numberValues.Add(Convert.ToDouble(line.Split('>').Last().Split(' ').Last()));
-                                            }catch{
-                                                try{
-                                                numberValues.Add(numberValues[numberNames.IndexOf(line.Split('>').Last())]);
+                                            try
+                                            {
+                                                numberValues.Add(Convert.ToDouble(line.Split('>').Last().Split(' ').Last()));
+                                            }
+                                            catch
+                                            {
+                                                try
+                                                {
+                                                    numberValues.Add(numberValues[numberNames.IndexOf(line.Split('>').Last())]);
                                                 }
-                                                catch{
+                                                catch
+                                                {
                                                     Console.ForegroundColor = ConsoleColor.Red;
-                                                    Console.WriteLine("Fatal Error in line "+ code.IndexOf(line));
+                                                    Console.WriteLine("Fatal Error in line " + code.IndexOf(line));
                                                     Console.ResetColor();
                                                 }
                                             }
@@ -643,11 +696,15 @@ namespace rC
                         {
                             if (strNames.Contains(line.Split(' ')[1].Split('>').First()))
                             {
-                                if (line.ToLower().Contains("$readline") == false)
+                                if (line.Split('>').Last().ToLower().StartsWith("$read") == false)
                                 {
                                     strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = line.Split('>').Last();
                                 }
-                                else if (line.ToLower().Contains("$readline") == true)
+                                else if (line.Split('>').Last().ToLower() == "$readkey")
+                                {
+                                    strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Console.ReadKey().Key.ToString();
+                                }
+                                else if (line.Split('>').Last().ToLower() == "$readline")
                                 {
                                     strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Console.ReadLine();
                                 }
@@ -655,12 +712,17 @@ namespace rC
                             else
                             {
 
-                                if (line.ToLower().Contains("$readline") == false)
+                                if (line.Split('>').Last().ToLower().StartsWith("$read") == false)
                                 {
                                     strNames.Add(line.Split(' ')[1].Split('>').First());
                                     strValues.Add(line.Split('>').Last());
                                 }
-                                else if (line.ToLower().Contains("$readline") == true)
+                                else if (line.Split('>').Last().ToLower() == "$readkey")
+                                {
+                                    strNames.Add(line.Split(' ')[1].Split('>').First());
+                                    strValues.Add(Console.ReadKey().Key.ToString());
+                                }
+                                else if (line.Split('>').Last().ToLower() == ("$readline"))
                                 {
                                     strNames.Add(line.Split(' ')[1].Split('>').First());
                                     strValues.Add(Console.ReadLine());
