@@ -497,9 +497,9 @@ namespace rC
                                 }
                                 catch
                                 {
-                                    pixelYChar.Add(Convert.ToInt32(numberValues[numberNames.IndexOf(line.ToLower().Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First())]));
+                                    pixelYChar.Add(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First())]));
                                 }
-                                string color = line.ToLower().Split(new[] { "color:" }, StringSplitOptions.None).Last().Split(' ').First();
+                                string color = line.Split(new[] { "color:" }, StringSplitOptions.None).Last().Split(' ').First();
                                 string characterToDraw = line.Split(new[] { "char:" }, StringSplitOptions.None).Last().Split(' ').First();
                                 charachtersToDraw.Add(characterToDraw);
 
