@@ -206,12 +206,6 @@ namespace rC
                             {
                                 Compile(code, numberNames, numberValues, strNames, strValues, references);
                             }
-                            else
-                            {
-                                Console.ForegroundColor = ConsoleColor.Red;
-                                Console.WriteLine("INVALID SYNTAX IN LINE " + code.IndexOf(line) + "(" + line + ")");
-                                Console.ResetColor();
-                            }
                         }
                     }
 
@@ -1249,17 +1243,15 @@ namespace rC
                 }
                 if (pixelColors.Count >= 1 && pixelX.Count >= 1 && pixelY.Count >= 1)
                 {
-                    foreach (var pixel in pixelColors)
-                    {
-                        Pixel.Draw(pixelX[pixelColors.IndexOf(pixel)], pixelY[pixelColors.IndexOf(pixel)], pixel);
-                    }
+                   for(int i=0;i<pixelColors.Count;i++){
+                        Pixel.Draw(pixelX[i], pixelY[i], pixelColors[i]);
+                   }
                 }
                 if (pixelColorsChar.Count >= 1 && pixelXChar.Count >= 1 && pixelYChar.Count >= 1)
                 {
-                    foreach (var pixel in pixelColorsChar)
-                    {
-                        Pixel.DrawChar(pixelXChar[pixelColors.IndexOf(pixel)], pixelYChar[pixelColors.IndexOf(pixel)], pixel, charachtersToDraw[pixelColorsChar.IndexOf(pixel)]);
-                    }
+                    for(int j=0;j<pixelColorsChar.Count;j++){
+                        Pixel.DrawChar(pixelXChar[j], pixelYChar[j], pixelColorsChar[j], charachtersToDraw[j]);
+                   }
                 }
             }
             Console.ResetColor();
