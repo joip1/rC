@@ -278,7 +278,6 @@ namespace rC
             Console.Clear();
 
             rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues, references);
-
             Console.ReadLine();
         }
         public static void WriteId(int id)
