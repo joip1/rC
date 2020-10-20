@@ -23,27 +23,69 @@ namespace rC
         {
             string readline;
             List<string> codeLines = new List<string>();
-            string[] varTypes = new string[] { "number", "str", "save(this)", "Write", "#", "WriteStr", "WriteNum", "sleep", "for", "color", "compile_lines", "if", " ", "pixel", "import", "CreateFile", "toLower", "toUpper" };
+            string[] varTypes = new string[] { "number", "str", "save(this)", "Write", "#", "WriteStr", "WriteNum", "sleep", "for", "color", "compile_lines", "if", "pixel", "import", "CreateFile", "toLower", "toUpper" };
             string[] methods = new string[] { "Write", "WriteStr", "WriteNum" };
-            string[] loops = new string[] { "for", "compile_lines", " ", "setcursorpos:", "sleep", "pixel", "color", "if", "CreateFile", "#", "import", "str", "number", "toLower", "toUpper" };
+            string[] loops = new string[] { "for", "compile_lines", "setcursorpos:", "sleep", "pixel", "color", "if", "CreateFile", "#", "import", "str", "number", "toLower", "toUpper" };
             bool isCompiling = true;
             List<string> numberNames = new List<string>();
             List<double> numberValues = new List<double>();
             List<string> strNames = new List<string>();
             List<string> strValues = new List<string>();
             List<string> references = new List<string>();
+            
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.Write("#rC Started Successfully\n");
-            Console.ResetColor();
+            if (File.Exists("run_config.rconfig"))
+            {
+                StreamReader readConfig = File.OpenText("run_config.rconfig");
+                string readline_config;
+                while ((readline_config = readConfig.ReadLine()) != null)
+                {
+                    if (readline_config.StartsWith("init:"))
+                    {
+                        if (File.Exists(readline_config.Split(':').Last())){
+                            StreamReader reader_init = File.OpenText(readline_config.Split(':').Last());
+                            List<string> run_code = new List<string>();
+                            string line_init;
+                            while ((line_init = reader_init.ReadLine()) != null)
+                            {
+                                run_code.Add(line_init);
+                            }
+                            reader_init.Close();
+                            rCompiler.Compile(run_code, numberNames, numberValues, strNames, strValues, references);
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine("Init File Does Not Exist, Change it in run_config.rconfig");
+                            Console.ResetColor();
+                        }
+                    }
+                }
+                readConfig.Close();
 
+            }
+            else
+            {
+                if (File.Exists("Main.rcode"))
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("run_config File Does Not Exist, Please run: restore_project");
+                    Console.ResetColor();
+                }else
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("#rC Started Successfully");
+                    Console.ResetColor();
+                }
+            }
 
             while ((readline = Console.ReadLine()).ToLower() != "rcompiler.compile" && isCompiling == true)
             {
                 
                 if (readline.StartsWith("create_file"))
                 {
-                    File.CreateText(readline.Split(new[] { "create_file " }, StringSplitOptions.None).Last() + ".rcode");
+                    var file = File.CreateText(readline.Split(new[] { "create_file " }, StringSplitOptions.None).Last() + ".rcode");
+                    file.Close();
                 }
                 else if (readline == "run_project")
                 {
@@ -56,8 +98,15 @@ namespace rC
                         {
                             entryPoint_Code.Add(read);
                         }
+                        reader.Close();
                         rCompiler.Compile(entryPoint_Code, numberNames, numberValues, strNames, strValues, references);
                         Console.Write("\n");
+                    }
+                    else if (!File.Exists("run_config.rconfig"))
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Main Run Config: run_config not found, Please Run the Command: restore_project");
+                        Console.ResetColor();
                     }
                     else
                     {
@@ -71,18 +120,27 @@ namespace rC
                 {
                     if (!File.Exists("Main.rcode"))
                     {
-                        File.CreateText("Main.rcode");
+                        var file = File.CreateText("Main.rcode");
+                        file.Close();
+                    }else if (!File.Exists("run_config.rconfig"))
+                    {
+                        StreamWriter ConfigWriter = File.CreateText("run_config.rconfig");
+                        ConfigWriter.WriteLine("init:Main.rcode");
+                        ConfigWriter.Close();
                     }
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("Project Restored Successfully!");
                     Console.ResetColor();
+                }else if (readline == "clrscr")
+                {
+                    Console.Clear();
                 }
                 else if (readline.ToLower().StartsWith("upgrade_project"))
                 {
                     if (File.Exists(readline.Split(new[] { "upgrade_project " }, StringSplitOptions.None).Last() + @"\Main.rcode"))
                     {
-                        File.Delete(readline.Split(new[] { "upgrade_project " }, StringSplitOptions.None).Last() + @"\rC.exe");
-                        File.Copy("rC.exe", readline.Split(new[] { "upgrade_project " }, StringSplitOptions.None).Last() + @"\rC.exe");
+                            File.Delete(readline.Split(new[] { "upgrade_project " }, StringSplitOptions.None).Last() + @"\Run_Program.exe");
+                        File.Copy("rC.exe", readline.Split(new[] { "upgrade_project " }, StringSplitOptions.None).Last() + @"\Run_Program.exe");
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("Project Upgraded Successfully!");
                         Console.ResetColor();
@@ -98,7 +156,10 @@ namespace rC
                 {
                     var dirToCopy = Directory.CreateDirectory(readline.Split(new[] { "create_project " }, StringSplitOptions.None).Last());
                     File.CreateText(dirToCopy.FullName + @"\Main.rcode");
-                    File.Copy("rC.exe", dirToCopy.FullName + @"\rC.exe");
+                    StreamWriter ConfigWriter = File.CreateText(dirToCopy.FullName + @"\run_config.rconfig");
+                    ConfigWriter.WriteLine("init:Main.rcode");
+                    ConfigWriter.Close();
+                    File.Copy("rC.exe", dirToCopy.FullName + @"\Run_Program.exe");
                     Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine("Project Created Successfully!");
                     Console.ResetColor();
@@ -129,121 +190,7 @@ namespace rC
                     System.Threading.Thread.Sleep(1000);
                     Environment.Exit(1);
                 }
-                if (varTypes.Any(readline.StartsWith))
-                {
-                    Console.Clear();
-                    foreach (var line in codeLines)
-                    {
-                        if (line.StartsWith("save(this)") && loops.Any(line.Contains) == false)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Yellow;
-                            Console.Write(codeLines.IndexOf(line) + " " + line + "\n");
-                            Console.ResetColor();
-                        }
-                        else if (methods.Any(line.StartsWith) && line != "save(this)" && loops.Any(line.StartsWith) == false)
-                        {
-                            Console.ResetColor();
-                            Console.Write(codeLines.IndexOf(line) + " ");
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.Write(line.Split('&').First());
-                            Console.ResetColor();
-                            try
-                            {
-                                Console.Write("&>" + line.Split(new[] { "&>" }, StringSplitOptions.None).Last() + "\n");
-                            }
-                            catch
-                            {
-                                Console.Write(" <---- Invalid Syntax\n");
-                            }
-                        }
-                        else if (varTypes.Any(line.StartsWith) && loops.Any(line.StartsWith) == false && methods.Any(line.StartsWith) == false && line.StartsWith("save(this)") == false && loops.Any(line.StartsWith) == false)
-                        {
-                            Console.ResetColor();
-                            Console.Write(codeLines.IndexOf(line) + " ");
-                            Console.ForegroundColor = ConsoleColor.Magenta;
-                            Console.Write(line.Split(' ').First());
-                            Console.ForegroundColor = ConsoleColor.White;
-                            try
-                            {
-                                Console.Write(" " + line.Split(' ')[1] + " >>" + line.Split('>').Last() + "\n");
-                            }
-                            catch
-                            {
-                                Console.Write(" <---- Invalid Syntax\n");
-                            }
-                        }
-                        else if (loops.Any(line.StartsWith) && methods.Any(line.StartsWith) == false && line != "save(this)")
-                        {
-                            Console.ResetColor();
-                            Console.Write(codeLines.IndexOf(line) + " ");
-                            Console.ForegroundColor = ConsoleColor.Blue;
-                            Console.Write(line.Split(' ').First());
-                            Console.ResetColor();
-                            Console.Write(line.Split(new[] { line.Split(' ').First() }, StringSplitOptions.None).Last() + "\n");
-                            Console.ResetColor();
-                        }
-                        else
-                        {
-                            Console.Write(codeLines.IndexOf(line) + " " + line + "\n");
-                        }
-
-                    }
-                    if (methods.Any(readline.Contains) == false && readline.Contains("save(this)") == false && loops.Any(readline.Contains) == false)
-                    {
-                        Console.ResetColor();
-                        Console.Write(codeLines.Count + " ");
-                        Console.ForegroundColor = ConsoleColor.Magenta;
-                        Console.Write(readline.Split(' ').First());
-                        //onsole.ForegroundColor = ConsoleColor.White;
-                        try
-                        {
-                            Console.Write(" " + readline.Split(' ')[1] + " >>" + readline.Split('>').Last() + "\n");
-                        }
-                        catch
-                        {
-                            Console.Write(" <---- Invalid Syntax\n");
-                        }
-
-
-                    }
-                    else if (readline.StartsWith("save(this)"))
-                    {
-                        Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.Write(codeLines.Count + " " + readline + "\n");
-                        Console.ResetColor();
-                    }
-                    else if (loops.Any(readline.StartsWith))
-                    {
-                        Console.ResetColor();
-                        Console.Write(codeLines.Count + " ");
-                        Console.ForegroundColor = ConsoleColor.Blue;
-                        Console.Write(readline.Split(' ').First());
-                        Console.ResetColor();
-                        Console.Write(readline.Split(new[] { readline.Split(' ').First() }, StringSplitOptions.None).Last() + "\n");
-                        Console.ResetColor();
-                    }
-                    else
-                    {
-
-                        Console.ResetColor();
-                        Console.Write(codeLines.Count + " ");
-                        Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write(readline.Split('&').First());
-                        Console.ResetColor();
-                        try
-                        {
-                            Console.Write("&>" + readline.Split(new[] { "&>" }, StringSplitOptions.None).Last() + "\n");
-                        }
-                        catch
-                        {
-                            Console.Write(" <---- Invalid Syntax\n");
-                        }
-                    }
-
-
-
-
-                }
+           
 
                 if (readline.StartsWith("line.modify") && readline.Contains(":"))
                 {
@@ -332,7 +279,6 @@ namespace rC
 
             rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues, references);
 
-            //Console.WriteLine("\n------------------------------------------------------\nCompiled, Output is Above\nPress enter to exit...");
             Console.ReadLine();
         }
         public static void WriteId(int id)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using rC;
 using System.Linq;
 
 namespace rC
@@ -9,10 +10,8 @@ namespace rC
     {
         //added with ubuntu
         //fix: 
-        //new to docs == for // readline // color // ;
-        //receive every variable for further changes;
-        //compile_lines_from_file (file:filename(no suffix rcode),1,5)
-        //operationg may be first -> change split to last in var + var = newVar(int)
+        //TODO: MAKE TRY / CATCH STATEMENTS
+        //new to docs == for // readline // color //num cursor_x >> set, cursor_y >> set;
         public static void Compile(
             List<string> code,
             List<string> numberNames,
@@ -31,36 +30,117 @@ namespace rC
             List<string> charachtersToDraw = new List<string>();
             List<int> pixelXChar = new List<int>();
             List<int> pixelYChar = new List<int>();
+            Random rand = new Random();
             List<ConsoleColor> pixelColorsChar = new List<ConsoleColor>();
 
             //read code line by line
             foreach (var line in code)
             {
+                if (numberNames.Contains("screen_width"))
+                {
+                    numberValues[numberNames.IndexOf("screen_width")] = Console.WindowWidth;
+                }
+                else
+                {
+                    numberNames.Add("screen_width");
+                    numberValues.Add(Console.WindowWidth);
+
+                }
+                if (numberNames.Contains("screen_height"))
+                {
+                    numberValues[numberNames.IndexOf("screen_height")] = Console.WindowHeight;
+                }
+                else
+                {
+                    numberNames.Add("screen_height");
+                    numberValues.Add(Console.WindowHeight);
+                }
+
+
+                if (numberNames.Contains("cursor_x"))
+                {
+                    numberValues[numberNames.IndexOf("cursor_x")] = Console.CursorLeft;
+                }
+                else
+                {
+                    numberValues.Add(Console.CursorLeft);
+                    numberNames.Add("cursor_x");
+                }
+                if (numberNames.Contains("cursor_y"))
+                {
+                    numberValues[numberNames.IndexOf("cursor_y")] = Console.CursorTop;
+                }
+                else
+                {
+                    numberValues.Add(Console.CursorTop);
+                    numberNames.Add("cursor_y");
+                }
+
 
                 if (line.StartsWith("#") == false)
                 {
-                    if (line.ToLower().StartsWith("setcursorpos:"))
+                    if (line.StartsWith("cursor_x >>"))
                     {
                         try
                         {
-                            Console.SetCursorPosition(Convert.ToInt32(line.ToLower().Split(new[] { "setcursorpos:" }, StringSplitOptions.None).Last().Split(',').First()), Convert.ToInt32(line.ToLower().Split(new[] { "setcursorpos:" }, StringSplitOptions.None).Last().Split(',').Last()));
+                            numberValues[numberNames.IndexOf("cursor_x")] = Convert.ToInt32(line.Split('>').Last());
                         }
                         catch
                         {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("INVALID SYNTAX IN LINE " + code.IndexOf(line) + "(" + line + ")");
-                            Console.ResetColor();
+                            numberValues[numberNames.IndexOf("cursor_x")] = numberValues[numberNames.IndexOf(line.Split('>').Last())];
                         }
+                        Console.CursorLeft = Convert.ToInt32(numberValues[numberNames.IndexOf("cursor_x")]);
+                    }
+                    else if (line.StartsWith("screen_width >>"))
+                    {
+                        try
+                        {
+                            numberValues[numberNames.IndexOf("screen_width")] = Convert.ToInt32(line.Split('>').Last());
+                        }
+                        catch
+                        {
+                            numberValues[numberNames.IndexOf("screen_width")] = numberValues[numberNames.IndexOf(line.Split('>').Last())];
+                        }
+                        Console.WindowWidth = Convert.ToInt32(numberValues[numberNames.IndexOf("screen_width")]);
+                    }
+                    else if (line.StartsWith("screen_height >>"))
+                    {
+                        try
+                        {
+                            numberValues[numberNames.IndexOf("screen_height")] = Convert.ToInt32(line.Split('>').Last());
+                        }
+                        catch
+                        {
+                            numberValues[numberNames.IndexOf("screen_height")] = numberValues[numberNames.IndexOf(line.Split('>').Last())];
+                        }
+                        Console.WindowHeight = Convert.ToInt32(numberValues[numberNames.IndexOf("screen_height")]);
+                    }
+                    else if (line.StartsWith("cursor_y >>"))
+                    {
+                        try
+                        {
+                            numberValues[numberNames.IndexOf("cursor_y")] = Convert.ToInt32(line.Split('>').Last());
+                        }
+                        catch
+                        {
+                            numberValues[numberNames.IndexOf("cursor_y")] = numberValues[numberNames.IndexOf(line.Split('>').Last())];
+                        }
+                        Console.CursorTop = Convert.ToInt32(numberValues[numberNames.IndexOf("cursor_y")]);
+                    }
+                    if (line == "exit")
+                    {
+                        Environment.Exit(1);
                     }
 
-                    if (line.ToLower().StartsWith("compile_lines_from_file"))
+
+                    else if (line.ToLower().StartsWith("compile_lines_from_file"))
                     {
                         string fileToCompile = "";
                         try
                         {
                             int firstIndex = Convert.ToInt32(line.Split('(').Last().Split(',')[1]);
                             int lastIndex = Convert.ToInt32(line.Split('(').Last().Split(',').Last().Split(')').First());
-                            lastIndex++;
+                            firstIndex--;
                             fileToCompile = line.ToLower().Split(new[] { "file:" }, StringSplitOptions.None).Last().Split(',').First();
 
                             if (!File.Exists(fileToCompile + ".rcode"))
@@ -117,27 +197,42 @@ namespace rC
                         {
                             int firstIndex = Convert.ToInt32(line.Split('(').Last().Split(',').First());
                             int lastIndex = Convert.ToInt32(line.Split('(').Last().Split(',').Last().Split(')').First());
-                            lastIndex++;
-                            Compile(code.GetRange(firstIndex, lastIndex - (firstIndex)), numberNames, numberValues, strNames, strValues, references);
+                            firstIndex--;
+                            List<string> newCompile = code;
+                            Compile(newCompile.GetRange(firstIndex, (lastIndex - firstIndex)), numberNames, numberValues, strNames, strValues, references);
                         }
                         catch
                         {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                            Console.WriteLine("INVALID SYNTAX IN LINE " + code.IndexOf(line) + "(" + line + ")");
-                            Console.ResetColor();
+                            if (line.Split('(').Last().Split(')').First().ToLower() == "all")
+                            {
+                                List<string> newCompile = code;
+                                Compile(newCompile, numberNames, numberValues, strNames, strValues, references);
+                            }
+                            else
+                            {
+                                Console.ForegroundColor = ConsoleColor.Red;
+                                Console.WriteLine("INVALID SYNTAX IN LINE " + code.IndexOf(line) + "(" + line + ")");
+                                Console.ResetColor();
+                            }
                         }
                     }
 
                     foreach (var num in numberNames)
                     {
 
-                        if (line == num.ToString() + "++")
+                        if (line.StartsWith(num.ToString() + "++"))
                         {
                             double newNum = numberValues[numberNames.IndexOf(num)];
                             newNum++;
                             numberValues[numberNames.IndexOf(num)] = newNum;
                         }
-                        if (line.StartsWith(num.ToString() + "+"))
+                        else if (line.StartsWith(num.ToString() + "--"))
+                        {
+                            double newNum = numberValues[numberNames.IndexOf(num)];
+                            newNum--;
+                            numberValues[numberNames.IndexOf(num)] = newNum;
+                        }
+                        else if (line.StartsWith(num.ToString() + "+"))
                         {
                             try
                             {
@@ -333,13 +428,27 @@ namespace rC
                     {
                         if (line.ToLower().StartsWith("pixel.draw"))
                         {
-                            try
-                            {
+                            
                                 //add to normal pixel
-                                int x = Convert.ToInt32(line.ToLower().Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First());
-                                int y = Convert.ToInt32(line.ToLower().Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First());
-                                pixelX.Add(Convert.ToInt32(line.ToLower().Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First()));
-                                pixelY.Add(Convert.ToInt32(line.ToLower().Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First()));
+
+
+
+                                try
+                                {
+                                    pixelX.Add(Convert.ToInt32(line.Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First()));
+                                }
+                                catch
+                                {
+                                    pixelX.Add(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First())]));
+                                }
+                                try
+                                {
+                                    pixelY.Add(Convert.ToInt32(line.Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First()));
+                                }
+                                catch
+                                {
+                                    pixelY.Add(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First())]));
+                                }
                                 string color = line.ToLower().Split(new[] { "color:" }, StringSplitOptions.None).Last().Split(' ').First();
 
 
@@ -355,24 +464,45 @@ namespace rC
                                 {
                                     pixelColors.Add(ConsoleColor.Blue);
                                 }
+                                else if (color == "magenta")
+                                {
+                                    pixelColors.Add(ConsoleColor.Magenta);
+                                }
+                                else if (color == "green")
+                                {
+                                    pixelColors.Add(ConsoleColor.Green);
+                                }
+                                else if (color == "yellow")
+                                {
+                                    pixelColors.Add(ConsoleColor.Yellow);
+                                }
 
-                            }
-                            catch
-                            {
-                                Console.WriteLine("Invalid Syntax In Line " + code.IndexOf(line));
-                            }
+                            
+                           
                         }
                         if (line.ToLower().StartsWith("pixel.drawchar"))
                         {
                             try
                             {
                                 //add to char
-                                int x = Convert.ToInt32(line.ToLower().Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First());
-                                int y = Convert.ToInt32(line.ToLower().Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First());
-                                pixelXChar.Add(Convert.ToInt32(line.ToLower().Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First()));
-                                pixelYChar.Add(Convert.ToInt32(line.ToLower().Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First()));
-                                string color = line.ToLower().Split(new[] { "color:" }, StringSplitOptions.None).Last().Split(' ').First();
-                                string characterToDraw = line.ToLower().Split(new[] { "char:" }, StringSplitOptions.None).Last().Split(' ').First();
+                                try
+                                {
+                                    pixelXChar.Add(Convert.ToInt32(line.Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First()));
+                                }
+                                catch
+                                {
+                                    pixelXChar.Add(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "x:" }, StringSplitOptions.None).Last().Split(' ').First())]));
+                                }
+                                try
+                                {
+                                    pixelYChar.Add(Convert.ToInt32(line.Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First()));
+                                }
+                                catch
+                                {
+                                    pixelYChar.Add(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "y:" }, StringSplitOptions.None).Last().Split(' ').First())]));
+                                }
+                                string color = line.Split(new[] { "color:" }, StringSplitOptions.None).Last().Split(' ').First();
+                                string characterToDraw = line.Split(new[] { "char:" }, StringSplitOptions.None).Last().Split(' ').First();
                                 charachtersToDraw.Add(characterToDraw);
 
                                 if (color == "white")
@@ -387,7 +517,18 @@ namespace rC
                                 {
                                     pixelColorsChar.Add(ConsoleColor.Blue);
                                 }
-
+                                else if (color == "magenta")
+                                {
+                                    pixelColorsChar.Add(ConsoleColor.Magenta);
+                                }
+                                else if (color == "green")
+                                {
+                                    pixelColorsChar.Add(ConsoleColor.Green);
+                                }
+                                else if (color == "yellow")
+                                {
+                                    pixelColorsChar.Add(ConsoleColor.Yellow);
+                                }
 
 
                             }
@@ -416,27 +557,27 @@ namespace rC
                         }
                     }
                     //color indicators
-                    if (line.ToLower().Contains("color.reset"))
+                    if (line.ToLower().StartsWith("color.reset"))
                     {
                         Console.ResetColor();
                     }
-                    else if (line.ToLower().Contains("color.green"))
+                    else if (line.ToLower().StartsWith("color.green"))
                     {
                         Console.ForegroundColor = ConsoleColor.Green;
                     }
-                    else if (line.ToLower().Contains("color.blue"))
+                    else if (line.ToLower().StartsWith("color.blue"))
                     {
                         Console.ForegroundColor = ConsoleColor.Blue;
                     }
-                    else if (line.ToLower().Contains("color.red"))
+                    else if (line.ToLower().StartsWith("color.red"))
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
                     }
-                    else if (line.ToLower().Contains("color.magenta"))
+                    else if (line.ToLower().StartsWith("color.magenta"))
                     {
                         Console.ForegroundColor = ConsoleColor.Magenta;
                     }
-                    else if (line.ToLower().Contains("color.yellow"))
+                    else if (line.ToLower().StartsWith("color.yellow"))
                     {
                         Console.ForegroundColor = ConsoleColor.Yellow;
                     }
@@ -446,7 +587,7 @@ namespace rC
                         Console.ReadLine();
                     }
 
-                    if (line.StartsWith("number") && line.Contains(">>")
+                    if (line.StartsWith("number ") || line.StartsWith("num ") && line.Contains(">>")
                         && line.ToLower().StartsWith("for") == false
                         && line.ToLower().Contains("in range %") == false
                         && line.Contains("$>") == false)
@@ -459,11 +600,25 @@ namespace rC
                                 {
                                     try
                                     {
-                                        numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(line.Split('>').Last().Split(' ').Last());
+                                        if (line.Split('>').Last().Contains("rand:"))
+                                        {
+                                            numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = rand.Next(Convert.ToInt32(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').First()), Convert.ToInt32(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').Last()));
+                                        }
+                                        else
+                                        {
+                                            numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(line.Split('>').Last());
+                                        }
                                     }
                                     catch
                                     {
-                                        numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(line.Split('>').Last());
+                                        if (line.Split('>').Last().Contains("rand:"))
+                                        {
+                                            numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = rand.Next(Convert.ToInt32(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').First()), Convert.ToInt32(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').Last()));
+                                        }
+                                        else
+                                        {
+                                            numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = numberValues[numberNames.IndexOf(line.Split('>').Last())];
+                                        }
                                     }
                                 }
                                 else if (line.ToLower().Contains("$readline") == true)
@@ -478,11 +633,40 @@ namespace rC
                                     numberNames.Add(line.Split(' ')[1].Split('>').First());
                                     try
                                     {
-                                        numberValues.Add(Convert.ToDouble(line.Split('>').Last().Split(' ').Last()));
+                                        if (line.Split('>').Last().Contains("rand:"))
+                                        {
+                                            numberValues.Add(rand.Next(Convert.ToInt32(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').First()), Convert.ToInt32(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').Last())));
+                                        }
+                                        else
+                                        {
+                                            try
+                                            {
+                                                numberValues.Add(Convert.ToDouble(line.Split('>').Last().Split(' ').Last()));
+                                            }
+                                            catch
+                                            {
+                                                try
+                                                {
+                                                    numberValues.Add(numberValues[numberNames.IndexOf(line.Split('>').Last())]);
+                                                }
+                                                catch
+                                                {
+                                                    Console.ForegroundColor = ConsoleColor.Red;
+                                                    Console.WriteLine("Fatal Error in line " + code.IndexOf(line));
+                                                    Console.ResetColor();
+                                                }
+                                            }
+                                        }
                                     }
                                     catch
                                     {
-                                        numberValues.Add(Convert.ToDouble(line.Split('>').Last()));
+                                        if (line.Split('>').Last().Contains("rand:"))
+                                        {
+                                            numberValues.Add(rand.Next(Convert.ToInt32(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').First()), Convert.ToInt32(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').Last())));
+                                        }
+                                        {
+                                            numberValues.Add(Convert.ToDouble(line.Split('>').Last()));
+                                        }
                                     }
                                 }
                                 else if (line.ToLower().Contains("$readline") == true)
@@ -501,7 +685,7 @@ namespace rC
                     }
 
                     //string definer
-                    if (line.Contains("str")
+                    if (line.StartsWith("str")
                         && line.Contains(">>")
                         && line.ToLower().StartsWith("for") == false && line.ToLower().Contains("in range %") == false
                         && line.Contains("$>") == false)
@@ -510,11 +694,15 @@ namespace rC
                         {
                             if (strNames.Contains(line.Split(' ')[1].Split('>').First()))
                             {
-                                if (line.ToLower().Contains("$readline") == false)
+                                if (line.Split('>').Last().ToLower().StartsWith("$read") == false)
                                 {
                                     strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = line.Split('>').Last();
                                 }
-                                else if (line.ToLower().Contains("$readline") == true)
+                                else if (line.Split('>').Last().ToLower() == "$readkey")
+                                {
+                                    strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Console.ReadKey().Key.ToString();
+                                }
+                                else if (line.Split('>').Last().ToLower() == "$readline")
                                 {
                                     strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Console.ReadLine();
                                 }
@@ -522,12 +710,17 @@ namespace rC
                             else
                             {
 
-                                if (line.ToLower().Contains("$readline") == false)
+                                if (line.Split('>').Last().ToLower().StartsWith("$read") == false)
                                 {
                                     strNames.Add(line.Split(' ')[1].Split('>').First());
                                     strValues.Add(line.Split('>').Last());
                                 }
-                                else if (line.ToLower().Contains("$readline") == true)
+                                else if (line.Split('>').Last().ToLower() == "$readkey")
+                                {
+                                    strNames.Add(line.Split(' ')[1].Split('>').First());
+                                    strValues.Add(Console.ReadKey().Key.ToString());
+                                }
+                                else if (line.Split('>').Last().ToLower() == ("$readline"))
                                 {
                                     strNames.Add(line.Split(' ')[1].Split('>').First());
                                     strValues.Add(Console.ReadLine());
@@ -543,23 +736,17 @@ namespace rC
                         }
                     }
 
-                    if (line.Contains("list(str)") && line.ToLower().StartsWith("for") == false && line.ToLower().Contains("in range %") == false && line.Contains("$>") == false)
-                    {
-                        List<List<string>> listsStr = new List<List<string>>();
-                    }
-
-
 
 
 
 
                     //Write 
 
-                    if (line.ToLower().Contains("newline") || line.ToLower().Contains("newln"))
+                    if (line.ToLower().StartsWith("newline") || line.ToLower().StartsWith("newln"))
                     {
                         Console.WriteLine("");
                     }
-                    if (line.Contains("Write") && line.Contains("&>") && line.Contains("<&") && line.Contains("WriteStr") == false && line.Contains("WriteNum") == false && line.ToLower().StartsWith("for") == false && line.ToLower().Contains("in range %") == false && line.Contains("$>") == false)
+                    if (line.StartsWith("Write") && line.Contains("&>") && line.Contains("<&") && line.Contains("WriteStr") == false && line.Contains("WriteNum") == false && line.ToLower().StartsWith("for") == false && line.ToLower().Contains("in range %") == false && line.Contains("$>") == false)
                     {
                         //check if it is a number 
                         //var matchesNumber = numberNames.Where(x => line.Contains(line.Split(new[] { "Write &>" }, StringSplitOptions.None).Last().ToString().Split(new[] { "<&" }, StringSplitOptions.None).First().ToString()));
@@ -567,7 +754,7 @@ namespace rC
                         Console.Write(line.Split(new[] { "Write &>" }, StringSplitOptions.None).Last().ToString().Split(new[] { "<&" }, StringSplitOptions.None).First().ToString());
 
                     }
-                    else if (line.Contains("WriteStr")
+                    else if (line.StartsWith("WriteStr")
                         && line.Contains("&>")
                         && line.ToLower().StartsWith("for") == false
                         && line.ToLower().Contains("in range %") == false
@@ -594,7 +781,7 @@ namespace rC
                         }
 
                     }
-                    else if (line.Contains("WriteNum")
+                    else if (line.StartsWith("WriteNum")
                         && line.Contains("&>")
                         && line.ToLower().StartsWith("for") == false
                         && line.ToLower().Contains("in range %") == false
@@ -701,7 +888,7 @@ namespace rC
                                 loopContent.Add(content);
                             }
                         }
-                        ForLoop(range, looper, loopContent, numberNames, numberValues, strNames, strValues, references);
+                        ForLoop(range, looper, loopContent);
                     }
                     else if (line.StartsWith("load >>") || line.StartsWith("compiler.load"))
                     {
@@ -816,7 +1003,10 @@ namespace rC
                             {
                             }
 
-                        }
+                        }/*else if(line.Contains("str(") && line.Contains("contains("))
+                        {
+                            if(strValues[strNames.Contains("")])
+                        }*/
                         else if (line.Contains("str(") && line.Contains("!="))
                         {
                             try
@@ -986,19 +1176,23 @@ namespace rC
                                 }
                                 else
                                 {
-
-                                    string newStatement = line.Split(new[] { "&else" }, StringSplitOptions.None).Last();
-                                    var getElseContent = newStatement.Split(new[] { "->" }, StringSplitOptions.None);
-                                    List<string> loopElseContent = new List<string>();
-                                    foreach (var content in getElseContent)
+                                    if (line.Contains("&else ->"))
                                     {
-                                        if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false)
+                                        string newStatement = line.Split(new[] { "&else" }, StringSplitOptions.None).Last();
+                                        var getElseContent = newStatement.Split(new[] { "->" }, StringSplitOptions.None);
+                                        List<string> loopElseContent = new List<string>();
+                                        foreach (var content in getElseContent)
                                         {
-                                            loopElseContent.Add(content);
+                                            if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false)
+                                            {
+                                                loopElseContent.Add(content);
+                                            }
                                         }
-                                    }
-                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references);
 
+                                        Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references);
+
+
+                                    }
                                 }
                             }
                             catch
@@ -1017,18 +1211,20 @@ namespace rC
                                 }
                                 else
                                 {
-
-                                    string newStatement = line.Split(new[] { "&else" }, StringSplitOptions.None).Last();
-                                    var getElseContent = newStatement.Split(new[] { "->" }, StringSplitOptions.None);
-                                    List<string> loopElseContent = new List<string>();
-                                    foreach (var content in getElseContent)
+                                    if (line.Contains("&else ->"))
                                     {
-                                        if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false)
+                                        string newStatement = line.Split(new[] { "&else" }, StringSplitOptions.None).Last();
+                                        var getElseContent = newStatement.Split(new[] { "->" }, StringSplitOptions.None);
+                                        List<string> loopElseContent = new List<string>();
+                                        foreach (var content in getElseContent)
                                         {
-                                            loopElseContent.Add(content);
+                                            if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false)
+                                            {
+                                                loopElseContent.Add(content);
+                                            }
                                         }
+                                        Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references);
                                     }
-                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references);
                                 }
 
                             }
@@ -1069,23 +1265,28 @@ namespace rC
                 }
             }
             Console.ResetColor();
-        }
-        //receive every variable;
-        public static void ForLoop(int range,
-            string looper,
-            List<string> loopContent,
-            List<string> numberNames,
-            List<double> numberValues,
-            List<string> strNames,
-            List<string> strValues,
-            List<string> references)
-        {
-            //Compile(loopContent, numberNames,  numberValues,  strNames,  strValues);
-            for (int x = 0; x < range; x++)
+            void ForLoop(int range,
+            string looper, List<string> loopContent)
+
             {
-                Compile(loopContent, numberNames, numberValues, strNames, strValues, references);
+
+                for (int x = 0; x < range; x++)
+                {
+                    if (numberNames.Contains("x"))
+                    {
+                        numberValues[numberNames.IndexOf("x")] = x;
+                    }
+                    else
+                    {
+                        numberValues.Add(x);
+                        numberNames.Add("x");
+                    }
+                    Compile(loopContent, numberNames, numberValues, strNames, strValues, references);
+                }
             }
         }
+        //receive every variable;
+
 
 
     }
