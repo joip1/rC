@@ -131,6 +131,46 @@ namespace rC
                     {
                         Environment.Exit(1);
                     }
+                    else if (line.StartsWith("screen_width >>"))
+                    {
+                        try
+                        {
+                            numberValues[numberNames.IndexOf("screen_width")] = Convert.ToInt32(line.Split('>').Last());
+                        }
+                        catch
+                        {
+                            numberValues[numberNames.IndexOf("screen_width")] = numberValues[numberNames.IndexOf(line.Split('>').Last())];
+                        }
+                        Console.WindowWidth = Convert.ToInt32(numberValues[numberNames.IndexOf("screen_width")]);
+                    }
+                    else if (line.StartsWith("screen_height >>"))
+                    {
+                        try
+                        {
+                            numberValues[numberNames.IndexOf("screen_height")] = Convert.ToInt32(line.Split('>').Last());
+                        }
+                        catch
+                        {
+                            numberValues[numberNames.IndexOf("screen_height")] = numberValues[numberNames.IndexOf(line.Split('>').Last())];
+                        }
+                        Console.WindowHeight = Convert.ToInt32(numberValues[numberNames.IndexOf("screen_height")]);
+                    }
+                    else if (line.StartsWith("cursor_y >>"))
+                    {
+                        try
+                        {
+                            numberValues[numberNames.IndexOf("cursor_y")] = Convert.ToInt32(line.Split('>').Last());
+                        }
+                        catch
+                        {
+                            numberValues[numberNames.IndexOf("cursor_y")] = numberValues[numberNames.IndexOf(line.Split('>').Last())];
+                        }
+                        Console.CursorTop = Convert.ToInt32(numberValues[numberNames.IndexOf("cursor_y")]);
+                    }
+                    if (line == "exit")
+                    {
+                        Environment.Exit(1);
+                    }
 
 
                     else if (line.ToLower().StartsWith("compile_lines_from_file"))
@@ -1251,17 +1291,15 @@ namespace rC
                 }
                 if (pixelColors.Count >= 1 && pixelX.Count >= 1 && pixelY.Count >= 1)
                 {
-                    foreach (var pixel in pixelColors)
-                    {
-                        Pixel.Draw(pixelX[pixelColors.IndexOf(pixel)], pixelY[pixelColors.IndexOf(pixel)], pixel);
-                    }
+                   for(int i=0;i<pixelColors.Count;i++){
+                        Pixel.Draw(pixelX[i], pixelY[i], pixelColors[i]);
+                   }
                 }
                 if (pixelColorsChar.Count >= 1 && pixelXChar.Count >= 1 && pixelYChar.Count >= 1)
                 {
-                    foreach (var pixel in pixelColorsChar)
-                    {
-                        Pixel.DrawChar(pixelXChar[pixelColors.IndexOf(pixel)], pixelYChar[pixelColors.IndexOf(pixel)], pixel, charachtersToDraw[pixelColorsChar.IndexOf(pixel)]);
-                    }
+                    for(int j=0;j<pixelColorsChar.Count;j++){
+                        Pixel.DrawChar(pixelXChar[j], pixelYChar[j], pixelColorsChar[j], charachtersToDraw[j]);
+                   }
                 }
             }
             Console.ResetColor();

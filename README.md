@@ -5,27 +5,13 @@ Open Source Programming Language Created By Rodrigo Cabaço =) This is a free an
 
 Newest Update Changes:
 
-Added Commands:
-- load >> filename.rcode
-- compiler.load >> filename.rcode
-- quit
-- save(this) as filename (no .rcode)
-- create_project projectName
-- upgrade_project projectPath
-- restore_project projectPath
-- run_project (when inside project directory)
-- create_file filename
-
-
-New Methods:
-
-- sleep >> miliseconds
+Added:
+- cursor_x or cursor_y: get or set (ex:cursor_x >>20) -> sets the cursor_x to 20
+- screen_width or screen_height : get or set
+- Fixed Bugs
 
 Currently Working On:
 
-- If Statements
 - While Statements
-- var = var + var <-- attributing variables its own value + other variable
-
 
 < Rodrigo Cabaço, rC >
