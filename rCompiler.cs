@@ -12,6 +12,8 @@ namespace rC
         //fix: 
         //TODO: MAKE TRY / CATCH STATEMENTS
         //new to docs == for // readline // color //num cursor_x >> set, cursor_y >> set;
+        //write,read,delete,create file
+        //numToString
         public static void Compile(
             List<string> code,
             List<string> numberNames,
@@ -37,6 +39,27 @@ namespace rC
             foreach (var line in code)
             {
 
+
+                if(line.StartsWith("numToString"))
+                {
+                    try
+                    {
+                    if(strNames.Contains(line.Split('>').First().Split('(').Last()))
+                    {
+                        strValues[strNames.IndexOf(line.Split('>').First().Split('(').Last())] = numberValues[numberNames.IndexOf(line.Split('>').Last().Split(')').First())].ToString();
+                    }
+                    else
+                    {
+                        strNames.Add((line.Split('>').First().Split('(').Last()));
+                        strValues.Add(numberValues[numberNames.IndexOf(line.Split('>').Last().Split(')').First())].ToString());
+                    }
+                    }catch
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Fatal Error, Line Index:" + code.IndexOf(line));
+                        Console.ForegroundColor = ConsoleColor.White;
+                    }
+                }
 
                 if (numberNames.Contains("screen_width"))
                 {
@@ -660,7 +683,7 @@ namespace rC
                     //color indicators
                     if (line.ToLower().StartsWith("color.reset"))
                     {
-                        Console.ResetColor();
+                        Console.ForegroundColor = ConsoleColor.White;
                     }
                     else if (line.ToLower().StartsWith("color.green"))
                     {
