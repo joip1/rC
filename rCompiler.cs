@@ -36,6 +36,8 @@ namespace rC
             //read code line by line
             foreach (var line in code)
             {
+
+
                 if (numberNames.Contains("screen_width"))
                 {
                     numberValues[numberNames.IndexOf("screen_width")] = Console.WindowWidth;
@@ -462,6 +464,10 @@ namespace rC
                         {
                             references.Add("split");
                         }
+                        else if (line.ToLower() == "import filestream")
+                        {
+                            references.Add("filestream");
+                        }
                     }
 
                     if (references.Contains("pixel"))
@@ -576,6 +582,61 @@ namespace rC
                             {
                                 Console.WriteLine("Invalid Syntax In Line " + code.IndexOf(line));
                             }
+                        }
+                    }
+                    if(references.Contains("filestream"))
+                    {
+                        //WriteFile file:filename content: Writing 
+                        //CreateFile file:filename
+                        //DeleteFile file.filename
+                        //todo ReadFile
+                        if(line.StartsWith("WriteToFile"))
+                        {
+                            string filename = line.Split(new [] {"file:"},StringSplitOptions.None).Last().Split(' ').First();
+                            if(strNames.Contains(filename)){
+                                filename = strValues[strNames.IndexOf(filename)];
+                            }
+                            string content = line.Split(new [] {"content:"}, StringSplitOptions.None).Last();
+                            if(strNames.Contains(content) == false)
+                            {
+                                FileStream.WriteToFile(filename,content);
+                            }else
+                            {
+                                FileStream.WriteToFile(filename,strValues[strNames.IndexOf(content)]);
+                            }
+                        }
+                        else if(line.StartsWith("DeleteFile"))
+                        {
+                            string filename = line.Split(new [] {"file:"},StringSplitOptions.None).Last().Split(' ').First();
+                            if(strNames.Contains(filename))
+                            {
+                                filename = strValues[strNames.IndexOf(filename)];
+                            }
+                            FileStream.DeleteFile(filename);
+                        }else if(line.StartsWith("CreateFile"))
+                        {
+                            string filename = line.Split(new [] {"file:"},StringSplitOptions.None).Last().Split(' ').First();
+                            if(strNames.Contains(filename))
+                            {
+                                filename = strValues[strNames.IndexOf(filename)];
+                            }
+                            FileStream.CreateFile(filename);
+                        }else if(line.StartsWith("ReadFile"))
+                        {
+                            string filename = line.Split(new [] {"file:"},StringSplitOptions.None).Last().Split(' ').First();
+                            string strToReadTo = line.Split(new [] {"str:"},StringSplitOptions.None).Last().Split(' ').First();
+                            if(strNames.Contains(filename))
+                            {
+                                filename = strValues[strNames.IndexOf(filename)];
+                            }
+                            if(strNames.Contains(strToReadTo))
+                            {
+                                strValues[strNames.IndexOf(strToReadTo)] =  FileStream.ReadFile(filename);;
+                            }else{
+                                strValues.Add(FileStream.ReadFile(filename));
+                                strNames.Add(strToReadTo);
+                            }
+                           
                         }
                     }
                     if (line.ToLower().StartsWith("sleep >>"))
