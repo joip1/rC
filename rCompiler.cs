@@ -13,7 +13,7 @@ namespace rC
         //TODO: MAKE TRY / CATCH STATEMENTS
         //new to docs == for // readline // color //num cursor_x >> set, cursor_y >> set;
         //write,read,delete,create file
-        //numToString
+        //numToStr(str>>num)
         public static void Compile(
             List<string> code,
             List<string> numberNames,
@@ -40,7 +40,7 @@ namespace rC
             {
 
 
-                if(line.StartsWith("numToString"))
+                if(line.StartsWith("numToStr"))
                 {
                     try
                     {
