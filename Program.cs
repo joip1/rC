@@ -37,11 +37,14 @@ namespace rC
             foreach (var arg in args)
             {
                 int x = Array.IndexOf(args,arg);
-                strNames.Add("arg" + x++);
-                strValues.Add(arg);
+                if (x != 0)
+                {
+                    strNames.Add("arg" + x);
+                    strValues.Add(arg);
+                }
             }
 
-            if (args.Length == 1)
+            if (args.Length >= 1)
             {
                 StreamReader reader_file = File.OpenText(args[0]);
                 List<string> run_code = new List<string>();
