@@ -242,14 +242,29 @@ namespace rC
                                         linesFromFile.Add(lineReading);
                                     }
                                     specificLine_Compiler.Close();
-                                    Compile(linesFromFile, numberNames, numberValues, strNames, strValues, references);
                                 }
                             }
                             catch
                             {
+                                try {
+
+                                    StreamReader specificLine_Compiler = File.OpenText(fileToCompile + ".rcode");
+                                    string lineReading;
+                                    int firstIndex = Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split('(').Last().Split(',')[1])]);
+                                    int lastIndex = Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split('(').Last().Split(',').Last().Split(')').First())]);
+                                    firstIndex--;
+                                    List<string> linesFromFile = new List<string>();
+                                    while ((lineReading = specificLine_Compiler.ReadLine()) != null)
+                                    {
+                                        linesFromFile.Add(lineReading);
+                                    }
+                                    specificLine_Compiler.Close();
+                                    Compile(linesFromFile.GetRange(firstIndex, lastIndex - (firstIndex)), numberNames, numberValues, strNames, strValues, references);
+                                }catch{
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("INVALID SYNTAX IN LINE " + code.IndexOf(line) + "(" + line + ")");
                                 Console.ResetColor();
+                                }
                             }
 
                         }
@@ -275,9 +290,17 @@ namespace rC
                             }
                             else
                             {
+                                try {
+                                    int firstIndex = Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split('(').Last().Split(',')[1])]);
+                                    int lastIndex = Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split('(').Last().Split(',').Last().Split(')').First())]);
+                                    firstIndex--;
+                                    List<string> newCompile =code; 
+                                    Compile(newCompile.GetRange(firstIndex, (lastIndex - firstIndex)), numberNames, numberValues, strNames, strValues, references);
+                                }catch{
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("INVALID SYNTAX IN LINE " + code.IndexOf(line) + "(" + line + ")");
                                 Console.ResetColor();
+                                }
                             }
                         }
                     }
