@@ -291,15 +291,13 @@ namespace rC
                             else
                             {
                                 try {
-                                    int firstIndex = Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split('(').Last().Split(',')[1])]);
+                                    int firstIndex = Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split('(').Last().Split(',')[0])]);
                                     int lastIndex = Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split('(').Last().Split(',').Last().Split(')').First())]);
                                     firstIndex--;
-                                    List<string> newCompile =code; 
+                                    List<string> newCompile = code; 
                                     Compile(newCompile.GetRange(firstIndex, (lastIndex - firstIndex)), numberNames, numberValues, strNames, strValues, references);
                                 }catch{
-                                Console.ForegroundColor = ConsoleColor.Red;
-                                Console.WriteLine("INVALID SYNTAX IN LINE " + code.IndexOf(line) + "(" + line + ")");
-                                Console.ResetColor();
+                                    
                                 }
                             }
                         }
