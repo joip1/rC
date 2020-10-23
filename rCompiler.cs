@@ -644,12 +644,12 @@ namespace rC
 
                             try
                             {
-                                SendKeys.Send(strValues[strNames.IndexOf(line.Split(new[] { "SendKeys" }, StringSplitOptions.None).Last().Split('(').Last().Split(')').First())]);
+                                SendKeys.SendWait(strValues[strNames.IndexOf(line.Split(new[] { "SendKeys" }, StringSplitOptions.None).Last().Split('(').Last().Split(')').First())]);
 
                             }
                             catch
                             {
-                                SendKeys.Send(strValues[strNames.IndexOf(line.Split(new[] { "SendKeys" }, StringSplitOptions.None).Last().Split('(').Last().Split(')').First())]);
+                                SendKeys.SendWait(line.Split(new[] { "SendKeys" }, StringSplitOptions.None).Last().Split('(').Last().Split(')').First());
                             }
                         }
                     }
