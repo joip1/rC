@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using rC;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace rC
 {
@@ -38,7 +39,7 @@ namespace rC
             //read code line by line
             foreach (var line in code)
             {
-
+               
 
                 if(line.StartsWith("numToStr"))
                 {
@@ -515,8 +516,12 @@ namespace rC
                         else if (line.ToLower() == "import filestream")
                         {
                             references.Add("filestream");
+                        }else if(line.ToLower() == "import keys")
+                        {
+                            references.Add("keys");
                         }
                     }
+
 
                     if (references.Contains("pixel"))
                     {
@@ -632,6 +637,21 @@ namespace rC
                             }
                         }
                     }
+                    if (references.Contains("keys"))
+                    {
+                        if (line.StartsWith("SendKeys"))
+                        {
+                            if (strNames.Contains(line.Split(new[] { "SendKeys" }, StringSplitOptions.None).Last().Split('(').Last().Split(')').First()))
+                            {
+                                SendKeys.Send(strValues[strNames.IndexOf(line.Split(new[] { "SendKeys" }, StringSplitOptions.None).Last().Split('(').Last().Split(')').First())]);
+
+                            }
+                            else
+                            {
+                                SendKeys.Send(strValues[strNames.IndexOf(line.Split(new[] { "SendKeys" }, StringSplitOptions.None).Last().Split('(').Last().Split(')').First())]);
+                            }
+                        }
+                    }
                     if(references.Contains("filestream"))
                     {
                         //WriteFile file:filename content: Writing 
@@ -687,6 +707,7 @@ namespace rC
                            
                         }
                     }
+                    
                     if (line.ToLower().StartsWith("sleep >>"))
                     {
                         try
