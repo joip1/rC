@@ -641,12 +641,13 @@ namespace rC
                     {
                         if (line.StartsWith("SendKeys"))
                         {
-                            if (strNames.Contains(line.Split(new[] { "SendKeys" }, StringSplitOptions.None).Last().Split('(').Last().Split(')').First()))
+
+                            try
                             {
                                 SendKeys.Send(strValues[strNames.IndexOf(line.Split(new[] { "SendKeys" }, StringSplitOptions.None).Last().Split('(').Last().Split(')').First())]);
 
                             }
-                            else
+                            catch
                             {
                                 SendKeys.Send(strValues[strNames.IndexOf(line.Split(new[] { "SendKeys" }, StringSplitOptions.None).Last().Split('(').Last().Split(')').First())]);
                             }
