@@ -42,23 +42,27 @@ namespace rC
 
                 if(line.StartsWith("numToStr"))
                 {
-                    try
-                    {
-                    if(strNames.Contains(line.Split('>').First().Split('(').Last()))
+
+                    if (strNames.Contains(line.Split('>').First().Split('(').Last()) && numberNames.Contains(line.Split('>').Last().Split(',').Last().Split(')').First()))
                     {
                         strValues[strNames.IndexOf(line.Split('>').First().Split('(').Last())] = numberValues[numberNames.IndexOf(line.Split('>').Last().Split(')').First())].ToString();
                     }
                     else
                     {
                         strNames.Add((line.Split('>').First().Split('(').Last()));
-                        strValues.Add(numberValues[numberNames.IndexOf(line.Split('>').Last().Split(')').First())].ToString());
+                        try
+                        {
+                            strValues.Add(numberValues[numberNames.IndexOf(line.Split('>').Last().Split(')').First())].ToString());
+                        }
+                        catch
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                            Console.WriteLine(line.Split('>').Last().Split(')').First() + " does not exist at Line With Index: " + code.IndexOf(line));
+                            Console.ForegroundColor = ConsoleColor.White;
+                        }
+                    
                     }
-                    }catch
-                    {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Fatal Error, Line Index:" + code.IndexOf(line));
-                        Console.ForegroundColor = ConsoleColor.White;
-                    }
+                    
                 }
 
                 if (numberNames.Contains("screen_width"))
@@ -790,16 +794,10 @@ namespace rC
                                             }
                                             catch
                                             {
-                                                try
-                                                {
-                                                    numberValues.Add(numberValues[numberNames.IndexOf(line.Split('>').Last())]);
-                                                }
-                                                catch
-                                                {
-                                                    Console.ForegroundColor = ConsoleColor.Red;
-                                                    Console.WriteLine("Fatal Error in line " + code.IndexOf(line));
-                                                    Console.ResetColor();
-                                                }
+
+                                                numberValues.Add(numberValues[numberNames.IndexOf(line.Split('>').Last())]);
+
+
                                             }
                                         }
                                     }
@@ -1022,7 +1020,7 @@ namespace rC
                             }
                         }
 
-                        string looper = line.ToLower().Split(new[] { "for" }, StringSplitOptions.None).Last().Split(new[] { "in range %" }, StringSplitOptions.None).First();
+                        string looper = line.ToLower().Split(new[] { "for " }, StringSplitOptions.None).Last().Split(new[] { " in range %" }, StringSplitOptions.None).First();
                         var getContent = line.Split(new[] { "$>" }, StringSplitOptions.None);
                         List<string> loopContent = new List<string>();
 
@@ -1415,14 +1413,14 @@ namespace rC
 
                 for (int x = 0; x < range; x++)
                 {
-                    if (numberNames.Contains("x"))
+                    if (numberNames.Contains(looper))
                     {
-                        numberValues[numberNames.IndexOf("x")] = x;
+                        numberValues[numberNames.IndexOf(looper)] = x;
                     }
                     else
                     {
                         numberValues.Add(x);
-                        numberNames.Add("x");
+                        numberNames.Add(looper);
                     }
                     Compile(loopContent, numberNames, numberValues, strNames, strValues, references);
                 }
