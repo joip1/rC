@@ -216,7 +216,7 @@ namespace rC
                             if (!File.Exists(fileToCompile + ".rcode"))
                             {
                                 Console.ForegroundColor = ConsoleColor.Red;
-                                Console.WriteLine("ERROR: File Does Not Exist (Line " + code.IndexOf(line) + ")(" + line + ")");
+                                Console.WriteLine("ERROR: File Does Not Exist (Line Index: " + code.IndexOf(line) + ")(" + line + ")");
                                 Console.ResetColor();
                             }
                             else
@@ -229,7 +229,14 @@ namespace rC
                                     linesFromFile.Add(lineReading);
                                 }
                                 specificLine_Compiler.Close();
-                                Compile(linesFromFile.GetRange(firstIndex, lastIndex - (firstIndex)), numberNames, numberValues, strNames, strValues, references);
+                                if (line.Split('(').Last().Split(',').Last().Split(')').First().ToLower() == "all")
+                                {
+                                    Compile(linesFromFile, numberNames, numberValues, strNames, strValues, references);
+                                }
+                                else 
+                                {
+                                    Compile(linesFromFile.GetRange(firstIndex, lastIndex - (firstIndex)), numberNames, numberValues, strNames, strValues, references);
+                                }
                             }
                         }
                         catch
@@ -247,6 +254,7 @@ namespace rC
                                         linesFromFile.Add(lineReading);
                                     }
                                     specificLine_Compiler.Close();
+                                    Compile(linesFromFile, numberNames, numberValues, strNames, strValues, references);
                                 }
                             }
                             catch
@@ -264,7 +272,14 @@ namespace rC
                                         linesFromFile.Add(lineReading);
                                     }
                                     specificLine_Compiler.Close();
-                                    Compile(linesFromFile.GetRange(firstIndex, lastIndex - (firstIndex)), numberNames, numberValues, strNames, strValues, references);
+                                    if (line.Split('(').Last().Split(',').Last().Split(')').First().ToLower() == "all")
+                                    {
+                                        Compile(linesFromFile, numberNames, numberValues, strNames, strValues, references);
+                                    }
+                                    else
+                                    {
+                                        Compile(linesFromFile.GetRange(firstIndex, lastIndex - (firstIndex)), numberNames, numberValues, strNames, strValues, references);
+                                    }
                                 }catch{
                                 Console.ForegroundColor = ConsoleColor.Red;
                                 Console.WriteLine("INVALID SYNTAX IN LINE " + code.IndexOf(line) + "(" + line + ")");
