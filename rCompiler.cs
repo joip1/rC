@@ -203,14 +203,14 @@ namespace rC
                     }
 
 
-                    else if (line.ToLower().StartsWith("compile_lines_from_file"))
+                    if (line.ToLower().StartsWith("compile_lines_from_file"))
                     {
                         string fileToCompile = "";
                         try
                         {
                             int firstIndex = Convert.ToInt32(line.Split('(').Last().Split(',')[1]);
                             int lastIndex = Convert.ToInt32(line.Split('(').Last().Split(',').Last().Split(')').First());
-                            firstIndex--;
+                                firstIndex--;
                             fileToCompile = line.ToLower().Split(new[] { "file:" }, StringSplitOptions.None).Last().Split(',').First();
 
                             if (!File.Exists(fileToCompile + ".rcode"))
@@ -654,7 +654,7 @@ namespace rC
                     }
                     if (references.Contains("keys"))
                     {
-                        if (line.StartsWith("SendKeys"))
+                        if (line.StartsWith("SendKeys") && line!="SendKeys.Enter")
                         {
 
                             try
@@ -666,7 +666,11 @@ namespace rC
                             {
                                 SendKeys.SendWait(line.Split(new[] { "SendKeys" }, StringSplitOptions.None).Last().Split('(').Last().Split(')').First());
                             }
+                        }else if(line=="SendKeys.Enter")
+                        {
+                            SendKeys.SendWait("{Enter}");
                         }
+
                     }
                     if(references.Contains("filestream"))
                     {
