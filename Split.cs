@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace rC
 {
-    public class Split
+    public static class Split
     {
+        public static string split(string ToSplit,string spliter,int index)
+        {
+            string Splited = "";
+            Splited = ToSplit.Split(new [] {spliter},StringSplitOptions.None)[index];
+            return Splited;
+        }        
     }
 }

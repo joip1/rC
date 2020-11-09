@@ -203,7 +203,7 @@ namespace rC
                     }
 
 
-                    if (line.ToLower().StartsWith("compile_lines_from_file"))
+                    if (line.ToLower().StartsWith("A"))
                     {
                         string fileToCompile = "";
                         try
@@ -534,6 +534,12 @@ namespace rC
                         }else if(line.ToLower() == "import keys")
                         {
                             references.Add("keys");
+                        }else if(line.ToLower() == "import split")
+                        {
+                            references.Add("split");
+                        }else if(line.ToLower().StartsWith("import "))
+                        {
+                            references.Add(line.Split(' ')[1]);
                         }
                     }
 
@@ -649,6 +655,38 @@ namespace rC
                             catch
                             {
                                 Console.WriteLine("Invalid Syntax In Line " + code.IndexOf(line));
+                            }
+                        }
+                    }
+                    if(references.Contains("split"))
+                    {
+                        if(line.StartsWith("getSplit"))
+                        {
+                            try
+                            {
+                            //getSplit from:x to:y index
+                            string from = line.Split(new [] {"from:"},StringSplitOptions.None).Last().Split(' ').First();
+                            string to = line.Split(new [] {"to:"},StringSplitOptions.None).Last().Split(' ').First();
+                            string index = line.Split(new [] {"index:"},StringSplitOptions.None).Last().Split(' ').First();
+                            int f = 0;
+                            try
+                            {
+                                f = Convert.ToInt32(index);
+                            }catch
+                            {
+                                f = Convert.ToInt32(numberValues[numberNames.IndexOf(index)]);
+                            }
+                            string split = line.Split(new [] {"separator:"},StringSplitOptions.None).Last().Split('\"')[1].Split('\"')[0];
+                            if(strNames.Contains(from))
+                            {
+                                strValues[strNames.IndexOf(to)] = Split.split(strValues[strNames.IndexOf(from)],split,f);
+                            }
+                            else
+                            {
+                                 strValues[strNames.IndexOf(to)] = Split.split(from,split,f);
+                            }
+                            }catch
+                            {
                             }
                         }
                     }
