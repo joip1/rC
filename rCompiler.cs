@@ -203,7 +203,7 @@ namespace rC
                     }
 
 
-                    if (line.ToLower().StartsWith("A"))
+                    if (line.ToLower().StartsWith("compile_lines_from_file"))
                     {
                         string fileToCompile = "";
                         try
@@ -290,7 +290,7 @@ namespace rC
                         }
                     }
 
-                    else if (line.ToLower().StartsWith("compile_lines"))
+                    if (line.ToLower().StartsWith("compile_lines"))
                     {
 
                         try
