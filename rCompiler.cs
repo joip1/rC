@@ -1057,7 +1057,7 @@ namespace rC
                                     {
                                         if (nametoCheck == name || nametoCheck == "{" + name || nametoCheck == name + "}" || nametoCheck == "{" + name + "}")
                                         {
-                                            Console.Write(strValues[strNames.IndexOf(name)] + line.Split(new[] { name }, StringSplitOptions.None)[1].Split(new[] { "}" }, StringSplitOptions.None).First());
+                                            Console.Write(strValues[strNames.IndexOf(name)]);
                                         }
                                     }
                                     catch
@@ -1086,7 +1086,7 @@ namespace rC
                                     {
                                         if (nametoCheck == name || nametoCheck == "{" + name || nametoCheck == name + "}" || nametoCheck == "{" + name + "}")
                                         {
-                                            Console.Write(numberValues[numberNames.IndexOf(name)] + line.Split(new[] { name }, StringSplitOptions.None)[1].Split(new[] { "}" }, StringSplitOptions.None).First());
+                                            Console.Write(numberValues[numberNames.IndexOf(name)]);
                                         }
                                     }
                                     catch
