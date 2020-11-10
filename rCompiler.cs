@@ -4,6 +4,7 @@ using System.IO;
 using rC;
 using System.Linq;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace rC
 {
@@ -35,11 +36,30 @@ namespace rC
             List<int> pixelYChar = new List<int>();
             Random rand = new Random();
             List<ConsoleColor> pixelColorsChar = new List<ConsoleColor>();
-
+            Stopwatch execTime = new Stopwatch();
             //read code line by line
+            execTime.Start();
+            try{
+
+            
             foreach (var line in code)
             {
-               
+                if(line.ToLower() == "exectime(secs)")
+                {
+                    execTime.Stop();
+                    Console.WriteLine(execTime.Elapsed);
+                    execTime.Start();
+                }
+                if(line.ToLower() == "exectime(ms)")
+                {
+                    execTime.Stop();
+                    Console.WriteLine(execTime.ElapsedMilliseconds);
+                    execTime.Start();
+                }
+                if(line.ToLower() == "exectime()")
+                {
+                    Console.WriteLine("\nexectime() takes one argument");
+                }
 
                 if(line.StartsWith("numToStr"))
                 {
@@ -1182,20 +1202,52 @@ namespace rC
                             Console.ResetColor();
                         }
                     }
-                    else if (line.StartsWith("if") && line.Contains("(") && line.Contains(")"))
+                    else if (line.StartsWith("if"))
                     {
-                        string statement = line.Split(new[] { "if(" }, StringSplitOptions.None).Last().Split(')')[0].Split(new [] {"!>"},StringSplitOptions.None).First();
-                        var getContent = line.Split(new[] { "!>" }, StringSplitOptions.None);
-                        List<string> loopContent = new List<string>();
 
-                        foreach (var content in getContent)
-                        {
-                            if (content.ToLower().StartsWith("if") == false && content.ToLower().Contains("(") == false && content.Contains("!>") == false)
+                            /*
+                                if name:1; statement:str(x==y); ident:" ";
+                                    Write &>Hi<&
+                                endIf(1)
+
+                            */
+                            string name="";
+                            string ident="";
+                            string statement="";
+                            List<string> loopContent = new List<string>();
+
+                            try
                             {
-                                loopContent.Add(content);
-                            }
-                        }
+                                name = line.Split(new[] { "name:" }, StringSplitOptions.None).Last().Split(';').First();
+                                statement = line.Split(new[] { "statement:" }, StringSplitOptions.None).Last().Split(';')[0];
+                                ident = line.Split(new[] { "ident:" }, StringSplitOptions.None).Last().Split('"')[1].Split('"').First().Split(';').First();
 
+                                List<string> newCode1 = code;
+                                for (int i = 0; i < newCode1.Count; i++)
+                                {
+                                    if (newCode1[i].StartsWith(ident))
+                                    {
+                                        newCode1[newCode1.IndexOf(newCode1[i])] = newCode1[i].Split(new[] { ident }, StringSplitOptions.None).Last();
+                                    }
+                                }
+
+
+                                if (newCode1.Contains($"endIf({name});"))
+                                {
+                                    newCode1.RemoveRange(0, newCode1.IndexOf(line) + 1);
+                                    newCode1.RemoveAt(newCode1.IndexOf($"endIf({name});"));
+                                    loopContent = newCode1;
+                                }
+                                else
+                                {
+                                    Console.WriteLine("\nNo End Was Found for If Statement with name: " + name);
+                                }
+
+                            }
+                            catch 
+                            {
+                                Console.WriteLine("Invalid Syntax Line: " + code.IndexOf(line));
+                            }
                         if (line.Contains("str(") && line.Contains("=="))
                         {
                             try
@@ -1485,7 +1537,13 @@ namespace rC
                         Pixel.DrawChar(pixelXChar[j], pixelYChar[j], pixelColorsChar[j], charachtersToDraw[j]);
                    }
                 }
+                execTime.Stop();
+                
             }
+            }
+            catch(System.InvalidOperationException) {
+                    
+                }
             Console.ResetColor();
             void ForLoop(int range,
             string looper, List<string> loopContent)
