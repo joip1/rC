@@ -44,7 +44,6 @@ namespace rC
 
                 foreach (var line in code)
                 {
-                    
                     if (line.ToLower() == "exectime(secs)")
                     {
                         execTime.Stop();
@@ -524,7 +523,8 @@ namespace rC
                                         try
                                         {
                                             strValues[strNames.IndexOf(str)] = strValues[strNames.IndexOf(str)] + line.Split('+')[1].Split(')').First();
-                                        }catch
+                                        }
+                                        catch
                                         {
                                             Console.WriteLine($"One of the Following Strings Does Not Exist: {line.Split('+')[0].Split(')').First()} or {line.Split('+')[0].Split(')').First()}");
                                         }
@@ -557,7 +557,8 @@ namespace rC
                             if (line.ToLower() == "import pixel")
                             {
                                 references.Add("pixel");
-                            }else if(line.ToLower() == "import process")
+                            }
+                            else if (line.ToLower() == "import process")
                             {
                                 references.Add("process");
                             }
@@ -698,18 +699,18 @@ namespace rC
                                 }
                             }
                         }
-                        if(references.Contains("process"))
+                        if (references.Contains("process"))
                         {
-                            if(line.StartsWith("StartProcess"))
+                            if (line.StartsWith("StartProcess"))
                             {
-                                string[] arguments = line.Split(new [] {"args:"},StringSplitOptions.None).Last().Split(' ').First().Split(',');
-                                string filename = line.Split(new [] {"file:"},StringSplitOptions.None).Last().Split(' ').First();
+                                string[] arguments = line.Split(new[] { "args:" }, StringSplitOptions.None).Last().Split(' ').First().Split(',');
+                                string filename = line.Split(new[] { "file:" }, StringSplitOptions.None).Last().Split(' ').First();
                                 string argument = "";
-                                foreach(var arg in arguments)
+                                foreach (var arg in arguments)
                                 {
-                                    argument = argument+" "+arg;
+                                    argument = argument + " " + arg;
                                 }
-                                Process.Start(filename,argument);
+                                Process.Start(filename, argument);
                             }
                         }
                         if (references.Contains("split"))
@@ -981,7 +982,7 @@ namespace rC
                                 {
                                     if (line.Split('>').Last().ToLower().StartsWith("$read") == false)
                                     {
-                                        strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = line.Split('>').Last().Split('\"')[1].Split('\"').First();
+                                        strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = line.Split('>')[2].Split('\"')[1].Split('\"').First();
                                     }
                                     else if (line.Split('>').Last().ToLower() == "$readkey")
                                     {
@@ -998,7 +999,7 @@ namespace rC
                                     if (line.Split('>').Last().ToLower().StartsWith("$read") == false)
                                     {
                                         strNames.Add(line.Split(' ')[1].Split('>').First());
-                                        strValues.Add(line.Split('>').Last().Split('\"')[1].Split('\"').First());
+                                        strValues.Add(line.Split('>')[2].Split('\"')[1].Split('\"').First());
                                     }
                                     else if (line.Split('>').Last().ToLower() == "$readkey")
                                     {
@@ -1040,7 +1041,7 @@ namespace rC
 
                         }
                         else if (line.StartsWith("WriteStr")
-                            && line.Contains(" {")
+                            && line.Contains("{")
                             && line.Contains("}")
                             && line.ToLower().StartsWith("for") == false
                             && line.ToLower().Contains("in range %") == false
@@ -1048,7 +1049,7 @@ namespace rC
                         {
                             foreach (var name in strNames)
                             {
-                                var namesToCheck = line.Split(',');
+                                var namesToCheck = line.Split('{')[1].Split('}')[0].Split(',');
 
                                 foreach (var nametoCheck in namesToCheck)
                                 {
@@ -1077,7 +1078,7 @@ namespace rC
                         {
                             foreach (var name in numberNames)
                             {
-                                var namesToCheck = line.Split(',');
+                                var namesToCheck = line.Split('{')[1].Split('}')[0].Split(',');
 
                                 foreach (var nametoCheck in namesToCheck)
                                 {
@@ -1148,34 +1149,34 @@ namespace rC
                         else if (line.ToLower().StartsWith("for") && line.ToLower().Contains("in range:"))
                         {
                             int range = 0;
-                               /*
-                                for x in range:
+                            /*
+                             for x in range:
 
-                            */
+                         */
                             string looper = "";
                             string ident = "";
-                            string name="";
+                            string name = "";
                             List<string> loopContent = new List<string>();
                             List<string> compileAfter = new List<string>();
                             try
                             {
                                 looper = line.Split(new[] { "for " }, StringSplitOptions.None).Last().Split(' ').First();
-                                
+
                                 try
                                 {
                                     range = Convert.ToInt32(line.Split(new[] { "in range:" }, StringSplitOptions.None).Last().Split(';')[0]);
                                 }
                                 catch
                                 {
-                                try
-                                {
-                                    range = Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "in range:" }, StringSplitOptions.None).Last().Split(';')[0])]);
+                                    try
+                                    {
+                                        range = Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "in range:" }, StringSplitOptions.None).Last().Split(';')[0])]);
+                                    }
+                                    catch
+                                    {
+                                        range = Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "in range:" }, StringSplitOptions.None).Last().Split(';')[0])]);
+                                    }
                                 }
-                                catch
-                                {
-                                    range = Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "in range:" }, StringSplitOptions.None).Last().Split(';')[0])]);
-                                }
-                            }
                                 name = line.Split(new[] { "name:" }, StringSplitOptions.None).Last().Split(';').First();
                                 ident = line.Split(new[] { "ident:" }, StringSplitOptions.None).Last().Split('"')[1].Split('"').First().Split(';').First();
                             }
@@ -1202,15 +1203,15 @@ namespace rC
                             if (newCode1.Contains($"endFor({name});"))
                             {
                                 newCode1.RemoveRange(0, newCode1.IndexOf(line) + 1);
-                                foreach(var lineofCode in newCode1)
+                                foreach (var lineofCode in newCode1)
                                 {
-                                    if(newCode1.IndexOf(lineofCode) > newCode1.IndexOf($"endFor({name});"))
+                                    if (newCode1.IndexOf(lineofCode) > newCode1.IndexOf($"endFor({name});"))
                                     {
                                         compileAfter.Add(lineofCode);
                                     }
                                 }
 
-                                newCode1.RemoveRange(newCode1.IndexOf($"endFor({name});"),newCode1.Count - newCode1.IndexOf($"endFor({name});"));
+                                newCode1.RemoveRange(newCode1.IndexOf($"endFor({name});"), newCode1.Count - newCode1.IndexOf($"endFor({name});"));
                                 loopContent = newCode1;
                             }
                             else
@@ -1219,9 +1220,9 @@ namespace rC
                             }
 
 
-                            
+
                             ForLoop(range, looper, loopContent);
-                            Compile(compileAfter,numberNames,numberValues,strNames,strValues,references);
+                            Compile(compileAfter, numberNames, numberValues, strNames, strValues, references);
                         }
                         else if (line.StartsWith("load >>") || line.StartsWith("compiler.load"))
                         {
@@ -1335,14 +1336,14 @@ namespace rC
                             if (newCode1.Contains($"endIf({name});"))
                             {
                                 newCode1.RemoveRange(0, newCode1.IndexOf(line) + 1);
-                                foreach(var lineofCode in newCode1)
+                                foreach (var lineofCode in newCode1)
                                 {
-                                    if(newCode1.IndexOf(lineofCode) > newCode1.IndexOf($"endIf({name});"))
+                                    if (newCode1.IndexOf(lineofCode) > newCode1.IndexOf($"endIf({name});"))
                                     {
                                         compileAfter.Add(lineofCode);
                                     }
                                 }
-                                newCode1.RemoveRange(newCode1.IndexOf($"endIf({name});"),newCode1.Count - newCode1.IndexOf($"endIf({name});"));
+                                newCode1.RemoveRange(newCode1.IndexOf($"endIf({name});"), newCode1.Count - newCode1.IndexOf($"endIf({name});"));
                                 loopContent = newCode1;
 
                             }
@@ -1615,7 +1616,7 @@ namespace rC
 
                             }
 
-                            Compile(compileAfter,numberNames,numberValues,strNames,strValues,references);
+                            Compile(compileAfter, numberNames, numberValues, strNames, strValues, references);
                         }
 
 
