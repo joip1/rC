@@ -34,6 +34,11 @@ namespace rC
             List<string> strNames = new List<string>();
             List<string> strValues = new List<string>();
             List<string> references = new List<string>();
+            List<string> strListNames = new List<string>();
+            List<List<string>> strListValues = new List<List<string>>();
+            List<string> numListNames = new List<string>();
+            List<List<double>> numListValues = new List<List<double>>();
+
             foreach (var arg in args)
             {
                 int x = Array.IndexOf(args,arg);
@@ -62,7 +67,7 @@ namespace rC
                 {
                     Console.WriteLine("Exception: Could not find file: "+args[0]);
                 }
-                rCompiler.Compile(run_code, numberNames, numberValues, strNames, strValues, references);
+                rCompiler.Compile(run_code, numberNames, numberValues, strNames, strValues, references,strListNames,strListValues,numListNames,numListValues);
 
             }
             else
@@ -85,7 +90,7 @@ namespace rC
                                     run_code.Add(line_init);
                                 }
                                 reader_init.Close();
-                                rCompiler.Compile(run_code, numberNames, numberValues, strNames, strValues, references);
+                                rCompiler.Compile(run_code, numberNames, numberValues, strNames, strValues, references,strListNames,strListValues,numListNames,numListValues);
                             }
                             else
                             {
@@ -134,7 +139,7 @@ namespace rC
                                 entryPoint_Code.Add(read);
                             }
                             reader.Close();
-                            rCompiler.Compile(entryPoint_Code, numberNames, numberValues, strNames, strValues, references);
+                            rCompiler.Compile(entryPoint_Code, numberNames, numberValues, strNames, strValues, references,strListNames,strListValues,numListNames,numListValues);
                             Console.Write("\n");
                         }
                         else if (!File.Exists("run_config.rconfig"))
@@ -201,17 +206,10 @@ namespace rC
                         Console.WriteLine("Project Created Successfully!");
                         Console.ResetColor();
                     }
-
-                    else if (readline.Contains("load >> "))
-                    {
-                        codeLines.Add(readline);
-                        rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues, references);
-                        isCompiling = true;
-                    }
                     else if (readline.StartsWith("compile >>") || readline.StartsWith("run >>"))
                     {
                         codeLines.Add(readline);
-                        rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues, references);
+                        rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues, references,strListNames,strListValues,numListNames,numListValues);
                         Console.ReadLine();
                         //isCompiling = false;
                     }
@@ -314,7 +312,7 @@ namespace rC
                 }
                 Console.Clear();
                 List<string> compileAfter = codeLines;
-                rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues, references);
+                rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues, references,strListNames,strListValues,numListNames,numListValues);
 
                 Console.ReadLine();
             }
