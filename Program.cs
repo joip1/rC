@@ -46,14 +46,24 @@ namespace rC
 
             if (args.Length >= 1)
             {
-                StreamReader reader_file = File.OpenText(args[0]);
+                StreamReader reader_file;
                 List<string> run_code = new List<string>();
+                try
+                {
+                    reader_file = File.OpenText(args[0]);
+                
                 string line_init;
                 while ((line_init = reader_file.ReadLine()) != null)
                 {
                     run_code.Add(line_init);
                 }
+                reader_file.Close();
+                }catch
+                {
+                    Console.WriteLine("Exception: Could not find file: "+args[0]);
+                }
                 rCompiler.Compile(run_code, numberNames, numberValues, strNames, strValues, references);
+
             }
             else
             {
@@ -303,8 +313,9 @@ namespace rC
                     }
                 }
                 Console.Clear();
-
+                List<string> compileAfter = codeLines;
                 rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues, references);
+
                 Console.ReadLine();
             }
         }

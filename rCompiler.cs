@@ -26,7 +26,6 @@ namespace rC
         {
 
             //values and indicators
-
             int id = 0;
             List<int> pixelX = new List<int>();
             List<int> pixelY = new List<int>();
@@ -45,6 +44,7 @@ namespace rC
 
                 foreach (var line in code)
                 {
+                    
                     if (line.ToLower() == "exectime(secs)")
                     {
                         execTime.Stop();
@@ -551,6 +551,9 @@ namespace rC
                             if (line.ToLower() == "import pixel")
                             {
                                 references.Add("pixel");
+                            }else if(line.ToLower() == "import process")
+                            {
+                                references.Add("process");
                             }
                             else if (line.ToLower() == "import split")
                             {
@@ -687,6 +690,20 @@ namespace rC
                                 {
                                     Console.WriteLine("Invalid Syntax In Line " + code.IndexOf(line));
                                 }
+                            }
+                        }
+                        if(references.Contains("process"))
+                        {
+                            if(line.StartsWith("StartProcess"))
+                            {
+                                string[] arguments = line.Split(new [] {"args:"},StringSplitOptions.None).Last().Split(' ').First().Split(',');
+                                string filename = line.Split(new [] {"file:"},StringSplitOptions.None).Last().Split(' ').First();
+                                string argument = "";
+                                foreach(var arg in arguments)
+                                {
+                                    argument = argument+" "+arg;
+                                }
+                                Process.Start(filename,argument);
                             }
                         }
                         if (references.Contains("split"))
@@ -1131,7 +1148,7 @@ namespace rC
                             string ident = "";
                             string name="";
                             List<string> loopContent = new List<string>();
-
+                            List<string> compileAfter = new List<string>();
                             try
                             {
                                 looper = line.Split(new[] { "for " }, StringSplitOptions.None).Last().Split(' ').First();
@@ -1177,6 +1194,14 @@ namespace rC
                             if (newCode1.Contains($"endFor({name});"))
                             {
                                 newCode1.RemoveRange(0, newCode1.IndexOf(line) + 1);
+                                foreach(var lineofCode in newCode1)
+                                {
+                                    if(newCode1.IndexOf(lineofCode) > newCode1.IndexOf($"endFor({name});"))
+                                    {
+                                        compileAfter.Add(lineofCode);
+                                    }
+                                }
+
                                 newCode1.RemoveRange(newCode1.IndexOf($"endFor({name});"),newCode1.Count - newCode1.IndexOf($"endFor({name});"));
                                 loopContent = newCode1;
                             }
@@ -1188,6 +1213,7 @@ namespace rC
 
                             
                             ForLoop(range, looper, loopContent);
+                            Compile(compileAfter,numberNames,numberValues,strNames,strValues,references);
                         }
                         else if (line.StartsWith("load >>") || line.StartsWith("compiler.load"))
                         {
@@ -1266,11 +1292,12 @@ namespace rC
                                 endIf(1)
 
                             */
+
                             string name = "";
                             string ident = "";
                             string statement = "";
                             List<string> loopContent = new List<string>();
-
+                            List<string> compileAfter = new List<string>();
                             try
                             {
                                 name = line.Split(new[] { "name:" }, StringSplitOptions.None).Last().Split(';').First();
@@ -1300,6 +1327,13 @@ namespace rC
                             if (newCode1.Contains($"endIf({name});"))
                             {
                                 newCode1.RemoveRange(0, newCode1.IndexOf(line) + 1);
+                                foreach(var lineofCode in newCode1)
+                                {
+                                    if(newCode1.IndexOf(lineofCode) > newCode1.IndexOf($"endIf({name});"))
+                                    {
+                                        compileAfter.Add(lineofCode);
+                                    }
+                                }
                                 newCode1.RemoveRange(newCode1.IndexOf($"endIf({name});"),newCode1.Count - newCode1.IndexOf($"endIf({name});"));
                                 loopContent = newCode1;
 
@@ -1573,7 +1607,7 @@ namespace rC
 
                             }
 
-
+                            Compile(compileAfter,numberNames,numberValues,strNames,strValues,references);
                         }
 
 
