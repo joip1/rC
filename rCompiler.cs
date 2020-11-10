@@ -48,13 +48,13 @@ namespace rC
                     if (line.ToLower() == "exectime(secs)")
                     {
                         execTime.Stop();
-                        Console.WriteLine(execTime.Elapsed);
+                        Console.Write(execTime.Elapsed);
                         execTime.Start();
                     }
                     if (line.ToLower() == "exectime(ms)")
                     {
                         execTime.Stop();
-                        Console.WriteLine(execTime.ElapsedMilliseconds);
+                        Console.Write(execTime.ElapsedMilliseconds);
                         execTime.Start();
                     }
                     if (line.ToLower() == "exectime()")
@@ -521,7 +521,13 @@ namespace rC
                                     }
                                     catch
                                     {
-                                        strValues[strNames.IndexOf(str)] = strValues[strNames.IndexOf(str)] + line.Split('+')[1].Split(')').First();
+                                        try
+                                        {
+                                            strValues[strNames.IndexOf(str)] = strValues[strNames.IndexOf(str)] + line.Split('+')[1].Split(')').First();
+                                        }catch
+                                        {
+                                            Console.WriteLine($"One of the Following Strings Does Not Exist: {line.Split('+')[0].Split(')').First()} or {line.Split('+')[0].Split(')').First()}");
+                                        }
                                     }
                                 }
                                 else if (str == "$readline")
@@ -975,7 +981,7 @@ namespace rC
                                 {
                                     if (line.Split('>').Last().ToLower().StartsWith("$read") == false)
                                     {
-                                        strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = line.Split('>').Last();
+                                        strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = line.Split('>').Last().Split('\"')[1].Split('\"').First();
                                     }
                                     else if (line.Split('>').Last().ToLower() == "$readkey")
                                     {
@@ -992,7 +998,7 @@ namespace rC
                                     if (line.Split('>').Last().ToLower().StartsWith("$read") == false)
                                     {
                                         strNames.Add(line.Split(' ')[1].Split('>').First());
-                                        strValues.Add(line.Split('>').Last());
+                                        strValues.Add(line.Split('>').Last().Split('\"')[1].Split('\"').First());
                                     }
                                     else if (line.Split('>').Last().ToLower() == "$readkey")
                                     {
@@ -1011,7 +1017,7 @@ namespace rC
                             catch
                             {
                                 int errorLine = code.IndexOf(line);
-                                Console.WriteLine($"Invalid Syntax (Line {errorLine--})");
+                                Console.WriteLine($"Invalid Syntax (Line {errorLine++})");
                             }
                         }
 
@@ -1025,31 +1031,32 @@ namespace rC
                         {
                             Console.WriteLine("");
                         }
-                        if (line.StartsWith("Write") && line.Contains("&>") && line.Contains("<&") && line.Contains("WriteStr") == false && line.Contains("WriteNum") == false && line.ToLower().StartsWith("for") == false && line.ToLower().Contains("in range %") == false && line.Contains("$>") == false)
+                        if (line.StartsWith("Write") && line.Contains(" \"") && line.Contains("WriteStr") == false && line.Contains("WriteNum") == false && line.ToLower().StartsWith("for") == false && line.ToLower().Contains("in range %") == false && line.Contains("$>") == false)
                         {
                             //check if it is a number 
                             //var matchesNumber = numberNames.Where(x => line.Contains(line.Split(new[] { "Write &>" }, StringSplitOptions.None).Last().ToString().Split(new[] { "<&" }, StringSplitOptions.None).First().ToString()));
 
-                            Console.Write(line.Split(new[] { "Write &>" }, StringSplitOptions.None).Last().ToString().Split(new[] { "<&" }, StringSplitOptions.None).First().ToString());
+                            Console.Write(line.Split(new[] { "Write \"" }, StringSplitOptions.None).Last().ToString().Split(new[] { "\"" }, StringSplitOptions.None).First().ToString());
 
                         }
                         else if (line.StartsWith("WriteStr")
-                            && line.Contains("&>")
+                            && line.Contains(" {")
+                            && line.Contains("}")
                             && line.ToLower().StartsWith("for") == false
                             && line.ToLower().Contains("in range %") == false
                             && line.Contains("$>") == false)
                         {
                             foreach (var name in strNames)
                             {
-                                var namesToCheck = line.Split(' ');
+                                var namesToCheck = line.Split(',');
 
                                 foreach (var nametoCheck in namesToCheck)
                                 {
                                     try
                                     {
-                                        if (nametoCheck == name || nametoCheck == "&>" + name || nametoCheck == name + "<&" || nametoCheck == "&>" + name + "<&")
+                                        if (nametoCheck == name || nametoCheck == "{" + name || nametoCheck == name + "}" || nametoCheck == "{" + name + "}")
                                         {
-                                            Console.Write(strValues[strNames.IndexOf(name)] + line.Split(new[] { name }, StringSplitOptions.None)[1].Split(new[] { "<&" }, StringSplitOptions.None).First());
+                                            Console.Write(strValues[strNames.IndexOf(name)] + line.Split(new[] { name }, StringSplitOptions.None)[1].Split(new[] { "}" }, StringSplitOptions.None).First());
                                         }
                                     }
                                     catch
@@ -1061,7 +1068,8 @@ namespace rC
 
                         }
                         else if (line.StartsWith("WriteNum")
-                            && line.Contains("&>")
+                            && line.Contains(" {")
+                            && line.Contains("}")
                             && line.ToLower().StartsWith("for") == false
                             && line.ToLower().Contains("in range %") == false
                             && line.Contains("$>") == false)
@@ -1069,15 +1077,15 @@ namespace rC
                         {
                             foreach (var name in numberNames)
                             {
-                                var namesToCheck = line.Split(' ');
+                                var namesToCheck = line.Split(',');
 
                                 foreach (var nametoCheck in namesToCheck)
                                 {
                                     try
                                     {
-                                        if (nametoCheck == name || nametoCheck == "&>" + name || nametoCheck == name + "<&" || nametoCheck == "&>" + name + "<&")
+                                        if (nametoCheck == name || nametoCheck == "{" + name || nametoCheck == name + "}" || nametoCheck == "{" + name + "}")
                                         {
-                                            Console.Write(numberValues[numberNames.IndexOf(name)] + line.Split(new[] { name }, StringSplitOptions.None)[1].Split(new[] { "<&" }, StringSplitOptions.None).First());
+                                            Console.Write(numberValues[numberNames.IndexOf(name)] + line.Split(new[] { name }, StringSplitOptions.None)[1].Split(new[] { "}" }, StringSplitOptions.None).First());
                                         }
                                     }
                                     catch
