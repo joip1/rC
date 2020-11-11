@@ -1062,6 +1062,7 @@ namespace rC
                                         }
                                         else
                                         {
+                                            rand = new Random();
                                             if (line.ToLower().Contains("$readline") == false)
                                             {
                                                 numberNames.Add(line.Split(' ')[1].Split('>').First());
