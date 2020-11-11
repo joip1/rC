@@ -51,11 +51,51 @@ namespace rC
 
                 foreach (var line in code)
                 {
+                    if(line.ToLower().StartsWith("updatestrlistvalue"))
+                    {
+                        //updateStrListValue(MyList[x])
+                        try
+                        {
+                            string stringToChange = strValues[strNames.IndexOf(line.Split('(')[1].Split(')')[0])];
+                            var listToChange = strListValues[strListNames.IndexOf(line.Split('(')[1].Split('[')[0])];
+                            if(numberNames.Contains(line.Split('[')[1].Split(']')[0])==false)
+                            {
+                                listToChange[Convert.ToInt32(line.Split('[')[1].Split(']')[0])] = stringToChange;
+                            }else
+                            {
+                                listToChange[Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split('[')[1].Split(']')[0])])] = stringToChange;
+                            }
+                        }
+                        catch
+                        {
+                            Console.WriteLine("Fatal error on line: " +code.IndexOf(line));
+                        }
+                    }
+                    if(line.ToLower().StartsWith("updatenumlistvalue"))
+                    {
+                        //updateStrListValue(MyList[x])
+                        try
+                        {
+                            double stringToChange = numberValues[numberNames.IndexOf(line.Split('(')[1].Split(')')[0])];
+                            var listToChange = numListValues[numListNames.IndexOf(line.Split('(')[1].Split('[')[0])];
+                            if(numberNames.Contains(line.Split('[')[1].Split(']')[0])==false)
+                            {
+                                listToChange[Convert.ToInt32(line.Split('[')[1].Split(']')[0])] = stringToChange;
+                            }else
+                            {
+                                listToChange[Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split('[')[1].Split(']')[0])])] = stringToChange;
+                            }
+                        }
+                        catch
+                        {
+                            Console.WriteLine("Fatal error on line: " +code.IndexOf(line));
+                        }
+                    }
 
                     if (line.StartsWith("list(str) "))
                     {
-                            strListNames.Add(line.Split(')').Last().Split('\"')[1].Split('\"').First());
-                            strListValues.Add(new List<string>());   
+                        strListNames.Add(line.Split(')').Last().Split('\"')[1].Split('\"').First());
+                        strListValues.Add(new List<string>());   
                     }
                     if (line.StartsWith("list(num)"))
                     {
@@ -64,6 +104,30 @@ namespace rC
                     }
                     foreach (var listName in strListNames)
                     {
+                                            
+                        if(line.StartsWith(listName+".IndexOf:"))
+                        {
+                            try
+                            {
+                                string stringToGetIndex ="";
+                                //MyList.IndexOf:"Something"; to:num
+                                if(line.Contains('"'))
+                                {
+                                    stringToGetIndex = line.Split(new []{"IndexOf:"},StringSplitOptions.None).Last().Split('"')[1].Split('"').First().Split(';').First();
+                                }
+                                else
+                                {
+                                    stringToGetIndex = strValues[strNames.IndexOf(line.Split(new [] {"IndexOf:"},StringSplitOptions.None).Last().Split(';').First())];
+                                }
+                                    numberValues[numberNames.IndexOf(line.Split(new [] {"to:"},StringSplitOptions.None).Last().Split(';').First())] = strListValues[strListNames.IndexOf(listName)].IndexOf(stringToGetIndex);
+                                }
+                            catch
+                            {
+                                Console.WriteLine("Fatal Error, Line: "+code.IndexOf(line));
+                            }
+                            
+                        }
+
                         foreach (var name in strNames)
                         {
                             if (name.ToLower().StartsWith(listName.ToLower() + ".add"))
@@ -77,6 +141,28 @@ namespace rC
                     }
                     foreach (var listName in numListNames)
                     {
+                        if(line.StartsWith(listName+".IndexOf:"))
+                        {
+                            try
+                            {
+                                string stringToGetIndex ="";
+                                //MyList.IndexOf:"Something"; to:num
+                                if(line.Contains('"'))
+                                {
+                                    stringToGetIndex = line.Split(new []{"IndexOf:"},StringSplitOptions.None).Last().Split('"')[1].Split('"').First().Split(';').First();
+                                }
+                                else
+                                {
+                                    stringToGetIndex = strValues[strNames.IndexOf(line.Split(new [] {"IndexOf:"},StringSplitOptions.None).Last().Split(';').First())];
+                                }
+                                numberValues[numberNames.IndexOf(line.Split(new [] {"to"},StringSplitOptions.None).Last().Split(';').First())] = numListValues[numListNames.IndexOf(listName)].IndexOf(Convert.ToDouble(stringToGetIndex));
+                                }
+                            catch
+                            {
+                                throw new Exception("Fatal error on line: "+ code.IndexOf(line));
+                            }
+                            
+                        }
                         foreach (var name in numberNames)
                         {
                             if (name.ToLower().StartsWith(listName.ToLower() + ".add"))
