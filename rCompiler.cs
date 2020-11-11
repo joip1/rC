@@ -1090,7 +1090,7 @@ namespace rC
                                                 {
                                                     if (line.Split('>').Last().Contains("rand:"))
                                                     {
-                                                        numberValues.Add(rand.Next(Convert.ToInt32(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').First()), Convert.ToInt32(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').Last())));
+                                                        numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = rand.Next(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').First())]), Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').Last())]));
                                                     }
                                                     {
                                                         numberValues.Add(Convert.ToDouble(line.Split('>').Last()));
