@@ -51,6 +51,7 @@ namespace rC
 
                 foreach (var line in code)
                 {
+
                     if (line.StartsWith("list(str) "))
                     {
                             strListNames.Add(line.Split(')').Last().Split('\"')[1].Split('\"').First());
@@ -80,7 +81,7 @@ namespace rC
                         {
                             if (name.ToLower().StartsWith(listName.ToLower() + ".add"))
                             {
-                                if (strListValues[strListNames.IndexOf(listName)].Contains(strValues[numberNames.IndexOf(name)]) == false)
+                                if (numListValues[numListNames.IndexOf(listName)].Contains(numberValues[numberNames.IndexOf(name)]) == false)
                                 {
                                     numListValues[numListNames.IndexOf(listName)].Add(numberValues[numberNames.IndexOf(name)]);
                                 }
@@ -153,7 +154,30 @@ namespace rC
                         
                     }
                 
-
+                      foreach(var stringList in strListNames)
+                        {
+                        if(numberNames.Contains(stringList+".length"))
+                        {
+                            numberValues[numberNames.IndexOf(stringList+".length")] = strListValues[strListNames.IndexOf(stringList)].Count;
+                        }
+                        else
+                        {
+                            numberNames.Add(stringList+".length");
+                            numberValues.Add(strListValues[strListNames.IndexOf(stringList)].Count);
+                        }
+                        }
+                    foreach(var numList in numListNames)
+                    {
+                        if(numberNames.Contains(numList+".length"))
+                        {
+                            numberValues[numberNames.IndexOf(numList+".length")] = numListValues[numListNames.IndexOf(numList)].Count;
+                        }
+                        else
+                        {
+                            numberNames.Add(numList+".length");
+                            numberValues.Add(numListValues[numListNames.IndexOf(numList)].Count);
+                        }
+                    }
 
 
                     
@@ -1002,6 +1026,7 @@ namespace rC
                                 {
                                     try
                                     {
+                                        rand = new Random();
                                         if (numberNames.Contains(line.Split(' ')[1].Split('>').First()))
                                         {
                                             if (line.ToLower().Contains("$readline") == false)
@@ -1019,9 +1044,10 @@ namespace rC
                                                 }
                                                 catch
                                                 {
+                                                    rand = new Random();
                                                     if (line.Split('>').Last().Contains("rand:"))
                                                     {
-                                                        numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = rand.Next(Convert.ToInt32(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').First()), Convert.ToInt32(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').Last()));
+                                                        numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = rand.Next(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').First())]), Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').Last())]));
                                                     }
                                                     else
                                                     {
