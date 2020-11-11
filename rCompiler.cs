@@ -1415,20 +1415,6 @@ namespace rC
                                     }
                                     List<string> newCode1 = code;
 
-                                    for (int i = 0; i < newCode1.Count; i++)
-                                    {
-                                        if (newCode1[i].StartsWith(ident))
-                                        {
-                                            try
-                                            {
-                                                newCode1[newCode1.IndexOf(newCode1[i])] = newCode1[i].Split(new[] { ident }, StringSplitOptions.None)[1];
-                                            }
-                                            catch
-                                            {
-                                            }
-                                        }
-                                    }
-
                                     if (newCode1.Contains($"endFor({name});"))
                                     {
                                         newCode1.RemoveRange(0, newCode1.IndexOf(line) + 1);
@@ -1447,6 +1433,21 @@ namespace rC
                                     {
                                         Console.WriteLine("\nNo End Was Found for For Loop with name: " + name);
                                     }
+                            for (int i = 0; i < newCode1.Count; i++)
+                                    {
+                                        if (newCode1[i].StartsWith(ident))
+                                        {
+                                            try
+                                            {
+                                                newCode1[newCode1.IndexOf(newCode1[i])] = newCode1[i].Split(new[] { ident }, StringSplitOptions.None)[1];
+                                            }
+                                            catch
+                                            {
+                                            }
+                                        }
+                                    }
+
+
 
 
 
@@ -1547,21 +1548,6 @@ namespace rC
                                         Console.WriteLine("Invalid Syntax Line: " + code.IndexOf(line));
                                     }
                                     List<string> newCode1 = code;
-
-                                    for (int i = 0; i < newCode1.Count; i++)
-                                    {
-                                        if (newCode1[i].StartsWith(ident))
-                                        {
-                                            try
-                                            {
-                                                newCode1[newCode1.IndexOf(newCode1[i])] = newCode1[i].Split(new[] { ident }, StringSplitOptions.None)[1];
-                                            }
-                                            catch
-                                            {
-                                            }
-                                        }
-                                    }
-
                                     if (newCode1.Contains($"endIf({name});"))
                                     {
                                         newCode1.RemoveRange(0, newCode1.IndexOf(line) + 1);
@@ -1580,6 +1566,21 @@ namespace rC
                                     {
                                         Console.WriteLine("\nNo End Was Found for If Statement with name: " + name);
                                     }
+                            for (int i = 0; i < newCode1.Count; i++)
+                                    {
+                                        if (newCode1[i].StartsWith(ident))
+                                        {
+                                            try
+                                            {
+                                                newCode1[newCode1.IndexOf(newCode1[i])] = newCode1[i].Split(new[] { ident }, StringSplitOptions.None)[1];
+                                            }
+                                            catch
+                                            {
+                                            }
+                                        }
+                                    }
+
+                                 
 
 
 
