@@ -51,7 +51,7 @@ namespace rC
 
                 foreach (var line in code)
                 { 
-                    if(line.ToLower().StartsWith("list(str).ToCharArray:")) 
+                    if(line.StartsWith("list(str).ToCharArray:")) 
                     {
                         try 
                         {
