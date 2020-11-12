@@ -50,7 +50,24 @@ namespace rC
                 //postStrListValue(Name[1])
 
                 foreach (var line in code)
-                {
+                { 
+                    if(line.ToLower().StartsWith("list(str).ToCharArray:")) 
+                    {
+                        try 
+                        {
+                            string stringFrom = strValues[strNames.IndexOf(line.Split(new[] { "ToCharArray:" },StringSplitOptions.None).Last().Split(';').First())];
+                            var ListToAssign = strListValues[strListNames.IndexOf(line.Split(new[] { "to:" }, StringSplitOptions.None).Last().Split(';').First())];
+                            foreach(var character in stringFrom)
+                            {
+                                string characterStr = character.ToString();
+                                ListToAssign.Add(characterStr);
+                            }
+                        }
+                        catch 
+                        {
+                            Console.WriteLine("Fatal error, line: " + code.IndexOf(line));
+                        }
+                    }
                     if(line.ToLower().StartsWith("updatestrlistvalue"))
                     {
                         //updateStrListValue(MyList[x])
