@@ -50,7 +50,21 @@ namespace rC
                 //postStrListValue(Name[1])
 
                 foreach (var line in code)
-                { 
+                {
+                    if (line.StartsWith("strToNum(")) 
+                    {
+                        string toConvert = strValues[strNames.IndexOf(line.Split('(').Last().Split(')').First())];
+                        if (numberNames.Contains(toConvert)) 
+                        {
+                            numberValues[numberNames.IndexOf(line.Split('(').Last().Split(')').First())] = Convert.ToDouble(toConvert);
+                        }
+                        else 
+                        {
+                            numberNames.Add(line.Split('(').Last().Split(')').First());
+                            numberValues.Add(Convert.ToDouble(toConvert));
+                        }
+                    }
+
                     if(line.StartsWith("list(str).ToCharArray:")) 
                     {
                         try 
