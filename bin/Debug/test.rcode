@@ -1,8 +1,0 @@
-number me >>12
-me++
-WriteNum &>me<&
-me+12
-WriteNum &>me<&
-number him >>13
-me*him
-WriteNum &>me<&

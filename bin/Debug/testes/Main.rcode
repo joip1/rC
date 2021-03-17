@@ -1,0 +1,27 @@
+import filestream
+
+
+list(str) "passwords"
+list(str) "Info"
+str nothing >> ""
+
+
+Write "First Name -> "
+str firstName >>$readline
+if statement:str(firstName!=nothing); name:if1; ident:"    ";
+    str Info.Add >>firstName
+endIf(if1);
+
+
+Write "Last Name -> "
+str lastName >>$readline
+if statement:str(lastName!=nothing); name:if2; ident:"    ";
+    str Info.Add >>lastName
+endIf(if2);
+
+
+Write "Username -> "
+str Username >>$readline
+if statement:str(Username!=nothing); name:if3; ident:"    ";
+    str Info.Add >>Username
+endIf(if3);

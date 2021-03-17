@@ -1,2 +1,0 @@
-number me >> 10
-for x in range % 10 $>me++ $>WriteNum &>me<&
