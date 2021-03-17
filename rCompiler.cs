@@ -161,19 +161,12 @@ namespace rC
 
                         foreach (var name in strNames)
                         {
-                            try
+                            if (name.ToLower().StartsWith(listName.ToLower() + ".add"))
                             {
-                                if (name.ToLower().StartsWith(listName.ToLower() + ".add"))
+                                if (strListValues[strListNames.IndexOf(listName)].Contains(strValues[strNames.IndexOf(name)]) == false)
                                 {
-                                    if (strListValues[strListNames.IndexOf(listName)].Contains(strValues[strNames.IndexOf(name)]) == false)
-                                    {
-                                        strListValues[strListNames.IndexOf(listName)].Add(strValues[strNames.IndexOf(name)]);
-                                    }
+                                    strListValues[strListNames.IndexOf(listName)].Add(strValues[strNames.IndexOf(name)]);
                                 }
-                            }
-                            catch
-                            {
-
                             }
                         }
                     }
@@ -1148,8 +1141,8 @@ namespace rC
                                     && line.ToLower().Contains("in range %") == false
                                     && line.Contains("$>") == false)
                                 {
-                                   // try
-                                    //{
+                                    try
+                                    {
                                         rand = new Random();
                                         if (numberNames.Contains(line.Split(' ')[1].Split('>').First()))
                                         {
@@ -1229,12 +1222,12 @@ namespace rC
                                             }
 
                                         }
-                                    //}
-                                  //  catch
-                                  //  {
-                                  //      int errorLine = code.IndexOf(line);
-                                   //     Console.WriteLine($"Invalid Syntax (Line {errorLine--})");
-                                   // }
+                                    }
+                                    catch
+                                    {
+                                        int errorLine = code.IndexOf(line);
+                                        Console.WriteLine($"Invalid Syntax (Line {errorLine--})");
+                                    }
                                 }
 
                                 //string definer
@@ -1243,8 +1236,8 @@ namespace rC
                                     && line.ToLower().StartsWith("for") == false && line.ToLower().Contains("in range %") == false
                                     && line.Contains("$>") == false)
                                 {
-                                    //try
-                                    //{
+                                    try
+                                    {
                                         if (strNames.Contains(line.Split(' ')[1].Split('>').First()))
                                         {
                                             if (line.Split('>').Last().ToLower().StartsWith("$read") == false)
@@ -1280,13 +1273,13 @@ namespace rC
                                             }
                                         }
 
-                                   // }
+                                    }
 
-                                   // catch
-                                   // {
-                                    //    int errorLine = code.IndexOf(line);
-                                     //   Console.WriteLine($"Invalid Syntax (Line {errorLine++})");
-                                    //}
+                                    catch
+                                    {
+                                        int errorLine = code.IndexOf(line);
+                                        Console.WriteLine($"Invalid Syntax (Line {errorLine++})");
+                                    }
                                 }
 
 

@@ -118,7 +118,7 @@ namespace rC
                         Console.ResetColor();
                     }
                 }
-                Console.Write("rC$ ");
+
                 while ((readline = Console.ReadLine()).ToLower() != "rcompiler.compile" && isCompiling == true)
                 {
 
@@ -126,10 +126,6 @@ namespace rC
                     {
                         var file = File.CreateText(readline.Split(new[] { "create_file " }, StringSplitOptions.None).Last() + ".rcode");
                         file.Close();
-                    }
-                    else if (readline.ToLower() == "clear") 
-                    {
-                        Console.Clear();
                     }
                     else if (readline == "run_project")
                     {
@@ -231,7 +227,7 @@ namespace rC
                     }
 
 
-                    else if (readline.StartsWith("line.modify") && readline.Contains(":"))
+                    if (readline.StartsWith("line.modify") && readline.Contains(":"))
                     {
                         int modifyLineIndex = Convert.ToInt32(readline.Split(new[] { "line.modify(" }, StringSplitOptions.None).Last().Split(')').First());
                         try
@@ -310,10 +306,9 @@ namespace rC
                     }
                     else
                     {
-                        Console.WriteLine("rC: Command not recognized");
+                        //codeLines.Add(readline);
+                        //Console.Write("" + codeLines.Count + " ");
                     }
-                    Console.Write("rC$ ");
-
                 }
                 Console.Clear();
                 List<string> compileAfter = codeLines;
