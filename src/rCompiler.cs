@@ -480,7 +480,7 @@ namespace rC
                                 }
 
 
-                                if (line.ToLower().StartsWith("method_file"))
+                                if (line.ToLower().StartsWith("method"))
                                 {
                                     string fileToCompile = "";
                                     try
@@ -1108,7 +1108,7 @@ namespace rC
                                 //color indicators
                                 if (line.ToLower().StartsWith("color.reset"))
                                 {
-                                    Console.ForegroundColor = ConsoleColor.White;
+                                    Console.ResetColor();   
                                 }
                                 else if (line.ToLower().StartsWith("color.green"))
                                 {

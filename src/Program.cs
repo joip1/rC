@@ -116,12 +116,15 @@ namespace rC
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("#rC Started Successfully");
                         Console.ResetColor();
+                        Console.Write("rC-shell ~# ");
+
+                        Console.ResetColor();
                     }
                 }
 
                 while ((readline = Console.ReadLine()).ToLower() != "rcompiler.compile" && isCompiling == true)
                 {
-
+                    Console.Write("rC-shell ~# ");
                     if (readline.StartsWith("create_file"))
                     {
                         var file = File.CreateText(readline.Split(new[] { "create_file " }, StringSplitOptions.None).Last() + ".rcode");
@@ -197,11 +200,11 @@ namespace rC
                     else if (readline.ToLower().StartsWith("create_project "))
                     {
                         var dirToCopy = Directory.CreateDirectory(readline.Split(new[] { "create_project " }, StringSplitOptions.None).Last());
-                        File.CreateText(dirToCopy.FullName + @"\Main.rcode");
-                        StreamWriter ConfigWriter = File.CreateText(dirToCopy.FullName + @"\run_config.rconfig");
+                        File.CreateText(dirToCopy.FullName + @"/Main.rcode");
+                        StreamWriter ConfigWriter = File.CreateText(dirToCopy.FullName + @"/run_config.rconfig");
                         ConfigWriter.WriteLine("init:Main.rcode");
                         ConfigWriter.Close();
-                        File.Copy("rC.exe", dirToCopy.FullName + @"\Run_Program.exe");
+                        File.Copy("rC.exe", dirToCopy.FullName + @"/Run_Program.exe");
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("Project Created Successfully!");
                         Console.ResetColor();
@@ -308,6 +311,9 @@ namespace rC
                     {
                         //codeLines.Add(readline);
                         //Console.Write("" + codeLines.Count + " ");
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Command not Recognized!");
+                        Console.ResetColor();
                     }
                 }
                 Console.Clear();
