@@ -16,6 +16,7 @@ namespace rC
         //new to docs == for // readline // color //num cursor_x >> set, cursor_y >> set;
         //write,read,delete,create file
         //numToStr(str>>num)
+        //TODO - add import files
         public static void Compile(
             List<string> code,
             List<string> numberNames,
@@ -488,7 +489,7 @@ namespace rC
                                         int firstIndex = Convert.ToInt32(line.Split(new[] { "first:" }, StringSplitOptions.None).Last().Split(';').First());
                                         int lastIndex = Convert.ToInt32(line.Split(new[] { "last:" }, StringSplitOptions.None).Last().Split(';').First());
                                         firstIndex--;
-                                        fileToCompile = line.ToLower().Split(new[] { "file:" }, StringSplitOptions.None).Last().Split(';').First();
+                                        fileToCompile = line.Split(new[] { "file:" }, StringSplitOptions.None).Last().Split(';').First();
 
                                         if (!File.Exists(fileToCompile + ".rcode"))
                                         {

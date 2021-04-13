@@ -4,8 +4,8 @@ Write "Character to replace >> "
 str characterToReplace >>$readline
 Write "Character to replace "
 WriteStr {characterToReplace}
-Write "with >> "
+Write " with >> "
 str replaceWith >>$readline
-replace:repla;with:replaceWith;str:replaceFrom;
+replace:characterToReplace;with:replaceWith;str:replaceFrom;
 Write "Result: "
 WriteStr {replaceFrom}
