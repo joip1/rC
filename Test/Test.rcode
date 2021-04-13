@@ -1,0 +1,10 @@
+import process
+import filestream
+DeleteFile file.server.sh
+WriteToFile file:server.sh content:python3 -m http.server 80
+StartProcess file:bash args:server.sh 
+str htmcode >>""
+ReadFile file:index.rhtm str:htmcode
+WriteToFile file:index.html content:htmcode
+DeleteFile file:index.html
+WriteToFile file:index.html content:htmcode

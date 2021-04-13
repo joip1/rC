@@ -1136,6 +1136,49 @@ namespace rC
                                     Console.ReadLine();
                                 }
 
+                                //usage: replace:f; with:d; str:string;
+                                if(line.ToLower().StartsWith("replace")){
+                                    string toReplace = line.Split(new []{"replace:"},StringSplitOptions.None).Last().Split(';').First();
+                                    string with = line.Split(new []{"with:"},StringSplitOptions.None).Last().Split(';').First();
+                                    string strToReplace = line.Split(new []{"str:"},StringSplitOptions.None).Last().Split(';').First();
+                                    string toReplaceChecked ="";
+                                    string strChecked = "";
+                                    string withChecked = "";
+                                     if(toReplace.Contains('"')){
+                                         toReplaceChecked= line.Split('"')[1].Split('"')[0];
+
+                                    }else{
+                                        try{
+                                            toReplaceChecked = strValues[strNames.IndexOf(toReplace)];
+                                        }catch{
+                                            Console.WriteLine("Error: "+toReplace+" doesn't exist on line "+code.IndexOf(line).ToString());
+                                        }
+                                    }
+                                      if(with.Contains('"')){
+                                         withChecked= line.Split('"')[1].Split('"')[0];
+
+                                    }else{
+                                        try{
+                                            withChecked = strValues[strNames.IndexOf(with)];
+                                        }catch{
+                                            Console.WriteLine("Error: "+with+" doesn't exist on line "+code.IndexOf(line).ToString());
+                                        }
+                                    }
+                                    
+                                    if(strToReplace.Contains('"')){
+                                        strChecked = line.Split('"')[1].Split('"')[0];
+
+                                    }else{
+                                        try{
+                                            strChecked = strValues[strNames.IndexOf(strToReplace)];
+                                        }catch{
+                                            Console.WriteLine("Error: "+strToReplace+" doesn't exist on line "+code.IndexOf(line).ToString());
+                                        }
+                                    }
+                                    strChecked.Replace(toReplaceChecked,withChecked);
+                                    strValues[strNames.IndexOf(strToReplace)]=strChecked;
+                                }
+
                                 if (line.StartsWith("number ") || line.StartsWith("num ") && line.Contains(">>")
                                     && line.ToLower().StartsWith("for") == false
                                     && line.ToLower().Contains("in range %") == false

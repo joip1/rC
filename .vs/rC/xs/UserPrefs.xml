@@ -1,0 +1,28 @@
+﻿<Properties StartupConfiguration="{A9AC555A-EE40-42A9-BA3F-6CBDA7A0B5A3}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="rCompiler.cs">
+    <Files>
+      <File FileName="rCompiler.cs" Line="1352" Column="50" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="rC" expanded="True">
+            <Node name="rC" expanded="True">
+              <Node name="rCompiler.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State />
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.rC PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
