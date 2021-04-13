@@ -1151,7 +1151,7 @@ namespace rC
                                     string strChecked = "";
                                     string withChecked = "";
                                      if(toReplace.Contains('"')){
-                                         toReplaceChecked= line.Split('"')[1].Split('"')[0];
+                                         toReplaceChecked= toReplace.Split('"')[1].Split('"')[0];
 
                                     }else{
                                         try{
@@ -1161,7 +1161,7 @@ namespace rC
                                         }
                                     }
                                       if(with.Contains('"')){
-                                         withChecked= line.Split('"')[1].Split('"')[0];
+                                         withChecked= with.Split('"')[1].Split('"')[0];
 
                                     }else{
                                         try{
@@ -1172,7 +1172,7 @@ namespace rC
                                     }
                                     
                                     if(strToReplace.Contains('"')){
-                                        strChecked = line.Split('"')[1].Split('"')[0];
+                                        strChecked = strToReplace.Split('"')[1].Split('"')[0];
 
                                     }else{
                                         try{
@@ -1181,8 +1181,9 @@ namespace rC
                                             Console.WriteLine("Error: "+strToReplace+" doesn't exist on line "+code.IndexOf(line).ToString());
                                         }
                                     }
-                                    strChecked.Replace(toReplaceChecked,withChecked);
-                                    strValues[strNames.IndexOf(strToReplace)]=strChecked;
+
+
+                                    strValues[strNames.IndexOf(strToReplace)] = strChecked.Replace(toReplaceChecked,withChecked);
                                 }
 
                                 if (line.StartsWith("number ") || line.StartsWith("num ") && line.Contains(">>")

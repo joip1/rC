@@ -312,7 +312,9 @@ namespace rC
                         //codeLines.Add(readline);
                         //Console.Write("" + codeLines.Count + " ");
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Command not Recognized!");
+                        if (readline!=""){
+                        Console.Write("Command not Recognized!");
+                        }
                         Console.ResetColor();
                     }
                 }
