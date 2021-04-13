@@ -837,7 +837,7 @@ namespace rC
                                     }
                                     else if (line.ToLower().StartsWith("import "))
                                     {
-                                        references.Add(line.Split(';')[1]);
+                                        references.Add(line.Split(' ')[1]);
                                     }
                                 }
 
@@ -1194,7 +1194,7 @@ namespace rC
                                     try
                                     {
                                         rand = new Random();
-                                        if (numberNames.Contains(line.Split(';')[1].Split('>').First()))
+                                        if (numberNames.Contains(line.Split(' ')[1].Split('>').First()))
                                         {
                                             if (line.ToLower().Contains("$readline") == false)
                                             {
@@ -1202,11 +1202,11 @@ namespace rC
                                                 {
                                                     if (line.Split('>').Last().Contains("rand:"))
                                                     {
-                                                        numberValues[numberNames.IndexOf(line.Split(';')[1].Split('>').First())] = rand.Next(Convert.ToInt32(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').First()), Convert.ToInt32(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').Last()));
+                                                        numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = rand.Next(Convert.ToInt32(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').First()), Convert.ToInt32(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').Last()));
                                                     }
                                                     else
                                                     {
-                                                        numberValues[numberNames.IndexOf(line.Split(';')[1].Split('>').First())] = Convert.ToDouble(line.Split('>').Last());
+                                                        numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(line.Split('>').Last());
                                                     }
                                                 }
                                                 catch
@@ -1214,17 +1214,17 @@ namespace rC
                                                     rand = new Random();
                                                     if (line.Split('>').Last().Contains("rand:"))
                                                     {
-                                                        numberValues[numberNames.IndexOf(line.Split(';')[1].Split('>').First())] = rand.Next(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').First())]), Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').Last())]));
+                                                        numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = rand.Next(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').First())]), Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').Last())]));
                                                     }
                                                     else
                                                     {
-                                                        numberValues[numberNames.IndexOf(line.Split(';')[1].Split('>').First())] = numberValues[numberNames.IndexOf(line.Split('>').Last())];
+                                                        numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = numberValues[numberNames.IndexOf(line.Split('>').Last())];
                                                     }
                                                 }
                                             }
                                             else if (line.ToLower().Contains("$readline") == true)
                                             {
-                                                numberValues[numberNames.IndexOf(line.Split(';')[1].Split('>').First())] = Convert.ToDouble(Console.ReadLine());
+                                                numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(Console.ReadLine());
                                             }
                                         }
                                         else
@@ -1232,7 +1232,7 @@ namespace rC
                                             rand = new Random();
                                             if (line.ToLower().Contains("$readline") == false)
                                             {
-                                                numberNames.Add(line.Split(';')[1].Split('>').First());
+                                                numberNames.Add(line.Split(' ')[1].Split('>').First());
                                                 try
                                                 {
                                                     if (line.Split('>').Last().Contains("rand:"))
@@ -1243,7 +1243,7 @@ namespace rC
                                                     {
                                                         try
                                                         {
-                                                            numberValues.Add(Convert.ToDouble(line.Split('>').Last().Split(';').Last()));
+                                                            numberValues.Add(Convert.ToDouble(line.Split('>').Last().Split(' ').Last()));
                                                         }
                                                         catch
                                                         {
@@ -1258,7 +1258,7 @@ namespace rC
                                                 {
                                                     if (line.Split('>').Last().Contains("rand:"))
                                                     {
-                                                        numberValues[numberNames.IndexOf(line.Split(';')[1].Split('>').First())] = rand.Next(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').First())]), Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').Last())]));
+                                                        numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = rand.Next(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').First())]), Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "rand:" }, StringSplitOptions.None).Last().Split(',').Last())]));
                                                     }
                                                     {
                                                         numberValues.Add(Convert.ToDouble(line.Split('>').Last()));
@@ -1267,7 +1267,7 @@ namespace rC
                                             }
                                             else if (line.ToLower().Contains("$readline") == true)
                                             {
-                                                numberNames.Add(line.Split(';')[1].Split('>').First());
+                                                numberNames.Add(line.Split(' ')[1].Split('>').First());
                                                 numberValues.Add(Convert.ToDouble(Console.ReadLine()));
                                             }
 
@@ -1288,19 +1288,19 @@ namespace rC
                                 {
                                     try
                                     {
-                                        if (strNames.Contains(line.Split(';')[1].Split('>').First()))
+                                        if (strNames.Contains(line.Split(' ')[1].Split('>').First()))
                                         {
                                             if (line.Split('>').Last().ToLower().StartsWith("$read") == false)
                                             {
-                                                strValues[strNames.IndexOf(line.Split(';')[1].Split('>').First())] = line.Split('>')[2].Split('\"')[1].Split('\"').First();
+                                                strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = line.Split('>')[2].Split('\"')[1].Split('\"').First();
                                             }
                                             else if (line.Split('>').Last().ToLower() == "$readkey")
                                             {
-                                                strValues[strNames.IndexOf(line.Split(';')[1].Split('>').First())] = Console.ReadKey().Key.ToString();
+                                                strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Console.ReadKey().Key.ToString();
                                             }
                                             else if (line.Split('>').Last().ToLower() == "$readline")
                                             {
-                                                strValues[strNames.IndexOf(line.Split(';')[1].Split('>').First())] = Console.ReadLine();
+                                                strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Console.ReadLine();
                                             }
                                         }
                                         else
@@ -1308,17 +1308,17 @@ namespace rC
 
                                             if (line.Split('>').Last().ToLower().StartsWith("$read") == false)
                                             {
-                                                strNames.Add(line.Split(';')[1].Split('>').First());
+                                                strNames.Add(line.Split(' ')[1].Split('>').First());
                                                 strValues.Add(line.Split('>')[2].Split('\"')[1].Split('\"').First());
                                             }
                                             else if (line.Split('>').Last().ToLower() == "$readkey")
                                             {
-                                                strNames.Add(line.Split(';')[1].Split('>').First());
+                                                strNames.Add(line.Split(' ')[1].Split('>').First());
                                                 strValues.Add(Console.ReadKey().Key.ToString());
                                             }
                                             else if (line.Split('>').Last().ToLower() == ("$readline"))
                                             {
-                                                strNames.Add(line.Split(';')[1].Split('>').First());
+                                                strNames.Add(line.Split(' ')[1].Split('>').First());
                                                 strValues.Add(Console.ReadLine());
                                             }
                                         }
