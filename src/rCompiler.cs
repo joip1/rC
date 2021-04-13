@@ -989,7 +989,13 @@ namespace rC
                                             {
                                                 f = Convert.ToInt32(numberValues[numberNames.IndexOf(index)]);
                                             }
-                                            string split = line.Split(new[] { "separator:" }, StringSplitOptions.None).Last().Split('\"')[1].Split('\"')[0];
+                                            string split ="";
+                                            if(split.Contains('"')){
+                                                split = line.Split(new[] { "separator:" }, StringSplitOptions.None).Last().Split('\"')[1].Split('\"')[0];
+                                            }
+                                            else{
+                                                split = strValues[strNames.IndexOf(line.Split(new[] { "separator:" }, StringSplitOptions.None).Last())];
+                                            }
                                             if (strNames.Contains(from))
                                             {
                                                 strValues[strNames.IndexOf(to)] = Split.split(strValues[strNames.IndexOf(from)], split, f);
