@@ -1045,7 +1045,7 @@ namespace rC
                                         {
                                             filename = strValues[strNames.IndexOf(filename)];
                                         }
-                                        string content = line.Split(new[] { "content:" }, StringSplitOptions.None).Last();
+                                        string content = line.Split(new[] { "content:" }, StringSplitOptions.None).Last().Split(';').First();
                                         if (strNames.Contains(content) == false)
                                         {
                                             FileStream.WriteToFile(filename, content);
