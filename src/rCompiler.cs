@@ -1137,6 +1137,10 @@ namespace rC
                                 {
                                     Console.ForegroundColor = ConsoleColor.Yellow;
                                 }
+                                 else if (line.ToLower().StartsWith("color.white"))
+                                {
+                                    Console.ForegroundColor = ConsoleColor.White;
+                                }
 
                                 if (line.ToLower() == ("$readline"))
                                 {
