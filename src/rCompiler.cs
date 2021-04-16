@@ -1970,8 +1970,10 @@ namespace rC
                 }catch{
                     if(suppressError ==false){
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("Compile error on line "+(code.IndexOf(line)++).ToString()+": "+line);   
+                        int line_Index = code.IndexOf(line);
+                        Console.WriteLine("Compile error on line "+line_Index++.ToString()+": "+line);   
                         Console.ResetColor();
+                        Environment.Exit(1);
                     }
                 }
 
