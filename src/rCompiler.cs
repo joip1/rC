@@ -41,10 +41,10 @@ namespace rC
             Random rand = new Random();
             List<ConsoleColor> pixelColorsChar = new List<ConsoleColor>();
             Stopwatch execTime = new Stopwatch();
+            bool suppressError = false;
             //read code line by line
             execTime.Start();
-            try
-            {
+            
                 //list(str) "Name"
                 //str Name.Add >> "Value"
                 //getStrListValue(Name[1])
@@ -52,6 +52,11 @@ namespace rC
 
                 foreach (var line in code)
                 {
+                    try
+                     {
+                    if(line.ToLower() == "suppresserrors"){
+                        suppressError = true;
+                    }
                     if (line.StartsWith("strToNum(")) 
                     {
                         string toConvert = strValues[strNames.IndexOf(line.Split('(').Last().Split(')').First())];
@@ -990,12 +995,12 @@ namespace rC
                                             {
                                                 f = Convert.ToInt32(numberValues[numberNames.IndexOf(index)]);
                                             }
-                                            string split ="";
+                                            string split =line.Split(new[] { "separator:" }, StringSplitOptions.None).Last().Split(';').First();
                                             if(split.Contains('"')){
                                                 split = line.Split(new[] { "separator:" }, StringSplitOptions.None).Last().Split('\"')[1].Split('\"')[0];
                                             }
                                             else{
-                                                split = strValues[strNames.IndexOf(line.Split(new[] { "separator:" }, StringSplitOptions.None).Last())];
+                                                split = strValues[strNames.IndexOf(line.Split(new[] { "separator:" }, StringSplitOptions.None).Last().Split(';').First())];
                                             }
                                             if (strNames.Contains(from))
                                             {
@@ -1475,7 +1480,7 @@ namespace rC
                                     List<string> compileAfter = new List<string>();
                                     try
                                     {
-                                        looper = line.Split(new[] { "for " }, StringSplitOptions.None).Last().Split(';').First();
+                                        looper = line.Split(new[] { "for " }, StringSplitOptions.None).Last().Split(' ').First();
 
                                         try
                                         {
@@ -1962,12 +1967,15 @@ namespace rC
                                 }
                             }
                             execTime.Stop();
+                }catch{
+                    if(suppressError ==false){
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Compile error on line "+(code.IndexOf(line)++).ToString()+": "+line);   
+                        Console.ResetColor();
+                    }
                 }
-            }
-            catch (System.InvalidOperationException)
-            {
 
-            }
+                }
             Console.ResetColor();
             void ForLoop(int range,
             string looper, List<string> loopContent)

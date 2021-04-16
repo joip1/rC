@@ -1,11 +1,6 @@
-Write "Enter string >> "
-str replaceFrom >>$readline
-Write "Character to replace >> "
-str characterToReplace >>$readline
-Write "Character to replace "
-WriteStr {characterToReplace}
-Write " with >> "
-str replaceWith >>$readline
-replace:characterToReplace;with:replaceWith;str:replaceFrom;
-Write "Result: "
-WriteStr {replaceFrom}
+import ./*
+
+str x >>"1"
+method file:method; content:all;
+str x >>"2"
+method file:method; content:all;
