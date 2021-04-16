@@ -41,10 +41,10 @@ namespace rC
             Random rand = new Random();
             List<ConsoleColor> pixelColorsChar = new List<ConsoleColor>();
             Stopwatch execTime = new Stopwatch();
-            bool suppressError = false;
             //read code line by line
             execTime.Start();
-            
+            try
+            {
                 //list(str) "Name"
                 //str Name.Add >> "Value"
                 //getStrListValue(Name[1])
@@ -52,11 +52,6 @@ namespace rC
 
                 foreach (var line in code)
                 {
-                    try
-                     {
-                    if(line.ToLower() == "suppresserrors"){
-                        suppressError = true;
-                    }
                     if (line.StartsWith("strToNum(")) 
                     {
                         string toConvert = strValues[strNames.IndexOf(line.Split('(').Last().Split(')').First())];
@@ -1967,17 +1962,12 @@ namespace rC
                                 }
                             }
                             execTime.Stop();
-                }catch{
-                    if(suppressError ==false){
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        int line_Index = code.IndexOf(line);
-                        Console.WriteLine("Compile error on line "+line_Index++.ToString()+": "+line);   
-                        Console.ResetColor();
-                        Environment.Exit(1);
-                    }
                 }
+            }
+            catch (System.InvalidOperationException)
+            {
 
-                }
+            }
             Console.ResetColor();
             void ForLoop(int range,
             string looper, List<string> loopContent)
