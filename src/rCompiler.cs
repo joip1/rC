@@ -52,10 +52,12 @@ namespace rC
 
                 foreach (var line in code)
                 {
+                    
+
                     if (line.StartsWith("strToNum(")) 
                     {
                         string toConvert = strValues[strNames.IndexOf(line.Split('(').Last().Split(')').First())];
-                        if (numberNames.Contains(toConvert)) 
+                        if (numberNames.Contains(line.Split('(').Last().Split(')').First())) 
                         {
                             numberValues[numberNames.IndexOf(line.Split('(').Last().Split(')').First())] = Convert.ToDouble(toConvert);
                         }
