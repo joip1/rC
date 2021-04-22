@@ -52,7 +52,11 @@ namespace rC
 
                 foreach (var line in code)
                 {
-                    
+                    if(line.StartsWith("strip(")){
+                        string toStrip = strValues[strNames.IndexOf(line.Split('(').Last().Split(')').First())];
+                        string cleaned = toStrip.Replace("\r","").Replace("\n","");
+                        strValues[strNames.IndexOf(line.Split('(').Last().Split(')').First())] = cleaned;
+                    }
 
                     if (line.StartsWith("strToNum(")) 
                     {
