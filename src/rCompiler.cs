@@ -48,7 +48,7 @@ namespace rC
                 //list(str) "Name"
                 //str Name.Add >> "Value"
                 //getStrListValue(Name[1])
-                //postStrListValue(Name[1])
+                //updateStrListValue(Name[1])
 
                 foreach (var line in code)
                 {
@@ -1299,7 +1299,16 @@ namespace rC
                                         {
                                             if (line.Split('>').Last().ToLower().StartsWith("$read") == false)
                                             {
+                                                if(line.Split('>')[2].Contains('"')){
                                                 strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = line.Split('>')[2].Split('\"')[1].Split('\"').First();
+                                                }else
+                                                {
+                                                    try{
+                                                        strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = strValues[strNames.IndexOf(line.Split('>')[2])];
+                                                    }catch{
+                                                        Console.WriteLine("Error: "+line);
+                                                    }
+                                                }
                                             }
                                             else if (line.Split('>').Last().ToLower() == "$readkey")
                                             {
