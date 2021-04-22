@@ -1299,16 +1299,8 @@ namespace rC
                                         {
                                             if (line.Split('>').Last().ToLower().StartsWith("$read") == false)
                                             {
-                                                if(line.Split('>')[2].Contains('"')){
                                                 strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = line.Split('>')[2].Split('\"')[1].Split('\"').First();
-                                                }else
-                                                {
-                                                    try{
-                                                        strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = strValues[strNames.IndexOf(line.Split('>')[2])];
-                                                    }catch{
-                                                        Console.WriteLine("Error: "+line);
-                                                    }
-                                                }
+                                                
                                             }
                                             else if (line.Split('>').Last().ToLower() == "$readkey")
                                             {
@@ -1325,7 +1317,17 @@ namespace rC
                                             if (line.Split('>').Last().ToLower().StartsWith("$read") == false)
                                             {
                                                 strNames.Add(line.Split(' ')[1].Split('>').First());
+                                                if(line.Split('>')[2].Contains('"')){
                                                 strValues.Add(line.Split('>')[2].Split('\"')[1].Split('\"').First());
+                                                }
+                                                else
+                                                {
+                                                     try{
+                                                        strValues.Add(strValues[strNames.IndexOf(line.Split('>')[2])]);
+                                                    }catch{
+                                                        Console.WriteLine("Error: "+line);
+                                                    }
+                                                }
                                             }
                                             else if (line.Split('>').Last().ToLower() == "$readkey")
                                             {
