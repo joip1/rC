@@ -485,9 +485,11 @@ namespace rC
                                 {
                                     Environment.Exit(1);
                                 }
-
-                                if(line.StartsWith(".")){
-                                    string fileToCompile = line.Split('.')[1].Split('(')[0];
+                                foreach(var importation in references){
+                                    
+                                
+                                if(line.StartsWith(importation)){
+                                    string fileToCompile = line.Split('(')[0];
                                     fileToCompile = fileToCompile.Replace('.','/');
                                     StreamReader specificLine_Compiler = File.OpenText(fileToCompile + ".rcode");
                                     string lineReading;
@@ -499,6 +501,7 @@ namespace rC
                                     specificLine_Compiler.Close();
                                     Compile(linesFromFile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
                                     Environment.Exit(1);
+                                }
                                 }
                                 if (line.StartsWith("method"))
                                 {
