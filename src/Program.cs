@@ -72,6 +72,22 @@ namespace rC
             }
             else
             {
+                try{
+                    StreamReader reader_file;
+                    List<string> run_code = new List<string>();
+                        reader_file = File.OpenText("Main.rcode");
+                    
+                    string line_init;
+                    while ((line_init = reader_file.ReadLine()) != null)
+                    {
+                        run_code.Add(line_init);
+                    }
+                    reader_file.Close();
+                   
+                    rCompiler.Compile(run_code, numberNames, numberValues, strNames, strValues, references,strListNames,strListValues,numListNames,numListValues);
+                } catch{
+
+                    }
                 if (File.Exists("run_config.rconfig"))
                 {
                     StreamReader readConfig = File.OpenText("run_config.rconfig");
@@ -107,9 +123,8 @@ namespace rC
                 {
                     if (File.Exists("Main.rcode"))
                     {
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        Console.WriteLine("run_config File Does Not Exist, Please run: restore_project");
                         Console.ResetColor();
+                        //do nothing
                     }
                     else
                     {
