@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using rC;
 using System.Linq;
+using System.Threading;
 using System.Windows.Forms;
 using System.Diagnostics;
 
@@ -64,6 +65,20 @@ namespace rC
                             // }
                            Compile(lines_for_functions[names_for_functions.IndexOf(func_name)],numberNames,numberValues,strNames,strValues,references,strListNames,strListValues,numListNames,numListValues,lines_for_functions,names_for_functions);
                         }
+                    }
+                    if(references.Contains("threading")&&line.StartsWith("newThread")){
+                        try{
+                        string nameof_func = line.Split('(')[1].Split('(')[0];
+                           void newThreadStart(){
+                             rCompiler.Compile(lines_for_functions[names_for_functions.IndexOf(nameof_func)],numberNames,numberValues,strNames,strValues,references,strListNames,strListValues,numListNames,numListValues,lines_for_functions,names_for_functions);
+                            }
+                            ThreadStart newThread = new ThreadStart(newThreadStart);
+                            Thread new_thread = new Thread(newThread);
+                            new_thread.Start();
+                        }catch{
+                            Console.WriteLine($"{line} : Error Starting Thread");
+                        }
+                            
                     }
 
                     if(line.StartsWith("function ")){
