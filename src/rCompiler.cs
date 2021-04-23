@@ -801,6 +801,30 @@ namespace rC
                                             }
                                         }
                                     }
+                                      if (line.StartsWith(num.ToString() + "%"))
+                                    {
+                                        try
+                                        {
+                                            numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] % Convert.ToDouble(line.Split('%').Last());
+                                        }
+                                        catch
+                                        {
+                                            try
+                                            {
+                                                foreach (var getNum in numberNames)
+                                                {
+                                                    if (line.Split('%').Last() == getNum)
+                                                    {
+                                                        numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] % numberValues[numberNames.IndexOf(getNum)];
+                                                    }
+                                                }
+                                            }
+                                            catch
+                                            {
+
+                                            }
+                                        }
+                                    }
 
 
                                 }
