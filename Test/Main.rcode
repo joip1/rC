@@ -4,12 +4,15 @@ function myFunc();{
     Write "hi"
 }myFunc;
 
-function myFunc2();{
-    Write "hello"
+num i >>0
+function myFunc2(num i);{
+    i++
 }myFunc2;
 
-for x in range:2; name:for1; ident:"    ";
-    Write "hi"
+for x in range:10; name:for1; ident:"    ";
+    myFunc2(i)
+    WriteNum {i}
+    newln
 endFor(for1);
 
 asdsd

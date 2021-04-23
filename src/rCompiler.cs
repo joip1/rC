@@ -24,10 +24,12 @@ namespace rC
             List<string> strNames,
             List<string> strValues,
             List<string> references,
-            List<string>strListNames,
-            List<List<string>>strListValues,
-            List<string>numListNames,
-            List<List<double>>numListValues)
+            List<string> strListNames,
+            List<List<string>> strListValues,
+            List<string> numListNames,
+            List<List<double>> numListValues,
+            List<List<string>> lines_for_functions,
+            List<string> names_for_functions)
         {
 
             //values and indicators
@@ -41,8 +43,6 @@ namespace rC
             Random rand = new Random();
             List<ConsoleColor> pixelColorsChar = new List<ConsoleColor>();
             Stopwatch execTime = new Stopwatch();
-            List<List<string>> lines_for_functions = new List<List<string>>();
-            List<string> names_for_functions = new List<string>();
             //read code line by line
             execTime.Start();
             try
@@ -56,6 +56,14 @@ namespace rC
 
                 foreach (var line in code)
                 {
+                    foreach(var func_name in names_for_functions){
+                        if(line.StartsWith(func_name+"(")||line.StartsWith(func_name+" (")){
+                            // foreach(var lineofcode in lines_for_functions[names_for_functions.IndexOf(func_name)]){
+                            //     Console.WriteLine(lineofcode);
+                            // }
+                           Compile(lines_for_functions[names_for_functions.IndexOf(func_name)],numberNames,numberValues,strNames,strValues,references,strListNames,strListValues,numListNames,numListValues,lines_for_functions,names_for_functions);
+                        }
+                    }
 
                     if(line.StartsWith("function ")){
                         //function main(str test);{
@@ -65,29 +73,15 @@ namespace rC
                         names_for_functions.Add(nameFunc);
                         List<string> func_content = code;
                         List<string> compileAfter = new List<string>();
-                        List<string> loopContent = new List<string>();
+                        int current_index = code.IndexOf(line);
+                        current_index++;
+                        func_content = code.GetRange(current_index,(code.IndexOf("}"+nameFunc+";")-current_index));
 
-                                    if (func_content.Contains("}"+nameFunc+";"))
+                        string ident ="    ";
+                            
+                        for (int i = 0; i < func_content.Count; i++)
                                     {
-                                        func_content.RemoveRange(0, func_content.IndexOf(line) + 1);
-                                        foreach (var lineofCode in func_content)
-                                        {
-                                            if (func_content.IndexOf(lineofCode) > func_content.IndexOf("}"+nameFunc+";"))
-                                            {
-                                                compileAfter.Add(lineofCode);
-                                            }
-                                        }
-
-                                        func_content.RemoveRange(func_content.IndexOf("}"+nameFunc+";"), func_content.Count - func_content.IndexOf("}"+nameFunc+";"));
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine("\nNo End Was Found for function with name: " + nameFunc);
-                                    }
-                                    string ident ="    ";
-                            for (int i = 0; i < func_content.Count; i++)
-                                    {
-                                        if (func_content[i].StartsWith(ident))
+                                        if (func_content[i].StartsWith(ident)/*&&func_content[i].StartsWith(ident+ident)==false*/)
                                         {
                                             try
                                             {
@@ -98,9 +92,12 @@ namespace rC
                                             }
                                         }
                                     }
-                        
+                                                            
+                        // foreach(var codeline in func_content){
+                        //     Console.WriteLine(codeline);
+                        // }
                         lines_for_functions.Add(func_content);
-                        Compile(compileAfter,numberNames,numberValues,strNames,strValues,references,strListNames,strListValues,numListNames,numListValues);
+                        Compile(compileAfter,numberNames,numberValues,strNames,strValues,references,strListNames,strListValues,numListNames,numListValues,lines_for_functions,names_for_functions);
 
                     }
                     if(line.StartsWith("strip(")){
@@ -552,7 +549,7 @@ namespace rC
                                       linesFromFile.Add(lineReading);
                                     }
                                     specificLine_Compiler.Close();
-                                    Compile(linesFromFile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                    Compile(linesFromFile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                     //Environment.Exit(1);
                                     }
                                     catch{
@@ -588,11 +585,11 @@ namespace rC
                                             specificLine_Compiler.Close();
                                             if (line.Split(new[] { "content:" }, StringSplitOptions.None).Last().Split(';').First() == "all")
                                             {
-                                                Compile(linesFromFile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                                Compile(linesFromFile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                             }
                                             else
                                             {
-                                                Compile(linesFromFile.GetRange(firstIndex, lastIndex - (firstIndex)), numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                                Compile(linesFromFile.GetRange(firstIndex, lastIndex - (firstIndex)), numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                             }
                                         }
                                     }
@@ -611,7 +608,7 @@ namespace rC
                                                     linesFromFile.Add(lineReading);
                                                 }
                                                 specificLine_Compiler.Close();
-                                                Compile(linesFromFile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                                Compile(linesFromFile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                             }
                                         }
                                         catch
@@ -633,11 +630,12 @@ namespace rC
                                                 specificLine_Compiler.Close();
                                                 if (line.Split(new[] { "content:" }, StringSplitOptions.None).Last().Split(';').First() == "all")
                                                 {
-                                                    Compile(linesFromFile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                                    Compile(linesFromFile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                                 }
                                                 else
                                                 {
-                                                    Compile(linesFromFile.GetRange(firstIndex, lastIndex - (firstIndex)), numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                                    Compile(linesFromFile.GetRange(firstIndex, lastIndex - (firstIndex)), numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions
+                                                    );
                                                 }
                                             }
                                             catch
@@ -660,14 +658,14 @@ namespace rC
                                         int lastIndex = Convert.ToInt32(line.Split(new[] { "last:" }, StringSplitOptions.None).Last().Split(';').First());
                                         firstIndex--;
                                         List<string> newCompile = code;
-                                        Compile(newCompile.GetRange(firstIndex, (lastIndex - firstIndex)), numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                        Compile(newCompile.GetRange(firstIndex, (lastIndex - firstIndex)), numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                     }
                                     catch
                                     {
                                         if (line.Split(new[] { "content:" }, StringSplitOptions.None).Last().Split(';').First() == "all")
                                         {
                                             List<string> newCompile = code;
-                                            Compile(newCompile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                            Compile(newCompile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                         }
                                         else
                                         {
@@ -677,7 +675,7 @@ namespace rC
                                                 int lastIndex = Convert.ToInt32(line.Split(new[] { "last:" }, StringSplitOptions.None).Last().Split(';').First());
                                                 firstIndex--;
                                                 List<string> newCompile = code;
-                                                Compile(newCompile.GetRange(firstIndex, (lastIndex - firstIndex)), numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                                Compile(newCompile.GetRange(firstIndex, (lastIndex - firstIndex)), numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                             }
                                             catch
                                             {
@@ -1628,7 +1626,7 @@ namespace rC
 
 
                                     ForLoop(range, looper, loopContent);
-                                    Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                    Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                 }
                                 else if (line.StartsWith("load >>") || line.StartsWith("compiler.load"))
                                 {
@@ -1661,7 +1659,7 @@ namespace rC
                                         Console.ForegroundColor = ConsoleColor.Cyan;
                                         Console.WriteLine("\n \n \n Output:");
                                         Console.ResetColor();
-                                        Compile(CompileFile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                        Compile(CompileFile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                         Console.WriteLine("");
                                     }
                                     catch
@@ -1686,7 +1684,7 @@ namespace rC
                                         {
                                             CompileFile.Add(lineReader);
                                         }
-                                        Compile(CompileFile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                        Compile(CompileFile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                         Console.Write("\n");
                                         reader.Close();
                                     }
@@ -1767,7 +1765,7 @@ namespace rC
                                             if (strValues[strNames.IndexOf(statement.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "str(" }, StringSplitOptions.None).Last().Split(new[] { "==" }, StringSplitOptions.None).First())]
                                                 == strValues[strNames.IndexOf(statement.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "==" }, StringSplitOptions.None).Last().Split(')').First())])
                                             {
-                                                Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                                Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                             }
                                             else
                                             {
@@ -1783,7 +1781,7 @@ namespace rC
                                                             loopElseContent.Add(content);
                                                         }
                                                     }
-                                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                                 }
                                             }
                                         }
@@ -1802,7 +1800,7 @@ namespace rC
                                             if (strValues[strNames.IndexOf(statement.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "str(" }, StringSplitOptions.None).Last().Split(new[] { "!=" }, StringSplitOptions.None).First())]
                                                 != strValues[strNames.IndexOf(statement.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "!=" }, StringSplitOptions.None).Last().Split(')').First())])
                                             {
-                                                Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                                Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                             }
                                             else
                                             {
@@ -1818,7 +1816,7 @@ namespace rC
                                                             loopElseContent.Add(content);
                                                         }
                                                     }
-                                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                                 }
                                             }
                                         }
@@ -1833,7 +1831,7 @@ namespace rC
                                             if (numberValues[numberNames.IndexOf(statement.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { "==" }, StringSplitOptions.None).First())]
                                                 == numberValues[numberNames.IndexOf(statement.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "==" }, StringSplitOptions.None).Last().Split(')').First())])
                                             {
-                                                Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                                Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                             }
                                             else
                                             {
@@ -1849,7 +1847,7 @@ namespace rC
                                                             loopElseContent.Add(content);
                                                         }
                                                     }
-                                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                                 }
                                             }
                                         }
@@ -1865,7 +1863,7 @@ namespace rC
                                             if (numberValues[numberNames.IndexOf(statement.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { "!=" }, StringSplitOptions.None).First())]
                                                 != numberValues[numberNames.IndexOf(statement.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "!=" }, StringSplitOptions.None).Last().Split(')').First())])
                                             {
-                                                Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                                Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                             }
                                             else
                                             {
@@ -1881,7 +1879,8 @@ namespace rC
                                                             loopElseContent.Add(content);
                                                         }
                                                     }
-                                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions
+                                                    );
                                                 }
                                             }
                                         }
@@ -1896,7 +1895,7 @@ namespace rC
                                             if (numberValues[numberNames.IndexOf(statement.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { ">=" }, StringSplitOptions.None).First())]
                                                 >= numberValues[numberNames.IndexOf(statement.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { ">=" }, StringSplitOptions.None).Last().Split(')').First())])
                                             {
-                                                Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                                Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                             }
                                             else
                                             {
@@ -1912,7 +1911,7 @@ namespace rC
                                                             loopElseContent.Add(content);
                                                         }
                                                     }
-                                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                                 }
                                             }
                                         }
@@ -1928,7 +1927,7 @@ namespace rC
                                             if (numberValues[numberNames.IndexOf(statement.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { "<=" }, StringSplitOptions.None).First())]
                                                 <= numberValues[numberNames.IndexOf(statement.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "<=" }, StringSplitOptions.None).Last().Split(')').First())])
                                             {
-                                                Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                                Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                             }
                                             else
                                             {
@@ -1944,7 +1943,7 @@ namespace rC
                                                             loopElseContent.Add(content);
                                                         }
                                                     }
-                                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                                 }
                                             }
                                         }
@@ -1960,7 +1959,7 @@ namespace rC
                                             if (numberValues[numberNames.IndexOf(statement.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { "+>" }, StringSplitOptions.None).First())]
                                                 > numberValues[numberNames.IndexOf(statement.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "+>" }, StringSplitOptions.None).Last().Split(')').First())])
                                             {
-                                                Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                                Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                             }
                                             else
                                             {
@@ -1977,7 +1976,7 @@ namespace rC
                                                         }
                                                     }
 
-                                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
 
 
                                                 }
@@ -1995,7 +1994,7 @@ namespace rC
                                             if (numberValues[numberNames.IndexOf(statement.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { "<-" }, StringSplitOptions.None).First())]
                                                 < numberValues[numberNames.IndexOf(statement.Split(new[] { "&else" }, StringSplitOptions.None).First().Split(new[] { "num(" }, StringSplitOptions.None).Last().Split(new[] { "<-" }, StringSplitOptions.None).Last().Split(')').First())])
                                             {
-                                                Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                                Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                             }
                                             else
                                             {
@@ -2011,7 +2010,7 @@ namespace rC
                                                             loopElseContent.Add(content);
                                                         }
                                                     }
-                                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                                    Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                                 }
                                             }
 
@@ -2022,7 +2021,7 @@ namespace rC
 
                                     }
 
-                                    Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
+                                    Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
                                 }
 
 
@@ -2075,7 +2074,7 @@ namespace rC
                         numberValues.Add(x);
                         numberNames.Add(looper);
                     }
-                    Compile(loopContent, numberNames, numberValues, strNames, strValues, references,strListNames,strListValues,numListNames,numListValues);
+                    Compile(loopContent, numberNames, numberValues, strNames, strValues, references,strListNames,strListValues,numListNames,numListValues,lines_for_functions,names_for_functions);
                 }
             }
         }
