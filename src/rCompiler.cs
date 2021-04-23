@@ -489,11 +489,11 @@ namespace rC
                                     
                                 
                                 if(line.StartsWith(importation)){
-                                    try{
+                                  //  try{
                                     string fileToCompile = line.Split('(')[0];
                                     fileToCompile = fileToCompile.Replace('.','/');
                                     fileToCompile = fileToCompile + ".rcode";
-                                    StreamReader specificLine_Compiler = File.OpenText(fileToCompile + ".rcode");
+                                    StreamReader specificLine_Compiler = File.OpenText(fileToCompile);
                                     string lineReading;
                                     List<string> linesFromFile = new List<string>();
                                     while ((lineReading = specificLine_Compiler.ReadLine()) != null)
@@ -503,10 +503,10 @@ namespace rC
                                     specificLine_Compiler.Close();
                                     Compile(linesFromFile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
                                     Environment.Exit(1);
-                                    }
-                                    catch{
-                                        Console.WriteLine("Method does not exist at line of index: "+code.IndexOf(line));
-                                    }
+                                    //}
+                                    // catch{
+                                    //     Console.WriteLine("Method does not exist at line of index: "+code.IndexOf(line));
+                                    // }
                                 }
                                 }
                                 if (line.StartsWith("method"))

@@ -1,1 +1,3 @@
-Write "helo"
+import modules
+
+modules.iamthebest()
