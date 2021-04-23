@@ -73,9 +73,14 @@ namespace rC
                              rCompiler.Compile(lines_for_functions[names_for_functions.IndexOf(nameof_func)],numberNames,numberValues,strNames,strValues,references,strListNames,strListValues,numListNames,numListValues,lines_for_functions,names_for_functions);
                              Console.WriteLine("");
                             }
+                            
                             ThreadStart thread_start = new ThreadStart(newThreadStart);
                             Thread newThread = new Thread(thread_start);
+                            System.Threading.Thread.Sleep(15);
                             newThread.Start();
+                            while(newThread.IsAlive!=true){
+                                newThread.Start();
+                            }
                         }catch{
                             Console.WriteLine($"{line} : Error Starting Thread");
                         }
