@@ -1168,7 +1168,11 @@ namespace rC
                                         string argument = "";
                                         foreach (var arg in arguments)
                                         {
-                                            argument = argument + " " + arg;
+                                            if(strNames.Contains(arg)){
+                                                argument = argument + " " + strValues[strNames.IndexOf(arg)];
+                                            }else{                                           
+                                                argument = argument + " " + arg;
+                                            }
                                         }
                                         Process.Start(filename, argument);
                                     }
