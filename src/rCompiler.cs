@@ -491,7 +491,7 @@ namespace rC
                                 }
                                 if (line == "exit")
                                 {
-                                    Environment.Exit(1);
+                                    Environment.Exit(0);
                                 }
                                 else if (line.StartsWith("screen_width >>"))
                                 {
@@ -1589,18 +1589,18 @@ namespace rC
                                     }
                                     List<string> newCode1 = code;
 
-                                    if (newCode1.Contains($"endFor({name});"))
+                                    if (newCode1.Contains("}"+name+";"))
                                     {
                                         newCode1.RemoveRange(0, newCode1.IndexOf(line) + 1);
                                         foreach (var lineofCode in newCode1)
                                         {
-                                            if (newCode1.IndexOf(lineofCode) > newCode1.IndexOf($"endFor({name});"))
+                                            if (newCode1.IndexOf(lineofCode) > newCode1.IndexOf("}"+name+";"))
                                             {
                                                 compileAfter.Add(lineofCode);
                                             }
                                         }
 
-                                        newCode1.RemoveRange(newCode1.IndexOf($"endFor({name});"), newCode1.Count - newCode1.IndexOf($"endFor({name});"));
+                                        newCode1.RemoveRange(newCode1.IndexOf("}"+name+";"), newCode1.Count - newCode1.IndexOf("}"+name+";"));
                                         loopContent = newCode1;
                                     }
                                     else
@@ -1722,17 +1722,17 @@ namespace rC
                                         Console.WriteLine("Invalid Syntax Line: " + code.IndexOf(line));
                                     }
                                     List<string> newCode1 = code;
-                                    if (newCode1.Contains($"endIf({name});"))
+                                    if (newCode1.Contains("}"+name+";"))
                                     {
                                         newCode1.RemoveRange(0, newCode1.IndexOf(line) + 1);
                                         foreach (var lineofCode in newCode1)
                                         {
-                                            if (newCode1.IndexOf(lineofCode) > newCode1.IndexOf($"endIf({name});"))
+                                            if (newCode1.IndexOf(lineofCode) > newCode1.IndexOf("}"+name+";"))
                                             {
                                                 compileAfter.Add(lineofCode);
                                             }
                                         }
-                                        newCode1.RemoveRange(newCode1.IndexOf($"endIf({name});"), newCode1.Count - newCode1.IndexOf($"endIf({name});"));
+                                        newCode1.RemoveRange(newCode1.IndexOf("}"+name+";"), newCode1.Count - newCode1.IndexOf("}"+name+";"));
                                         loopContent = newCode1;
 
                                     }

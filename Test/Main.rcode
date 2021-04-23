@@ -1,20 +1,7 @@
-import modules.iamevenbetter
+str i >>"2"
+str x >>"1"
 
-function myFunc();{
-    Write "hi"
-}myFunc;
-
-num i >>0
-function myFunc2(num i);{
-    i++
-}myFunc2;
-
-for x in range:10; name:for1; ident:"    ";
-    myFunc2(i)
-    WriteNum {i}
-    newln
-endFor(for1);
-
-asdsd
-$readline
+if statement:str(x==i); name:"if1"; ident:"    ";
+    Write "true"
+}"if1";
 exit
