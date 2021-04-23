@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.IO;
 
 namespace rC
@@ -69,7 +69,17 @@ namespace rC
                 {
                     Console.WriteLine("Exception: Could not find file: "+args[0]);
                 }
+                // void newThreadStart(){
+                //     rCompiler.Compile(run_code,numberNames,numberValues,strNames,strValues,references,strListNames,strListValues,numListNames,numListValues,lines_for_functions,names_for_functions);
+                // }
+                // for (int i = 0; i < 2; i++)
+                // {
+                //     ThreadStart newThread = new ThreadStart(newThreadStart);
+                //     Thread new_thread = new Thread(newThread);
+                //     new_thread.Start();
+                // }
                 rCompiler.Compile(run_code,numberNames,numberValues,strNames,strValues,references,strListNames,strListValues,numListNames,numListValues,lines_for_functions,names_for_functions);
+
 
             }
             else

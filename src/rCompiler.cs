@@ -101,6 +101,85 @@ namespace rC
                         Compile(compileAfter,numberNames,numberValues,strNames,strValues,references,strListNames,strListValues,numListNames,numListValues,lines_for_functions,names_for_functions);
 
                     }
+                    if (line.ToLower().StartsWith("for") && line.ToLower().Contains("in range:"))
+                                {
+                                    int range = 0;
+                                    /*
+                                     for x in range:
+
+                                 */
+                                    string looper = "";
+                                    string ident = "";
+                                    string name = "";
+                                    List<string> loopContent = new List<string>();
+                                    List<string> compileAfter = new List<string>();
+                                    try
+                                    {
+                                        looper = line.Split(new[] { "for " }, StringSplitOptions.None).Last().Split(' ').First();
+
+                                        try
+                                        {
+                                            range = Convert.ToInt32(line.Split(new[] { "in range:" }, StringSplitOptions.None).Last().Split(';')[0]);
+                                        }
+                                        catch
+                                        {
+                                            try
+                                            {
+                                                range = Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "in range:" }, StringSplitOptions.None).Last().Split(';')[0])]);
+                                            }
+                                            catch
+                                            {
+                                                range = Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "in range:" }, StringSplitOptions.None).Last().Split(';')[0])]);
+                                            }
+                                        }
+                                        name = line.Split(new[] { "name:" }, StringSplitOptions.None).Last().Split(';').First();
+                                        ident = line.Split(new[] { "ident:" }, StringSplitOptions.None).Last().Split('"')[1].Split('"').First().Split(';').First();
+                                    }
+                                    catch
+                                    {
+                                        Console.WriteLine("Invalid Syntax Line: " + code.IndexOf(line));
+                                    }
+                                    List<string> newCode1 = code;
+
+                                    if (newCode1.Contains("}"+name+";"))
+                                    {
+                                        newCode1.RemoveRange(0, newCode1.IndexOf(line) + 1);
+                                        foreach (var lineofCode in newCode1)
+                                        {
+                                            if (newCode1.IndexOf(lineofCode) > newCode1.IndexOf("}"+name+";"))
+                                            {
+                                                compileAfter.Add(lineofCode);
+                                            }
+                                        }
+
+                                        newCode1.RemoveRange(newCode1.IndexOf("}"+name+";"), newCode1.Count - newCode1.IndexOf("}"+name+";"));
+                                        loopContent = newCode1;
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("\nNo End Was Found for For Loop with name: " + name);
+                                    }
+                            for (int i = 0; i < newCode1.Count; i++)
+                                    {
+                                        if (newCode1[i].StartsWith(ident))
+                                        {
+                                            try
+                                            {
+                                                newCode1[newCode1.IndexOf(newCode1[i])] = newCode1[i].Split(new[] { ident }, StringSplitOptions.None)[1];
+                                            }
+                                            catch
+                                            {
+                                            }
+                                        }
+                                    }
+
+
+
+
+
+                                    ForLoop(range, looper, loopContent);
+                                    Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
+                                }
                     if(line.StartsWith("strip(")){
                         string toStrip = strValues[strNames.IndexOf(line.Split('(').Last().Split(')').First())];
                         string cleaned = toStrip.Replace("\r","").Replace("\n","");
@@ -490,7 +569,7 @@ namespace rC
                                     }
                                     Console.CursorTop = Convert.ToInt32(numberValues[numberNames.IndexOf("cursor_y")]);
                                 }
-                                if (line == "exit")
+                                if (line == "exit()")
                                 {
                                     Environment.Exit(0);
                                 }
@@ -1574,85 +1653,7 @@ namespace rC
                                 {
                                     id = 0;
                                 }
-                                else if (line.ToLower().StartsWith("for") && line.ToLower().Contains("in range:"))
-                                {
-                                    int range = 0;
-                                    /*
-                                     for x in range:
-
-                                 */
-                                    string looper = "";
-                                    string ident = "";
-                                    string name = "";
-                                    List<string> loopContent = new List<string>();
-                                    List<string> compileAfter = new List<string>();
-                                    try
-                                    {
-                                        looper = line.Split(new[] { "for " }, StringSplitOptions.None).Last().Split(' ').First();
-
-                                        try
-                                        {
-                                            range = Convert.ToInt32(line.Split(new[] { "in range:" }, StringSplitOptions.None).Last().Split(';')[0]);
-                                        }
-                                        catch
-                                        {
-                                            try
-                                            {
-                                                range = Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "in range:" }, StringSplitOptions.None).Last().Split(';')[0])]);
-                                            }
-                                            catch
-                                            {
-                                                range = Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new[] { "in range:" }, StringSplitOptions.None).Last().Split(';')[0])]);
-                                            }
-                                        }
-                                        name = line.Split(new[] { "name:" }, StringSplitOptions.None).Last().Split(';').First();
-                                        ident = line.Split(new[] { "ident:" }, StringSplitOptions.None).Last().Split('"')[1].Split('"').First().Split(';').First();
-                                    }
-                                    catch
-                                    {
-                                        Console.WriteLine("Invalid Syntax Line: " + code.IndexOf(line));
-                                    }
-                                    List<string> newCode1 = code;
-
-                                    if (newCode1.Contains("}"+name+";"))
-                                    {
-                                        newCode1.RemoveRange(0, newCode1.IndexOf(line) + 1);
-                                        foreach (var lineofCode in newCode1)
-                                        {
-                                            if (newCode1.IndexOf(lineofCode) > newCode1.IndexOf("}"+name+";"))
-                                            {
-                                                compileAfter.Add(lineofCode);
-                                            }
-                                        }
-
-                                        newCode1.RemoveRange(newCode1.IndexOf("}"+name+";"), newCode1.Count - newCode1.IndexOf("}"+name+";"));
-                                        loopContent = newCode1;
-                                    }
-                                    else
-                                    {
-                                        Console.WriteLine("\nNo End Was Found for For Loop with name: " + name);
-                                    }
-                            for (int i = 0; i < newCode1.Count; i++)
-                                    {
-                                        if (newCode1[i].StartsWith(ident))
-                                        {
-                                            try
-                                            {
-                                                newCode1[newCode1.IndexOf(newCode1[i])] = newCode1[i].Split(new[] { ident }, StringSplitOptions.None)[1];
-                                            }
-                                            catch
-                                            {
-                                            }
-                                        }
-                                    }
-
-
-
-
-
-                                    ForLoop(range, looper, loopContent);
-                                    Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues,lines_for_functions,names_for_functions);
-                                }
+                            
                                 else if (line.StartsWith("load >>") || line.StartsWith("compiler.load"))
                                 {
                                     string fileToCompile = line.Split(new[] { "load >> " }, StringSplitOptions.None).Last();
