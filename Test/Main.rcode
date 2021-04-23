@@ -1,7 +1,0 @@
-str i >>"2"
-str x >>"1"
-
-if statement:str(x==i); name:"if1"; ident:"    ";
-    Write "true"
-}"if1";
-exit
