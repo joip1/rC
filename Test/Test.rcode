@@ -1,6 +1,1 @@
-import ./*
-
-str x >>"1"
-method file:method; content:all;
-str x >>"2"
-method file:method; content:all;
+Write "hi"

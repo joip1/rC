@@ -1,3 +1,17 @@
-import modules
+import modules.iamevenbetter
 
-modules.iamthebest()
+function myFunc();{
+    Write "hi"
+}myFunc;
+
+function myFunc2();{
+    Write "hello"
+}myFunc2;
+
+for x in range:2; name:for1; ident:"    ";
+    Write "hi"
+endFor(for1);
+
+asdsd
+$readline
+exit

@@ -41,6 +41,8 @@ namespace rC
             Random rand = new Random();
             List<ConsoleColor> pixelColorsChar = new List<ConsoleColor>();
             Stopwatch execTime = new Stopwatch();
+            List<List<string>> lines_for_functions = new List<List<string>>();
+            List<string> names_for_functions = new List<string>();
             //read code line by line
             execTime.Start();
             try
@@ -50,8 +52,57 @@ namespace rC
                 //getStrListValue(Name[1])
                 //updateStrListValue(Name[1])
 
+                
+
                 foreach (var line in code)
                 {
+
+                    if(line.StartsWith("function ")){
+                        //function main(str test);{
+                        //    Write "Im da best"
+                        //}main;
+                        string nameFunc = line.Split(new []{"function "},StringSplitOptions.None).Last().Split('(').First();
+                        names_for_functions.Add(nameFunc);
+                        List<string> func_content = code;
+                        List<string> compileAfter = new List<string>();
+                        List<string> loopContent = new List<string>();
+
+                                    if (func_content.Contains("}"+nameFunc+";"))
+                                    {
+                                        func_content.RemoveRange(0, func_content.IndexOf(line) + 1);
+                                        foreach (var lineofCode in func_content)
+                                        {
+                                            if (func_content.IndexOf(lineofCode) > func_content.IndexOf("}"+nameFunc+";"))
+                                            {
+                                                compileAfter.Add(lineofCode);
+                                            }
+                                        }
+
+                                        func_content.RemoveRange(func_content.IndexOf("}"+nameFunc+";"), func_content.Count - func_content.IndexOf("}"+nameFunc+";"));
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("\nNo End Was Found for function with name: " + nameFunc);
+                                    }
+                                    string ident ="    ";
+                            for (int i = 0; i < func_content.Count; i++)
+                                    {
+                                        if (func_content[i].StartsWith(ident))
+                                        {
+                                            try
+                                            {
+                                                func_content[func_content.IndexOf(func_content[i])] = func_content[i].Split(new[] { ident }, StringSplitOptions.None)[1];
+                                            }
+                                            catch
+                                            {
+                                            }
+                                        }
+                                    }
+                        
+                        lines_for_functions.Add(func_content);
+                        Compile(compileAfter,numberNames,numberValues,strNames,strValues,references,strListNames,strListValues,numListNames,numListValues);
+
+                    }
                     if(line.StartsWith("strip(")){
                         string toStrip = strValues[strNames.IndexOf(line.Split('(').Last().Split(')').First())];
                         string cleaned = toStrip.Replace("\r","").Replace("\n","");
@@ -489,7 +540,7 @@ namespace rC
                                     
                                 
                                 if(line.StartsWith(importation)){
-                                  //  try{
+                                  try{
                                     string fileToCompile = line.Split('(')[0];
                                     fileToCompile = fileToCompile.Replace('.','/');
                                     fileToCompile = fileToCompile + ".rcode";
@@ -498,15 +549,15 @@ namespace rC
                                     List<string> linesFromFile = new List<string>();
                                     while ((lineReading = specificLine_Compiler.ReadLine()) != null)
                                     {
-                                        linesFromFile.Add(lineReading);
+                                      linesFromFile.Add(lineReading);
                                     }
                                     specificLine_Compiler.Close();
                                     Compile(linesFromFile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues);
-                                    Environment.Exit(1);
-                                    //}
-                                    // catch{
-                                    //     Console.WriteLine("Method does not exist at line of index: "+code.IndexOf(line));
-                                    // }
+                                    //Environment.Exit(1);
+                                    }
+                                    catch{
+                                        Console.WriteLine("Method does not exist at line of index: "+code.IndexOf(line));
+                                    }
                                 }
                                 }
                                 if (line.StartsWith("method"))
