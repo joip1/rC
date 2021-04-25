@@ -148,13 +148,13 @@ namespace rC {
               current_index++;
               func_content = code.GetRange(current_index, (code.IndexOf("}" + nameFunc + ";") - current_index));
 
-              string ident = "    ";
+              string indent = "    ";
 
               for (int i = 0; i < func_content.Count; i++) {
-                if (func_content[i].StartsWith(ident) /*&&func_content[i].StartsWith(ident+ident)==false*/ ) {
+                if (func_content[i].StartsWith(indent) /*&&func_content[i].StartsWith(indent+indent)==false*/ ) {
                   try {
                     func_content[func_content.IndexOf(func_content[i])] = func_content[i].Split(new [] {
-                      ident
+                      indent
                     }, StringSplitOptions.None)[1];
                   } catch {}
                 }
@@ -174,7 +174,7 @@ namespace rC {
 
                                  */
               string looper = "";
-              string ident = "";
+              string indent = "";
               string name = "";
               List < string > loopContent = new List < string > ();
               List < string > compileAfter = new List < string > ();
@@ -201,8 +201,8 @@ namespace rC {
                 name = line.Split(new [] {
                   "name:"
                 }, StringSplitOptions.None).Last().Split(';').First();
-                ident = line.Split(new [] {
-                  "ident:"
+                indent = line.Split(new [] {
+                  "indent:"
                 }, StringSplitOptions.None).Last().Split('"')[1].Split('"').First().Split(';').First();
               } catch {
                 Console.WriteLine("Invalid Syntax Line: " + code.IndexOf(line));
@@ -223,10 +223,10 @@ namespace rC {
                 Console.WriteLine("\nNo End Was Found for For Loop with name: " + name);
               }
               for (int i = 0; i < newCode1.Count; i++) {
-                if (newCode1[i].StartsWith(ident)) {
+                if (newCode1[i].StartsWith(indent)) {
                   try {
                     newCode1[newCode1.IndexOf(newCode1[i])] = newCode1[i].Split(new [] {
-                      ident
+                      indent
                     }, StringSplitOptions.None)[1];
                   } catch {}
                 }
@@ -1401,14 +1401,14 @@ namespace rC {
             } else if (line.StartsWith("if")) {
 
               /*
-                  if name:1; statement:str(x==y); ident:" ";
+                  if name:1; statement:str(x==y); indent:" ";
                       Write &>Hi<&
                   endIf(1)
 
               */
 
               string name = "";
-              string ident = "";
+              string indent = "";
               string statement = "";
               List < string > loopContent = new List < string > ();
               List < string > compileAfter = new List < string > ();
@@ -1419,8 +1419,8 @@ namespace rC {
                 statement = line.Split(new [] {
                   "statement:"
                 }, StringSplitOptions.None).Last().Split(';')[0];
-                ident = line.Split(new [] {
-                  "ident:"
+                indent = line.Split(new [] {
+                  "indent:"
                 }, StringSplitOptions.None).Last().Split('"')[1].Split('"').First().Split(';').First();
               } catch {
                 Console.WriteLine("Invalid Syntax Line: " + code.IndexOf(line));
@@ -1440,10 +1440,10 @@ namespace rC {
                 Console.WriteLine("\nNo End Was Found for If Statement with name: " + name);
               }
               for (int i = 0; i < newCode1.Count; i++) {
-                if (newCode1[i].StartsWith(ident)) {
+                if (newCode1[i].StartsWith(indent)) {
                   try {
                     newCode1[newCode1.IndexOf(newCode1[i])] = newCode1[i].Split(new [] {
-                      ident
+                      indent
                     }, StringSplitOptions.None)[1];
                   } catch {}
                 }
