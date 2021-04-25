@@ -24,6 +24,14 @@ namespace rC
         static void Main(string[] args)
         {
             string readline;
+            string default_main = "#!/usr/bin/rC\n"+
+"\nfunction main(){\n"+
+"    Write \"Hello World!\"\n"+
+"}main;\n"+
+"\n"+
+"main()\n"+
+"newln\n"+
+"exit()\n";
             List<string> codeLines = new List<string>();
             string[] varTypes = new string[] { "number", "str", "save(this)", "Write", "#", "WriteStr", "WriteNum", "sleep", "for", "color", "compile_lines", "if", "pixel", "import", "CreateFile", "toLower", "toUpper" };
             string[] methods = new string[] { "Write", "WriteStr", "WriteNum" };
@@ -151,7 +159,6 @@ namespace rC
 
                 while ((readline = Console.ReadLine()).ToLower() != "rcompiler.compile" && isCompiling == true)
                 {
-                    Console.Write("rC-shell ~# ");
                     if (readline.StartsWith("create_file"))
                     {
                         var file = File.CreateText(readline.Split(new[] { "create_file " }, StringSplitOptions.None).Last() + ".rcode");
@@ -227,14 +234,16 @@ namespace rC
                     else if (readline.ToLower().StartsWith("create_project "))
                     {
                         var dirToCopy = Directory.CreateDirectory(readline.Split(new[] { "create_project " }, StringSplitOptions.None).Last());
-                        File.CreateText(dirToCopy.FullName + @"/Main.rcode");
+                        StreamWriter config_default = File.CreateText( dirToCopy.FullName + @"/Main.rcode");
+                        config_default.Write(default_main);
                         StreamWriter ConfigWriter = File.CreateText(dirToCopy.FullName + @"/run_config.rconfig");
                         ConfigWriter.WriteLine("init:Main.rcode");
                         ConfigWriter.Close();
-                        File.Copy("rC.exe", dirToCopy.FullName + @"/Run_Program.exe");
+                     //   File.Copy("rC.exe", dirToCopy.FullName + @"/Run_Program.exe");
                         Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine("Project Created Successfully!");
                         Console.ResetColor();
+                        config_default.Close();
                     }
                     else if (readline.StartsWith("compile >>") || readline.StartsWith("run >>"))
                     {
@@ -338,12 +347,13 @@ namespace rC
                     {
                         //codeLines.Add(readline);
                         //Console.Write("" + codeLines.Count + " ");
-                        Console.ForegroundColor = ConsoleColor.Red;
-                        if (readline!=""){
-                        Console.Write("Command not Recognized!");
-                        }
-                        Console.ResetColor();
+                        // Console.ForegroundColor = ConsoleColor.Red;
+                        // if (readline!=""){
+                        // Console.Write("Command not Recognized!\n");
+                        // }
+                        // Console.ResetColor();
                     }
+                    Console.Write("rC-shell ~# ");
                 }
                 Console.Clear();
                 List<string> compileAfter = codeLines;

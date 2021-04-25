@@ -1,0 +1,12 @@
+#!/usr/bin/rC
+
+function main(){
+    for x in range:10000; name:for1; indent:"   ";{
+       Write "Hello World!"
+       newln
+    }for1;
+}main;
+
+main()
+newln
+exit()
