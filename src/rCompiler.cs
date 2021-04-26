@@ -51,7 +51,7 @@ namespace rC {
         //updateStrListValue(Name[1])
 
         foreach(var line in code) {
-          foreach(var func_name in names_for_functions) {
+        /*  foreach(var func_name in names_for_functions) {
             int ocorrences = 0;
             foreach(var func_name_2 in names_for_functions){
               if(func_name_2 == func_name){
@@ -60,7 +60,7 @@ namespace rC {
             }
             if(ocorrences>=2){
                 Console.WriteLine("There is more than 1 function named: "+func_name);
-            }
+            }*/
             if (line.StartsWith(func_name + "(") || line.StartsWith(func_name + " (")) {
               // foreach(var lineofcode in lines_for_functions[names_for_functions.IndexOf(func_name)]){
               //     Console.WriteLine(lineofcode);
