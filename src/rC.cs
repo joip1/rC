@@ -49,6 +49,9 @@ namespace rC
             List<List<string>> lines_for_functions = new List<List<string>>();
             List<string> names_for_functions = new List<string>();
 
+            strListNames.Add("args");
+            strListValues.Add(new List<string>());
+
             foreach (var arg in args)
             {
                 int x = Array.IndexOf(args,arg);
@@ -56,6 +59,7 @@ namespace rC
                 {
                     strNames.Add("arg" + x);
                     strValues.Add(arg);
+                    strListValues[strListNames.IndexOf("args")].Add(arg);
                 }
             }
 
