@@ -49,80 +49,44 @@ namespace rC {
         //str Name.Add >> "Value"
         //getStrListValue(Name[1])
         //updateStrListValue(Name[1])
-
-        foreach(var line in code) {
-        /*  foreach(var func_name in names_for_functions) {
-            int ocorrences = 0;
-            foreach(var func_name_2 in names_for_functions){
-              if(func_name_2 == func_name){
-                ocorrences++;
-              }
-            }
-            if(ocorrences>=2){
-                Console.WriteLine("There is more than 1 function named: "+func_name);
-            }*/
-            if (line.StartsWith(func_name + "(") || line.StartsWith(func_name + " (")) {
-              // foreach(var lineofcode in lines_for_functions[names_for_functions.IndexOf(func_name)]){
-              //     Console.WriteLine(lineofcode);
-              // }
-              Compile(lines_for_functions[names_for_functions.IndexOf(func_name)], numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+        strNames.Add("line_break");
+        strValues.Add("\n");
+        strNames.Add("path");
+        strValues.Add("/usr/lib/rC");
+        foreach(var _line in code) {
+          string line = _line;
+          //
+          // line = line.Replace("$path$", strValues[strNames.IndexOf("path")]);
+          // line = line.Replace("$PATH$", strValues[strNames.IndexOf("path")]);
+       if (line.StartsWith("Write") && line.Contains(" \"") && line.StartsWith("WriteStr") == false && line.StartsWith("WriteNum") == false) {
+              //check if it is a number 
+              //var matchesNumber = numberNames.Where(x => line.Contains(line.Split(new[] { "Write &>" }, StringSplitOptions.None).Last().ToString().Split(new[] { "<&" }, StringSplitOptions.None).First().ToString()));
+            if(line.Contains('$')){
+          foreach(var string_var in strNames){
+                      try{
+                        string toReplace = "$"+string_var+"$";
+                      line = line.Replace(toReplace,strValues[strNames.IndexOf(string_var)]);
+                      }catch{
+                      }
+                    } 
+          foreach(var num_var in numberNames){
+            try{
+              string toReplace = "$"+num_var+"$";
+              line = line.Replace(toReplace,numberValues[numberNames.IndexOf(num_var)].ToString());
+            }catch{
+              
             }
           }
-          if (references.Contains("threading") && line.StartsWith("newThread(")) {
-            try {
-              string nameof_func = line.Split('(')[1].Split('(')[0];
-              void newThreadStart() {
-                rCompiler.Compile(lines_for_functions[names_for_functions.IndexOf(nameof_func)], numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-                Console.WriteLine("");
-              }
-
-              ThreadStart thread_start = new ThreadStart(newThreadStart);
-              Thread newThread = new Thread(thread_start);
-              System.Threading.Thread.Sleep(15);
-              newThread.Start();
-              while (newThread.IsAlive != true) {
-                newThread.Start();
-              }
-            } catch {
-              Console.WriteLine($"{line} : Error Starting Thread");
+          }
+              Console.Write(line.Split(new [] {
+                "Write \""
+              }, StringSplitOptions.None).Last().ToString().Split(new [] {
+                "\""
+              }, StringSplitOptions.None).First().ToString());
+                break;
             }
 
-          }
-
-          if (line.StartsWith("function ")) {
-            //function main(str test);{
-            //    Write "Im da best"
-            //}main;
-            string nameFunc = line.Split(new [] {
-              "function "
-            }, StringSplitOptions.None).Last().Split('(').First();
-            names_for_functions.Add(nameFunc);
-            List < string > func_content = code;
-            List < string > compileAfter = new List < string > ();
-            int current_index = code.IndexOf(line);
-            current_index++;
-            func_content = code.GetRange(current_index, (code.IndexOf("}" + nameFunc + ";") - current_index));
-
-            string indent = "    ";
-
-            for (int i = 0; i < func_content.Count; i++) {
-              if (func_content[i].StartsWith(indent) /*&&func_content[i].StartsWith(indent+indent)==false*/ ) {
-                try {
-                  func_content[func_content.IndexOf(func_content[i])] = func_content[i].Split(new [] {
-                    indent
-                  }, StringSplitOptions.None)[1];
-                } catch {}
-              }
-            }
-
-            // foreach(var codeline in func_content){
-            //     Console.WriteLine(codeline);
-            // }
-            lines_for_functions.Add(func_content);
-            Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-
-          }
-          if (line.ToLower().StartsWith("for") && line.ToLower().Contains("in range:")) {
+          else if (line.ToLower().StartsWith("for") && line.ToLower().Contains("in range:")) {
             int range = 0;
             /*
                                      for x in range:
@@ -189,11 +153,86 @@ namespace rC {
 
             ForLoop(range, looper, loopContent);
             Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+            break;
           }
+         else if (references.Contains("threading") && line.StartsWith("newThread(")) {
+            try {
+              string nameof_func = line.Split('(')[1].Split('(')[0];
+              void newThreadStart() {
+                rCompiler.Compile(lines_for_functions[names_for_functions.IndexOf(nameof_func)], numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+                Console.WriteLine("");
+              }
+
+              ThreadStart thread_start = new ThreadStart(newThreadStart);
+              Thread newThread = new Thread(thread_start);
+              System.Threading.Thread.Sleep(15);
+              newThread.Start();
+              while (newThread.IsAlive != true) {
+                newThread.Start();
+              }
+            } catch {
+              Console.WriteLine($"{line} : Error Starting Thread");
+            }
+
+          }
+  
+          foreach(var func_name in names_for_functions) {
+            //int ocorrences = 0;
+            // foreach(var func_name_2 in names_for_functions){
+            //   if(func_name_2 == func_name){
+            //     ocorrences++;
+            //   }
+            // }
+            // if(ocorrences>=2){
+            //     Console.WriteLine("There is more than 1 function named: "+func_name);
+            // }
+            if (line.StartsWith(func_name + "(") || line.StartsWith(func_name + " (")) {
+              // foreach(var lineofcode in lines_for_functions[names_for_functions.IndexOf(func_name)]){
+              //     Console.WriteLine(lineofcode);
+              // }
+              Compile(lines_for_functions[names_for_functions.IndexOf(func_name)], numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+            }
+            break;
+          }
+          if (line.StartsWith("function ")) {
+            //function main(str test);{
+            //    Write "Im da best"
+            //}main;
+            string nameFunc = line.Split(new [] {
+              "function "
+            }, StringSplitOptions.None).Last().Split('(').First();
+            names_for_functions.Add(nameFunc);
+            List < string > func_content = code;
+            List < string > compileAfter = new List < string > ();
+            int current_index = code.IndexOf(line);
+            current_index++;
+            func_content = code.GetRange(current_index, (code.IndexOf("}" + nameFunc + ";") - current_index));
+
+            string indent = "    ";
+
+            for (int i = 0; i < func_content.Count; i++) {
+              if (func_content[i].StartsWith(indent) /*&&func_content[i].StartsWith(indent+indent)==false*/ ) {
+                try {
+                  func_content[func_content.IndexOf(func_content[i])] = func_content[i].Split(new [] {
+                    indent
+                  }, StringSplitOptions.None)[1];
+                } catch {}
+              }
+            }
+
+            // foreach(var codeline in func_content){
+            //     Console.WriteLine(codeline);
+            // }
+            lines_for_functions.Add(func_content);
+            Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+
+          }
+          
           if (line.StartsWith("strip(")) {
             string toStrip = strValues[strNames.IndexOf(line.Split('(').Last().Split(')').First())];
             string cleaned = toStrip.Replace("\r", "").Replace("\n", "");
             strValues[strNames.IndexOf(line.Split('(').Last().Split(')').First())] = cleaned;
+            break;
           }
 
           if (line.StartsWith("strToNum(")) {
@@ -260,6 +299,28 @@ namespace rC {
             numListValues.Add(new List < double > ());
           }
           foreach(var listName in strListNames) {
+            // if(line.Contains(listName) && line.Contains('[')){
+            //   // try{
+            //     string toParse = line.Split(new []{listName},StringSplitOptions.None)[1].Split(']')[0];
+            //     toParse = listName+toParse+']';
+            //     int indx = 0;
+            //     string isNum = toParse.Split('[')[1].Split(']')[0];
+            //     if(numberNames.Contains(isNum)){
+            //       indx = Convert.ToInt32(numberValues[numberNames.IndexOf(isNum)]);
+            //     }else{
+            //       indx = Convert.ToInt32(isNum);
+            //     }
+            //      if(strNames.Contains(toParse)){
+            //        strValues[strNames.IndexOf(toParse)] = strListValues[strListNames.IndexOf(listName)][indx]; 
+            //      }else{
+
+            //        strNames.Add(toParse);
+            //        Console.WriteLine(strListNames.Count());
+            //      }
+              // }catch{
+              //   Console.WriteLine("Error at line: "+line);
+              // }
+            // }
 
             if (line.StartsWith(listName + ".IndexOf:")) {
               try {
@@ -974,6 +1035,7 @@ namespace rC {
                     strValues[strNames.IndexOf(to)] = Split.split(from, split, f);
                   }
                 } catch {}
+                break;  
               }
             }
             if (references.Contains("keys")) {
@@ -1031,7 +1093,9 @@ namespace rC {
                 }
                 FileStream.CreateFile(filename);
               } else if (line.StartsWith("ReadFile")) {
-                string filename = line.Split(new [] {
+                string filename = "";
+                try{
+                filename = line.Split(new [] {
                   "file:"
                 }, StringSplitOptions.None).Last().Split(';').First();
                 string strToReadTo = line.Split(new [] {
@@ -1046,7 +1110,10 @@ namespace rC {
                   strValues.Add(FileStream.ReadFile(filename));
                   strNames.Add(strToReadTo);
                 }
-
+                }
+                catch{
+                  Console.WriteLine("File: "+filename+ " not found!");
+                }
               }
             }
 
@@ -1250,24 +1317,14 @@ namespace rC {
                 int errorLine = code.IndexOf(line);
                 Console.WriteLine($"Invalid Syntax (Line {errorLine++})");
               }
-            }
+           }
 
             //Write 
 
             if (line.ToLower().StartsWith("newline") || line.ToLower().StartsWith("newln")) {
               Console.WriteLine("");
             }
-            if (line.StartsWith("Write") && line.Contains(" \"") && line.Contains("WriteStr") == false && line.Contains("WriteNum") == false && line.ToLower().StartsWith("for") == false && line.ToLower().Contains("in range %") == false && line.Contains("$>") == false) {
-              //check if it is a number 
-              //var matchesNumber = numberNames.Where(x => line.Contains(line.Split(new[] { "Write &>" }, StringSplitOptions.None).Last().ToString().Split(new[] { "<&" }, StringSplitOptions.None).First().ToString()));
-
-              Console.Write(line.Split(new [] {
-                "Write \""
-              }, StringSplitOptions.None).Last().ToString().Split(new [] {
-                "\""
-              }, StringSplitOptions.None).First().ToString());
-
-            } else if (line.StartsWith("WriteStr") &&
+             else if (line.StartsWith("WriteStr") &&
               line.Contains("{") &&
               line.Contains("}") &&
               line.ToLower().StartsWith("for") == false &&
@@ -1310,102 +1367,7 @@ namespace rC {
                 }
 
               }
-
-              //save
-
-            } else if (line.StartsWith("save(this)") && line.Contains("as") == false) {
-              id = new Random().Next(1, 10000);
-              StreamWriter writer = File.CreateText("code.id(" + id + ").rcode");
-              foreach(var lineToSave in code) {
-                if (lineToSave.StartsWith("save")) {
-                  writer.WriteLine(lineToSave);
-                }
-              }
-              if (id != 0) {
-                Program.WriteId(id);
-              }
-
-              writer.Close();
-            } else if (line.StartsWith("save(this)") && line.Contains("as") == true) {
-              StreamWriter writerAs = File.CreateText(line.Split(new [] {
-                "save(this) as "
-              }, StringSplitOptions.None).Last() + ".rcode");
-              foreach(var lineToSave in code) {
-                if (lineToSave.StartsWith("save") == false) {
-                  writerAs.WriteLine(lineToSave);
-                }
-              }
-              writerAs.Close();
-              Console.ResetColor();
-              Console.Write("\nFile Saved as ");
-              Console.ForegroundColor = ConsoleColor.Green;
-              Console.Write(line.Split(new [] {
-                "save(this) as "
-              }, StringSplitOptions.None).Last() + ".rcode");
-              Console.ResetColor();
-              Console.Write(" in order to edit it, please do so using a text editor or visual studio.\nIn order to compile it, use the command load >> " + (line.Split(new [] {
-                "save(this) as"
-              }, StringSplitOptions.None).Last() + ".rcode"));
-
-            } else if (line == "save = false") {
-              id = 0;
-            } else if (line.StartsWith("load >>") || line.StartsWith("compiler.load")) {
-              string fileToCompile = line.Split(new [] {
-                "load >> "
-              }, StringSplitOptions.None).Last();
-              Console.WriteLine(fileToCompile);
-              List < string > CompileFile = new List < string > ();
-              try {
-                StreamReader reader = new StreamReader(fileToCompile);
-                string lineReader;
-                while ((lineReader = reader.ReadLine()) != null) {
-                  CompileFile.Add(lineReader);
-                }
-                string isVisualizing;
-
-                Console.WriteLine("Do you want to Visualize it's code (Y/n): ");
-                isVisualizing = Console.ReadLine();
-                if (isVisualizing.ToLower() != "n") {
-                  Console.ForegroundColor = ConsoleColor.Cyan;
-                  Console.WriteLine("\n " + fileToCompile + " (Code): \n");
-                  Console.ResetColor();
-                  foreach(var lineToShow in CompileFile) {
-                    Console.WriteLine(CompileFile.IndexOf(lineToShow) + " " + lineToShow);
-                  }
-                  Console.WriteLine("\n");
-                }
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                Console.WriteLine("\n \n \n Output:");
-                Console.ResetColor();
-                Compile(CompileFile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-                Console.WriteLine("");
-              } catch {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("ERROR: Couldn't find " + fileToCompile);
-                Console.ResetColor();
-              }
-
-            } else if (line.StartsWith("compile >>")) {
-              List < string > CompileFile = new List < string > ();
-              string fileToCompile = line.Split(new [] {
-                ">> "
-              }, StringSplitOptions.None).Last();
-
-              try {
-                StreamReader reader = new StreamReader(fileToCompile);
-                string lineReader;
-                while ((lineReader = reader.ReadLine()) != null) {
-                  CompileFile.Add(lineReader);
-                }
-                Compile(CompileFile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-                Console.Write("\n");
-                reader.Close();
-              } catch {
-
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("File Not Found / Compilation Error! \n(Make Sure You Leave a Space Between the indicators (>>) ex: compile >> filename.rcode");
-                Console.ResetColor();
-              }
+break;
             } else if (line.StartsWith("if")) {
 
               /*
