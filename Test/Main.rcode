@@ -1,12 +1,14 @@
-function l(),{
-    num f >>213
-    num g >>214
-    if statement:num(g+>f); "j";{
-        Write "$g$ > $f$"
+function check(); {
+    if num(f==x); "j";{
+        Write "hi"
     }j;
-    # for x in range:1000; "k";{
-    #     Write "Hi"
-    # }k;
+}check;
+function l(),{
+    num f >>1
+    num g >>214
+    if num(f!=g); "j";{
+        Write "hi"
+    }j;
     
 }l;
 l()

@@ -167,7 +167,6 @@ continue;
                 }
               }
               name = line.Split('"')[1].Split('"').First().Split(';').First();
-              Console.WriteLine(name);
               indent = "    ";
             } catch {
               Console.WriteLine("Invalid Syntax Line: " + code.IndexOf(line));
@@ -240,8 +239,8 @@ continue;
               try {
                 name = line.Split('"')[1].Split('"')[0].Split(';')[0];
                 statement = line.Split(new [] {
-                  "statement:"
-                }, StringSplitOptions.None).Last().Split(';')[0];
+                  " "
+                }, StringSplitOptions.None)[1].Split(';')[0];
                 indent = "    ";
               } catch {
                 Console.WriteLine("Invalid Syntax Line: " + code.IndexOf(line));
@@ -544,7 +543,6 @@ continue;
                         }
                       }
                       Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-                      continue;
                     }
                   }
 
