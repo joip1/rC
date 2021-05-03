@@ -31,7 +31,6 @@ namespace rC {
       List < string > names_for_functions) {
 
       //values and indicators
-      int id = 0;
       List < int > pixelX = new List < int > ();
       List < int > pixelY = new List < int > ();
       List < ConsoleColor > pixelColors = new List < ConsoleColor > ();
@@ -77,6 +76,7 @@ namespace rC {
               
             }
           }
+
           }
               Console.Write(line.Split(new [] {
                 "Write \""
@@ -85,7 +85,56 @@ namespace rC {
               }, StringSplitOptions.None).First().ToString());
                 continue;
             }
+if (line.ToLower().StartsWith("newline") || line.ToLower().StartsWith("newln")) {
+              Console.WriteLine("");
+              continue;
+            }
+             else if (line.StartsWith("WriteStr") &&
+              line.Contains("{") &&
+              line.Contains("}") &&
+              line.ToLower().StartsWith("for") == false &&
+              line.ToLower().Contains("in range %") == false &&
+              line.Contains("$>") == false) {
+              foreach(var name in strNames) {
+                var namesToCheck = line.Split('{')[1].Split('}')[0].Split(',');
 
+                foreach(var nametoCheck in namesToCheck) {
+                  try {
+                    if (nametoCheck == name || nametoCheck == "{" + name || nametoCheck == name + "}" || nametoCheck == "{" + name + "}") {
+                      Console.Write(strValues[strNames.IndexOf(name)]);
+                    }
+                  } catch {
+                    Console.WriteLine("Invalid Syntax on Line " + code.IndexOf(line));
+                  }
+                }
+              }
+continue;
+            } 
+              else if (line.StartsWith("WriteNum") &&
+              line.Contains(" {") &&
+              line.Contains("}") &&
+              line.ToLower().StartsWith("for") == false &&
+              line.ToLower().Contains("in range %") == false &&
+              line.Contains("$>") == false)
+
+            {
+              foreach(var name in numberNames) {
+                var namesToCheck = line.Split('{')[1].Split('}')[0].Split(',');
+
+                foreach(var nametoCheck in namesToCheck) {
+                  try {
+                    if (nametoCheck == name || nametoCheck == "{" + name || nametoCheck == name + "}" || nametoCheck == "{" + name + "}") {
+                      Console.Write(numberValues[numberNames.IndexOf(name)]);
+                    }
+                  } catch {
+                    Console.WriteLine("Invalid Syntax on Line " + code.IndexOf(line));
+                  }
+
+                }
+
+              }
+continue;
+            } 
           else if (line.ToLower().StartsWith("for") && line.ToLower().Contains("in range:")) {
             int range = 0;
             /*
@@ -117,12 +166,9 @@ namespace rC {
                   }, StringSplitOptions.None).Last().Split(';')[0])]);
                 }
               }
-              name = line.Split(new [] {
-                "name:"
-              }, StringSplitOptions.None).Last().Split(';').First();
-              indent = line.Split(new [] {
-                "indent:"
-              }, StringSplitOptions.None).Last().Split('"')[1].Split('"').First().Split(';').First();
+              name = line.Split('"')[1].Split('"').First().Split(';').First();
+              Console.WriteLine(name);
+              indent = "    ";
             } catch {
               Console.WriteLine("Invalid Syntax Line: " + code.IndexOf(line));
             }
@@ -144,9 +190,7 @@ namespace rC {
             for (int i = 0; i < newCode1.Count; i++) {
               if (newCode1[i].StartsWith(indent)) {
                 try {
-                  newCode1[newCode1.IndexOf(newCode1[i])] = newCode1[i].Split(new [] {
-                    indent
-                  }, StringSplitOptions.None)[1];
+                  newCode1[newCode1.IndexOf(newCode1[i])] = newCode1[i].Substring(indent.Length);
                 } catch {}
               }
             }
@@ -175,6 +219,341 @@ namespace rC {
             }
 
           }
+          else if (line.StartsWith("if")) {
+
+              /*
+                  if name:1; statement:str(x==y); indent:" ";
+                      Write &>Hi<&
+                  endIf(1)
+
+              */
+  /*
+  if statement:str(x==y); "g";{
+
+  }g;
+  */
+              string name = "";
+              string indent = "";
+              string statement = "";
+              List < string > loopContent = new List < string > ();
+              List < string > compileAfter = new List < string > ();
+              try {
+                name = line.Split('"')[1].Split('"')[0].Split(';')[0];
+                statement = line.Split(new [] {
+                  "statement:"
+                }, StringSplitOptions.None).Last().Split(';')[0];
+                indent = "    ";
+              } catch {
+                Console.WriteLine("Invalid Syntax Line: " + code.IndexOf(line));
+              }
+              List < string > newCode1 = code;
+              if (newCode1.Contains("}" + name + ";")) {
+                newCode1.RemoveRange(0, newCode1.IndexOf(line) + 1);
+                foreach(var lineofCode in newCode1) {
+                  if (newCode1.IndexOf(lineofCode) > newCode1.IndexOf("}" + name + ";")) {
+                    compileAfter.Add(lineofCode);
+                  }
+                }
+                newCode1.RemoveRange(newCode1.IndexOf("}" + name + ";"), newCode1.Count - newCode1.IndexOf("}" + name + ";"));
+                loopContent = newCode1;
+
+              } else {
+                Console.WriteLine("\nNo End Was Found for If Statement with name: " + name);
+              }
+              for (int i = 0; i < newCode1.Count; i++) {
+                if (newCode1[i].StartsWith(indent)) {
+                  try {
+                    newCode1[newCode1.IndexOf(newCode1[i])] = newCode1[i].Substring(indent.Length);
+                  } catch {}
+                }
+              }
+
+              if (line.Contains("str(") && line.Contains("==")) {
+                try {
+                  if (strValues[strNames.IndexOf(statement.Split(new [] {
+                      "&else"
+                    }, StringSplitOptions.None).First().Split(new [] {
+                      "str("
+                    }, StringSplitOptions.None).Last().Split(new [] {
+                      "=="
+                    }, StringSplitOptions.None).First())] ==
+                    strValues[strNames.IndexOf(statement.Split(new [] {
+                      "&else"
+                    }, StringSplitOptions.None).First().Split(new [] {
+                      "=="
+                    }, StringSplitOptions.None).Last().Split(')').First())]) {
+                    Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+                  } else {
+                    if (line.Contains("&else")) {
+                      string newStatement = line.Split(new [] {
+                        "&else"
+                      }, StringSplitOptions.None).Last();
+                      var getElseContent = newStatement.Split(new [] {
+                        "->"
+                      }, StringSplitOptions.None);
+                      List < string > loopElseContent = new List < string > ();
+                      foreach(var content in getElseContent) {
+                        if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false) {
+                          loopElseContent.Add(content);
+                        }
+                      }
+                      Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+                    }
+                  }
+                } catch {}
+
+              }
+              /*else if(line.Contains("str(") && line.Contains("contains("))
+                                      {
+                                          if(strValues[strNames.Contains("")])
+                                      }*/
+              else if (line.Contains("str(") && line.Contains("!=")) {
+                try {
+                  if (strValues[strNames.IndexOf(statement.Split(new [] {
+                      "&else"
+                    }, StringSplitOptions.None).First().Split(new [] {
+                      "str("
+                    }, StringSplitOptions.None).Last().Split(new [] {
+                      "!="
+                    }, StringSplitOptions.None).First())] !=
+                    strValues[strNames.IndexOf(statement.Split(new [] {
+                      "&else"
+                    }, StringSplitOptions.None).First().Split(new [] {
+                      "!="
+                    }, StringSplitOptions.None).Last().Split(')').First())]) {
+                    Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+                  } else {
+                    if (line.Contains("&else")) {
+                      string newStatement = line.Split(new [] {
+                        "&else"
+                      }, StringSplitOptions.None).Last();
+                      var getElseContent = newStatement.Split(new [] {
+                        "->"
+                      }, StringSplitOptions.None);
+                      List < string > loopElseContent = new List < string > ();
+                      foreach(var content in getElseContent) {
+                        if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false) {
+                          loopElseContent.Add(content);
+                        }
+                      }
+                      Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+                    }
+                  }
+                } catch {}
+              }
+              if (statement.Contains("num(") && statement.Contains("==")) {
+                try {
+                  if (numberValues[numberNames.IndexOf(statement.Split(new [] {
+                      "&else"
+                    }, StringSplitOptions.None).First().Split(new [] {
+                      "num("
+                    }, StringSplitOptions.None).Last().Split(new [] {
+                      "=="
+                    }, StringSplitOptions.None).First())] ==
+                    numberValues[numberNames.IndexOf(statement.Split(new [] {
+                      "&else"
+                    }, StringSplitOptions.None).First().Split(new [] {
+                      "=="
+                    }, StringSplitOptions.None).Last().Split(')').First())]) {
+                    Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+                  } else {
+                    if (line.Contains("&else")) {
+                      string newStatement = line.Split(new [] {
+                        "&else"
+                      }, StringSplitOptions.None).Last();
+                      var getElseContent = newStatement.Split(new [] {
+                        "->"
+                      }, StringSplitOptions.None);
+                      List < string > loopElseContent = new List < string > ();
+                      foreach(var content in getElseContent) {
+                        if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false) {
+                          loopElseContent.Add(content);
+                        }
+                      }
+                      Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+                    }
+                  }
+                } catch {}
+
+              } else if (statement.Contains("num(") && statement.Contains("!=")) {
+                try {
+                  if (numberValues[numberNames.IndexOf(statement.Split(new [] {
+                      "&else"
+                    }, StringSplitOptions.None).First().Split(new [] {
+                      "num("
+                    }, StringSplitOptions.None).Last().Split(new [] {
+                      "!="
+                    }, StringSplitOptions.None).First())] !=
+                    numberValues[numberNames.IndexOf(statement.Split(new [] {
+                      "&else"
+                    }, StringSplitOptions.None).First().Split(new [] {
+                      "!="
+                    }, StringSplitOptions.None).Last().Split(')').First())]) {
+                    Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+                  } else {
+                    if (line.Contains("&else")) {
+                      string newStatement = line.Split(new [] {
+                        "&else"
+                      }, StringSplitOptions.None).Last();
+                      var getElseContent = newStatement.Split(new [] {
+                        "->"
+                      }, StringSplitOptions.None);
+                      List < string > loopElseContent = new List < string > ();
+                      foreach(var content in getElseContent) {
+                        if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false) {
+                          loopElseContent.Add(content);
+                        }
+                      }
+                      Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+                    }
+                  }
+                } catch {}
+              } else if (statement.Contains("num(") && statement.Contains(">=")) {
+                try {
+                  if (numberValues[numberNames.IndexOf(statement.Split(new [] {
+                      "&else"
+                    }, StringSplitOptions.None).First().Split(new [] {
+                      "num("
+                    }, StringSplitOptions.None).Last().Split(new [] {
+                      ">="
+                    }, StringSplitOptions.None).First())] >=
+                    numberValues[numberNames.IndexOf(statement.Split(new [] {
+                      "&else"
+                    }, StringSplitOptions.None).First().Split(new [] {
+                      ">="
+                    }, StringSplitOptions.None).Last().Split(')').First())]) {
+                    Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+                  } else {
+                    if (line.Contains("&else")) {
+                      string newStatement = line.Split(new [] {
+                        "&else"
+                      }, StringSplitOptions.None).Last();
+                      var getElseContent = newStatement.Split(new [] {
+                        "->"
+                      }, StringSplitOptions.None);
+                      List < string > loopElseContent = new List < string > ();
+                      foreach(var content in getElseContent) {
+                        if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false) {
+                          loopElseContent.Add(content);
+                        }
+                      }
+                      Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+                    }
+                  }
+                } catch {}
+
+              } else if (statement.Contains("num(") && statement.Contains("<=")) {
+                try {
+                  if (numberValues[numberNames.IndexOf(statement.Split(new [] {
+                      "&else"
+                    }, StringSplitOptions.None).First().Split(new [] {
+                      "num("
+                    }, StringSplitOptions.None).Last().Split(new [] {
+                      "<="
+                    }, StringSplitOptions.None).First())] <=
+                    numberValues[numberNames.IndexOf(statement.Split(new [] {
+                      "&else"
+                    }, StringSplitOptions.None).First().Split(new [] {
+                      "<="
+                    }, StringSplitOptions.None).Last().Split(')').First())]) {
+                    Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+                  } else {
+                    if (line.Contains("&else")) {
+                      string newStatement = line.Split(new [] {
+                        "&else"
+                      }, StringSplitOptions.None).Last();
+                      var getElseContent = newStatement.Split(new [] {
+                        "->"
+                      }, StringSplitOptions.None);
+                      List < string > loopElseContent = new List < string > ();
+                      foreach(var content in getElseContent) {
+                        if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false) {
+                          loopElseContent.Add(content);
+                        }
+                      }
+                      Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+                    }
+                  }
+                } catch {}
+
+              } else if (statement.Contains("num(") && statement.Contains("+>")) {
+                try {
+                  if (numberValues[numberNames.IndexOf(statement.Split(new [] {
+                      "&else"
+                    }, StringSplitOptions.None).First().Split(new [] {
+                      "num("
+                    }, StringSplitOptions.None).Last().Split(new [] {
+                      "+>"
+                    }, StringSplitOptions.None).First())] >
+                    numberValues[numberNames.IndexOf(statement.Split(new [] {
+                      "&else"
+                    }, StringSplitOptions.None).First().Split(new [] {
+                      "+>"
+                    }, StringSplitOptions.None).Last().Split(')').First())]) {
+                    Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+                  } else {
+                    if (line.Contains("&else ->")) {
+                      string newStatement = line.Split(new [] {
+                        "&else"
+                      }, StringSplitOptions.None).Last();
+                      var getElseContent = newStatement.Split(new [] {
+                        "->"
+                      }, StringSplitOptions.None);
+                      List < string > loopElseContent = new List < string > ();
+                      foreach(var content in getElseContent) {
+                        if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false) {
+                          loopElseContent.Add(content);
+                        }
+                      }
+
+                      Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+
+                    }
+                  }
+                } catch {}
+
+              } else if (statement.Contains("num(") && statement.Contains("<-")) {
+                try {
+                  if (numberValues[numberNames.IndexOf(statement.Split(new [] {
+                      "&else"
+                    }, StringSplitOptions.None).First().Split(new [] {
+                      "num("
+                    }, StringSplitOptions.None).Last().Split(new [] {
+                      "<-"
+                    }, StringSplitOptions.None).First())] <
+                    numberValues[numberNames.IndexOf(statement.Split(new [] {
+                      "&else"
+                    }, StringSplitOptions.None).First().Split(new [] {
+                      "num("
+                    }, StringSplitOptions.None).Last().Split(new [] {
+                      "<-"
+                    }, StringSplitOptions.None).Last().Split(')').First())]) {
+                    Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+                  } else {
+                    if (line.Contains("&else ->")) {
+                      string newStatement = line.Split(new [] {
+                        "&else"
+                      }, StringSplitOptions.None).Last();
+                      var getElseContent = newStatement.Split(new [] {
+                        "->"
+                      }, StringSplitOptions.None);
+                      List < string > loopElseContent = new List < string > ();
+                      foreach(var content in getElseContent) {
+                        if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false) {
+                          loopElseContent.Add(content);
+                        }
+                      }
+                      Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+                      continue;
+                    }
+                  }
+
+                } catch {}
+
+              }
+
+              Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+            } 
   
           foreach(var func_name in names_for_functions) {
             //int ocorrences = 0;
@@ -194,6 +573,7 @@ namespace rC {
             }
             continue;
           }
+
           if (line.StartsWith("function ")) {
             //function main(str test);{
             //    Write "Im da best"
@@ -213,9 +593,7 @@ namespace rC {
             for (int i = 0; i < func_content.Count; i++) {
               if (func_content[i].StartsWith(indent) /*&&func_content[i].StartsWith(indent+indent)==false*/ ) {
                 try {
-                  func_content[func_content.IndexOf(func_content[i])] = func_content[i].Split(new [] {
-                    indent
-                  }, StringSplitOptions.None)[1];
+                  func_content[func_content.IndexOf(func_content[i])] = func_content[i].Substring(indent.Length);
                 } catch {}
               }
             }
@@ -223,6 +601,7 @@ namespace rC {
             // foreach(var codeline in func_content){
             //     Console.WriteLine(codeline);
             // }
+          
             lines_for_functions.Add(func_content);
             Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
 
@@ -1321,389 +1700,6 @@ namespace rC {
 
             //Write 
 
-            if (line.ToLower().StartsWith("newline") || line.ToLower().StartsWith("newln")) {
-              Console.WriteLine("");
-            }
-             else if (line.StartsWith("WriteStr") &&
-              line.Contains("{") &&
-              line.Contains("}") &&
-              line.ToLower().StartsWith("for") == false &&
-              line.ToLower().Contains("in range %") == false &&
-              line.Contains("$>") == false) {
-              foreach(var name in strNames) {
-                var namesToCheck = line.Split('{')[1].Split('}')[0].Split(',');
-
-                foreach(var nametoCheck in namesToCheck) {
-                  try {
-                    if (nametoCheck == name || nametoCheck == "{" + name || nametoCheck == name + "}" || nametoCheck == "{" + name + "}") {
-                      Console.Write(strValues[strNames.IndexOf(name)]);
-                    }
-                  } catch {
-                    Console.WriteLine("Invalid Syntax on Line " + code.IndexOf(line));
-                  }
-                }
-              }
-
-            } else if (line.StartsWith("WriteNum") &&
-              line.Contains(" {") &&
-              line.Contains("}") &&
-              line.ToLower().StartsWith("for") == false &&
-              line.ToLower().Contains("in range %") == false &&
-              line.Contains("$>") == false)
-
-            {
-              foreach(var name in numberNames) {
-                var namesToCheck = line.Split('{')[1].Split('}')[0].Split(',');
-
-                foreach(var nametoCheck in namesToCheck) {
-                  try {
-                    if (nametoCheck == name || nametoCheck == "{" + name || nametoCheck == name + "}" || nametoCheck == "{" + name + "}") {
-                      Console.Write(numberValues[numberNames.IndexOf(name)]);
-                    }
-                  } catch {
-                    Console.WriteLine("Invalid Syntax on Line " + code.IndexOf(line));
-                  }
-
-                }
-
-              }
-continue;
-            } else if (line.StartsWith("if")) {
-
-              /*
-                  if name:1; statement:str(x==y); indent:" ";
-                      Write &>Hi<&
-                  endIf(1)
-
-              */
-
-              string name = "";
-              string indent = "";
-              string statement = "";
-              List < string > loopContent = new List < string > ();
-              List < string > compileAfter = new List < string > ();
-              try {
-                name = line.Split(new [] {
-                  "name:"
-                }, StringSplitOptions.None).Last().Split(';').First();
-                statement = line.Split(new [] {
-                  "statement:"
-                }, StringSplitOptions.None).Last().Split(';')[0];
-                indent = line.Split(new [] {
-                  "indent:"
-                }, StringSplitOptions.None).Last().Split('"')[1].Split('"').First().Split(';').First();
-              } catch {
-                Console.WriteLine("Invalid Syntax Line: " + code.IndexOf(line));
-              }
-              List < string > newCode1 = code;
-              if (newCode1.Contains("}" + name + ";")) {
-                newCode1.RemoveRange(0, newCode1.IndexOf(line) + 1);
-                foreach(var lineofCode in newCode1) {
-                  if (newCode1.IndexOf(lineofCode) > newCode1.IndexOf("}" + name + ";")) {
-                    compileAfter.Add(lineofCode);
-                  }
-                }
-                newCode1.RemoveRange(newCode1.IndexOf("}" + name + ";"), newCode1.Count - newCode1.IndexOf("}" + name + ";"));
-                loopContent = newCode1;
-
-              } else {
-                Console.WriteLine("\nNo End Was Found for If Statement with name: " + name);
-              }
-              for (int i = 0; i < newCode1.Count; i++) {
-                if (newCode1[i].StartsWith(indent)) {
-                  try {
-                    newCode1[newCode1.IndexOf(newCode1[i])] = newCode1[i].Split(new [] {
-                      indent
-                    }, StringSplitOptions.None)[1];
-                  } catch {}
-                }
-              }
-
-              if (line.Contains("str(") && line.Contains("==")) {
-                try {
-                  if (strValues[strNames.IndexOf(statement.Split(new [] {
-                      "&else"
-                    }, StringSplitOptions.None).First().Split(new [] {
-                      "str("
-                    }, StringSplitOptions.None).Last().Split(new [] {
-                      "=="
-                    }, StringSplitOptions.None).First())] ==
-                    strValues[strNames.IndexOf(statement.Split(new [] {
-                      "&else"
-                    }, StringSplitOptions.None).First().Split(new [] {
-                      "=="
-                    }, StringSplitOptions.None).Last().Split(')').First())]) {
-                    Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-                  } else {
-                    if (line.Contains("&else")) {
-                      string newStatement = line.Split(new [] {
-                        "&else"
-                      }, StringSplitOptions.None).Last();
-                      var getElseContent = newStatement.Split(new [] {
-                        "->"
-                      }, StringSplitOptions.None);
-                      List < string > loopElseContent = new List < string > ();
-                      foreach(var content in getElseContent) {
-                        if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false) {
-                          loopElseContent.Add(content);
-                        }
-                      }
-                      Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-                    }
-                  }
-                } catch {}
-
-              }
-              /*else if(line.Contains("str(") && line.Contains("contains("))
-                                      {
-                                          if(strValues[strNames.Contains("")])
-                                      }*/
-              else if (line.Contains("str(") && line.Contains("!=")) {
-                try {
-                  if (strValues[strNames.IndexOf(statement.Split(new [] {
-                      "&else"
-                    }, StringSplitOptions.None).First().Split(new [] {
-                      "str("
-                    }, StringSplitOptions.None).Last().Split(new [] {
-                      "!="
-                    }, StringSplitOptions.None).First())] !=
-                    strValues[strNames.IndexOf(statement.Split(new [] {
-                      "&else"
-                    }, StringSplitOptions.None).First().Split(new [] {
-                      "!="
-                    }, StringSplitOptions.None).Last().Split(')').First())]) {
-                    Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-                  } else {
-                    if (line.Contains("&else")) {
-                      string newStatement = line.Split(new [] {
-                        "&else"
-                      }, StringSplitOptions.None).Last();
-                      var getElseContent = newStatement.Split(new [] {
-                        "->"
-                      }, StringSplitOptions.None);
-                      List < string > loopElseContent = new List < string > ();
-                      foreach(var content in getElseContent) {
-                        if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false) {
-                          loopElseContent.Add(content);
-                        }
-                      }
-                      Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-                    }
-                  }
-                } catch {}
-              }
-              if (statement.Contains("num(") && statement.Contains("==")) {
-                try {
-                  if (numberValues[numberNames.IndexOf(statement.Split(new [] {
-                      "&else"
-                    }, StringSplitOptions.None).First().Split(new [] {
-                      "num("
-                    }, StringSplitOptions.None).Last().Split(new [] {
-                      "=="
-                    }, StringSplitOptions.None).First())] ==
-                    numberValues[numberNames.IndexOf(statement.Split(new [] {
-                      "&else"
-                    }, StringSplitOptions.None).First().Split(new [] {
-                      "=="
-                    }, StringSplitOptions.None).Last().Split(')').First())]) {
-                    Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-                  } else {
-                    if (line.Contains("&else")) {
-                      string newStatement = line.Split(new [] {
-                        "&else"
-                      }, StringSplitOptions.None).Last();
-                      var getElseContent = newStatement.Split(new [] {
-                        "->"
-                      }, StringSplitOptions.None);
-                      List < string > loopElseContent = new List < string > ();
-                      foreach(var content in getElseContent) {
-                        if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false) {
-                          loopElseContent.Add(content);
-                        }
-                      }
-                      Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-                    }
-                  }
-                } catch {}
-
-              } else if (statement.Contains("num(") && statement.Contains("!=")) {
-                try {
-                  if (numberValues[numberNames.IndexOf(statement.Split(new [] {
-                      "&else"
-                    }, StringSplitOptions.None).First().Split(new [] {
-                      "num("
-                    }, StringSplitOptions.None).Last().Split(new [] {
-                      "!="
-                    }, StringSplitOptions.None).First())] !=
-                    numberValues[numberNames.IndexOf(statement.Split(new [] {
-                      "&else"
-                    }, StringSplitOptions.None).First().Split(new [] {
-                      "!="
-                    }, StringSplitOptions.None).Last().Split(')').First())]) {
-                    Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-                  } else {
-                    if (line.Contains("&else")) {
-                      string newStatement = line.Split(new [] {
-                        "&else"
-                      }, StringSplitOptions.None).Last();
-                      var getElseContent = newStatement.Split(new [] {
-                        "->"
-                      }, StringSplitOptions.None);
-                      List < string > loopElseContent = new List < string > ();
-                      foreach(var content in getElseContent) {
-                        if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false) {
-                          loopElseContent.Add(content);
-                        }
-                      }
-                      Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-                    }
-                  }
-                } catch {}
-              } else if (statement.Contains("num(") && statement.Contains(">=")) {
-                try {
-                  if (numberValues[numberNames.IndexOf(statement.Split(new [] {
-                      "&else"
-                    }, StringSplitOptions.None).First().Split(new [] {
-                      "num("
-                    }, StringSplitOptions.None).Last().Split(new [] {
-                      ">="
-                    }, StringSplitOptions.None).First())] >=
-                    numberValues[numberNames.IndexOf(statement.Split(new [] {
-                      "&else"
-                    }, StringSplitOptions.None).First().Split(new [] {
-                      ">="
-                    }, StringSplitOptions.None).Last().Split(')').First())]) {
-                    Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-                  } else {
-                    if (line.Contains("&else")) {
-                      string newStatement = line.Split(new [] {
-                        "&else"
-                      }, StringSplitOptions.None).Last();
-                      var getElseContent = newStatement.Split(new [] {
-                        "->"
-                      }, StringSplitOptions.None);
-                      List < string > loopElseContent = new List < string > ();
-                      foreach(var content in getElseContent) {
-                        if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false) {
-                          loopElseContent.Add(content);
-                        }
-                      }
-                      Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-                    }
-                  }
-                } catch {}
-
-              } else if (statement.Contains("num(") && statement.Contains("<=")) {
-                try {
-                  if (numberValues[numberNames.IndexOf(statement.Split(new [] {
-                      "&else"
-                    }, StringSplitOptions.None).First().Split(new [] {
-                      "num("
-                    }, StringSplitOptions.None).Last().Split(new [] {
-                      "<="
-                    }, StringSplitOptions.None).First())] <=
-                    numberValues[numberNames.IndexOf(statement.Split(new [] {
-                      "&else"
-                    }, StringSplitOptions.None).First().Split(new [] {
-                      "<="
-                    }, StringSplitOptions.None).Last().Split(')').First())]) {
-                    Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-                  } else {
-                    if (line.Contains("&else")) {
-                      string newStatement = line.Split(new [] {
-                        "&else"
-                      }, StringSplitOptions.None).Last();
-                      var getElseContent = newStatement.Split(new [] {
-                        "->"
-                      }, StringSplitOptions.None);
-                      List < string > loopElseContent = new List < string > ();
-                      foreach(var content in getElseContent) {
-                        if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false) {
-                          loopElseContent.Add(content);
-                        }
-                      }
-                      Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-                    }
-                  }
-                } catch {}
-
-              } else if (statement.Contains("num(") && statement.Contains("+>")) {
-                try {
-                  if (numberValues[numberNames.IndexOf(statement.Split(new [] {
-                      "&else"
-                    }, StringSplitOptions.None).First().Split(new [] {
-                      "num("
-                    }, StringSplitOptions.None).Last().Split(new [] {
-                      "+>"
-                    }, StringSplitOptions.None).First())] >
-                    numberValues[numberNames.IndexOf(statement.Split(new [] {
-                      "&else"
-                    }, StringSplitOptions.None).First().Split(new [] {
-                      "+>"
-                    }, StringSplitOptions.None).Last().Split(')').First())]) {
-                    Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-                  } else {
-                    if (line.Contains("&else ->")) {
-                      string newStatement = line.Split(new [] {
-                        "&else"
-                      }, StringSplitOptions.None).Last();
-                      var getElseContent = newStatement.Split(new [] {
-                        "->"
-                      }, StringSplitOptions.None);
-                      List < string > loopElseContent = new List < string > ();
-                      foreach(var content in getElseContent) {
-                        if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false) {
-                          loopElseContent.Add(content);
-                        }
-                      }
-
-                      Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-
-                    }
-                  }
-                } catch {}
-
-              } else if (statement.Contains("num(") && statement.Contains("<-")) {
-                try {
-                  if (numberValues[numberNames.IndexOf(statement.Split(new [] {
-                      "&else"
-                    }, StringSplitOptions.None).First().Split(new [] {
-                      "num("
-                    }, StringSplitOptions.None).Last().Split(new [] {
-                      "<-"
-                    }, StringSplitOptions.None).First())] <
-                    numberValues[numberNames.IndexOf(statement.Split(new [] {
-                      "&else"
-                    }, StringSplitOptions.None).First().Split(new [] {
-                      "num("
-                    }, StringSplitOptions.None).Last().Split(new [] {
-                      "<-"
-                    }, StringSplitOptions.None).Last().Split(')').First())]) {
-                    Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-                  } else {
-                    if (line.Contains("&else ->")) {
-                      string newStatement = line.Split(new [] {
-                        "&else"
-                      }, StringSplitOptions.None).Last();
-                      var getElseContent = newStatement.Split(new [] {
-                        "->"
-                      }, StringSplitOptions.None);
-                      List < string > loopElseContent = new List < string > ();
-                      foreach(var content in getElseContent) {
-                        if (content.ToLower().StartsWith("&else") == false && content.Contains("->") == false) {
-                          loopElseContent.Add(content);
-                        }
-                      }
-                      Compile(loopElseContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-                    }
-                  }
-
-                } catch {}
-
-              }
-
-              Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-            }
 
             /* foreach (var item in numberValues)
              {

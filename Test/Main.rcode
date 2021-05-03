@@ -1,7 +1,14 @@
-#!/usr/bin/rC
-for x in range:50000; name:for1; indent:"   ";{
-   Write "hi"
-   Write "$x$"
-}for1;
+function l(),{
+    num f >>213
+    num g >>214
+    if statement:num(g+>f); "j";{
+        Write "$g$ > $f$"
+    }j;
+    # for x in range:1000; "k";{
+    #     Write "Hi"
+    # }k;
+    
+}l;
+l()
 newln
 exit()
