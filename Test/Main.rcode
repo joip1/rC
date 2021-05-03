@@ -1,6 +1,7 @@
 #!/usr/bin/rC
 for x in range:50000; name:for1; indent:"   ";{
-   Write "l"
+   Write "hi"
+   Write "$x$"
 }for1;
 newln
 exit()
