@@ -147,6 +147,124 @@ continue;
               }
 continue;
             } 
+            else if (line.StartsWith("str") &&
+              line.Contains(">>") &&
+              line.ToLower().StartsWith("for") == false && line.ToLower().Contains("in range %") == false &&
+              line.Contains("$>") == false) {
+              try {
+                if (strNames.Contains(line.Split(' ')[1].Split('>').First())) {
+                  if (line.Split('>').Last().ToLower().StartsWith("$read") == false) {
+                    strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = line.Split('>')[2].Split('\"')[1].Split('\"').First();
+
+                  } else if (line.Split('>').Last().ToLower() == "$readkey") {
+                    strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Console.ReadKey().Key.ToString();
+                  } else if (line.Split('>').Last().ToLower() == "$readline") {
+                    strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Console.ReadLine();
+                  }
+                } else {
+
+                  if (line.Split('>').Last().ToLower().StartsWith("$read") == false) {
+                    strNames.Add(line.Split(' ')[1].Split('>').First());
+                    if (line.Split('>')[2].Contains('"')) {
+                      strValues.Add(line.Split('>')[2].Split('\"')[1].Split('\"').First());
+                    } else {
+                      try {
+                        strValues.Add(strValues[strNames.IndexOf(line.Split('>')[2])]);
+                      } catch {
+                        Console.WriteLine("Error: " + line);
+                      }
+                    }
+                  } else if (line.Split('>').Last().ToLower() == "$readkey") {
+                    strNames.Add(line.Split(' ')[1].Split('>').First());
+                    strValues.Add(Console.ReadKey().Key.ToString());
+                  } else if (line.Split('>').Last().ToLower() == ("$readline")) {
+                    strNames.Add(line.Split(' ')[1].Split('>').First());
+                    strValues.Add(Console.ReadLine());
+                  }
+                }
+
+              } catch {
+                int errorLine = code.IndexOf(line);
+                Console.WriteLine($"Invalid Syntax (Line {errorLine++})");
+              }
+              continue;
+           }
+           else if (line.StartsWith("number ") || line.StartsWith("num ") && line.Contains(">>") &&
+              line.ToLower().StartsWith("for") == false &&
+              line.ToLower().Contains("in range %") == false &&
+              line.Contains("$>") == false) {
+              try {
+                rand = new Random();
+                if (numberNames.Contains(line.Split(' ')[1].Split('>').First())) {
+                  if (line.ToLower().Contains("$readline") == false) {
+                    try {
+                      if (line.Split('>').Last().Contains("rand:")) {
+                        numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = rand.Next(Convert.ToInt32(line.Split(new [] {
+                          "rand:"
+                        }, StringSplitOptions.None).Last().Split(',').First()), Convert.ToInt32(line.Split(new [] {
+                          "rand:"
+                        }, StringSplitOptions.None).Last().Split(',').Last()));
+                      } else {
+                        numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(line.Split('>').Last());
+                      }
+                    } catch {
+                      rand = new Random();
+                      if (line.Split('>').Last().Contains("rand:")) {
+                        numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = rand.Next(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new [] {
+                          "rand:"
+                        }, StringSplitOptions.None).Last().Split(',').First())]), Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new [] {
+                          "rand:"
+                        }, StringSplitOptions.None).Last().Split(',').Last())]));
+                      } else {
+                        numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = numberValues[numberNames.IndexOf(line.Split('>').Last())];
+                      }
+                    }
+                  } else if (line.ToLower().Contains("$readline") == true) {
+                    numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(Console.ReadLine());
+                  }
+                } else {
+                  rand = new Random();
+                  if (line.ToLower().Contains("$readline") == false) {
+                    numberNames.Add(line.Split(' ')[1].Split('>').First());
+                    try {
+                      if (line.Split('>').Last().Contains("rand:")) {
+                        numberValues.Add(rand.Next(Convert.ToInt32(line.Split(new [] {
+                          "rand:"
+                        }, StringSplitOptions.None).Last().Split(',').First()), Convert.ToInt32(line.Split(new [] {
+                          "rand:"
+                        }, StringSplitOptions.None).Last().Split(',').Last())));
+                      } else {
+                        try {
+                          numberValues.Add(Convert.ToDouble(line.Split('>').Last().Split(' ').Last()));
+                        } catch {
+
+                          numberValues.Add(numberValues[numberNames.IndexOf(line.Split('>').Last())]);
+
+                        }
+                      }
+                    } catch {
+                      if (line.Split('>').Last().Contains("rand:")) {
+                        numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = rand.Next(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new [] {
+                          "rand:"
+                        }, StringSplitOptions.None).Last().Split(',').First())]), Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new [] {
+                          "rand:"
+                        }, StringSplitOptions.None).Last().Split(',').Last())]));
+                      } {
+                        numberValues.Add(Convert.ToDouble(line.Split('>').Last()));
+                      }
+                    }
+                  } else if (line.ToLower().Contains("$readline") == true) {
+                    numberNames.Add(line.Split(' ')[1].Split('>').First());
+                    numberValues.Add(Convert.ToDouble(Console.ReadLine()));
+                  }
+
+                }
+              } catch {
+                int errorLine = code.IndexOf(line);
+                Console.WriteLine($"Invalid Syntax (Line {errorLine--})");
+              }
+              continue;
+            }
           else if (line.ToLower().StartsWith("for") && line.ToLower().Contains("in range:")) {
             int range = 0;
             /*
@@ -1589,124 +1707,9 @@ continue;
               strValues[strNames.IndexOf(strToReplace)] = strChecked.Replace(toReplaceChecked, withChecked);
             }
 
-            if (line.StartsWith("number ") || line.StartsWith("num ") && line.Contains(">>") &&
-              line.ToLower().StartsWith("for") == false &&
-              line.ToLower().Contains("in range %") == false &&
-              line.Contains("$>") == false) {
-              try {
-                rand = new Random();
-                if (numberNames.Contains(line.Split(' ')[1].Split('>').First())) {
-                  if (line.ToLower().Contains("$readline") == false) {
-                    try {
-                      if (line.Split('>').Last().Contains("rand:")) {
-                        numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = rand.Next(Convert.ToInt32(line.Split(new [] {
-                          "rand:"
-                        }, StringSplitOptions.None).Last().Split(',').First()), Convert.ToInt32(line.Split(new [] {
-                          "rand:"
-                        }, StringSplitOptions.None).Last().Split(',').Last()));
-                      } else {
-                        numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(line.Split('>').Last());
-                      }
-                    } catch {
-                      rand = new Random();
-                      if (line.Split('>').Last().Contains("rand:")) {
-                        numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = rand.Next(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new [] {
-                          "rand:"
-                        }, StringSplitOptions.None).Last().Split(',').First())]), Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new [] {
-                          "rand:"
-                        }, StringSplitOptions.None).Last().Split(',').Last())]));
-                      } else {
-                        numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = numberValues[numberNames.IndexOf(line.Split('>').Last())];
-                      }
-                    }
-                  } else if (line.ToLower().Contains("$readline") == true) {
-                    numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Convert.ToDouble(Console.ReadLine());
-                  }
-                } else {
-                  rand = new Random();
-                  if (line.ToLower().Contains("$readline") == false) {
-                    numberNames.Add(line.Split(' ')[1].Split('>').First());
-                    try {
-                      if (line.Split('>').Last().Contains("rand:")) {
-                        numberValues.Add(rand.Next(Convert.ToInt32(line.Split(new [] {
-                          "rand:"
-                        }, StringSplitOptions.None).Last().Split(',').First()), Convert.ToInt32(line.Split(new [] {
-                          "rand:"
-                        }, StringSplitOptions.None).Last().Split(',').Last())));
-                      } else {
-                        try {
-                          numberValues.Add(Convert.ToDouble(line.Split('>').Last().Split(' ').Last()));
-                        } catch {
-
-                          numberValues.Add(numberValues[numberNames.IndexOf(line.Split('>').Last())]);
-
-                        }
-                      }
-                    } catch {
-                      if (line.Split('>').Last().Contains("rand:")) {
-                        numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = rand.Next(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new [] {
-                          "rand:"
-                        }, StringSplitOptions.None).Last().Split(',').First())]), Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new [] {
-                          "rand:"
-                        }, StringSplitOptions.None).Last().Split(',').Last())]));
-                      } {
-                        numberValues.Add(Convert.ToDouble(line.Split('>').Last()));
-                      }
-                    }
-                  } else if (line.ToLower().Contains("$readline") == true) {
-                    numberNames.Add(line.Split(' ')[1].Split('>').First());
-                    numberValues.Add(Convert.ToDouble(Console.ReadLine()));
-                  }
-
-                }
-              } catch {
-                int errorLine = code.IndexOf(line);
-                Console.WriteLine($"Invalid Syntax (Line {errorLine--})");
-              }
-            }
 
             //string definer
-            if (line.StartsWith("str") &&
-              line.Contains(">>") &&
-              line.ToLower().StartsWith("for") == false && line.ToLower().Contains("in range %") == false &&
-              line.Contains("$>") == false) {
-              try {
-                if (strNames.Contains(line.Split(' ')[1].Split('>').First())) {
-                  if (line.Split('>').Last().ToLower().StartsWith("$read") == false) {
-                    strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = line.Split('>')[2].Split('\"')[1].Split('\"').First();
-
-                  } else if (line.Split('>').Last().ToLower() == "$readkey") {
-                    strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Console.ReadKey().Key.ToString();
-                  } else if (line.Split('>').Last().ToLower() == "$readline") {
-                    strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Console.ReadLine();
-                  }
-                } else {
-
-                  if (line.Split('>').Last().ToLower().StartsWith("$read") == false) {
-                    strNames.Add(line.Split(' ')[1].Split('>').First());
-                    if (line.Split('>')[2].Contains('"')) {
-                      strValues.Add(line.Split('>')[2].Split('\"')[1].Split('\"').First());
-                    } else {
-                      try {
-                        strValues.Add(strValues[strNames.IndexOf(line.Split('>')[2])]);
-                      } catch {
-                        Console.WriteLine("Error: " + line);
-                      }
-                    }
-                  } else if (line.Split('>').Last().ToLower() == "$readkey") {
-                    strNames.Add(line.Split(' ')[1].Split('>').First());
-                    strValues.Add(Console.ReadKey().Key.ToString());
-                  } else if (line.Split('>').Last().ToLower() == ("$readline")) {
-                    strNames.Add(line.Split(' ')[1].Split('>').First());
-                    strValues.Add(Console.ReadLine());
-                  }
-                }
-
-              } catch {
-                int errorLine = code.IndexOf(line);
-                Console.WriteLine($"Invalid Syntax (Line {errorLine++})");
-              }
-           }
+           
 
             //Write 
 

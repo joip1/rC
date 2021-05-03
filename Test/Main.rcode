@@ -1,1 +1,3 @@
-Write "Hi"$endl;Wrh
+str \n >>line_break
+Write "Hi$\n$"
+exit()
