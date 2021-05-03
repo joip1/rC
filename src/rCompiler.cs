@@ -1,7 +1,8 @@
+using rC;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
-using rC;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
@@ -42,7 +43,18 @@ namespace rC {
       Stopwatch execTime = new Stopwatch();
       //read code line by line
       execTime.Start();
-
+      // foreach (var __line in code){
+      //   if(__line.Contains("$endl;")){
+      //     code[code.IndexOf(__line)] = __line.Split(new [] {"$endl;"},StringSplitOptions.None)[0];
+      //     int x = 0;
+      //     foreach(var line__ in __line.Split(new []{"$endl;"},StringSplitOptions.None)){
+      //       if(x!=0){
+      //         code.Insert(code.IndexOf(__line+x),line__);
+      //       }
+      //       x++;
+      //     }
+      //   }
+      // }
       try {
         //list(str) "Name"
         //str Name.Add >> "Value"

@@ -1,16 +1,1 @@
-function check(); {
-    if num(f==x); "j";{
-        Write "hi"
-    }j;
-}check;
-function l(),{
-    num f >>1
-    num g >>214
-    if num(f!=g); "j";{
-        Write "hi"
-    }j;
-    
-}l;
-l()
-newln
-exit()
+Write "Hi"$endl;Wrh
