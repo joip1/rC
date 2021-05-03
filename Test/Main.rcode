@@ -1,9 +1,6 @@
 #!/usr/bin/rC
-
-function main(){
-    Write "Hello World"
-}main;
-
-main()
+for x in range:50000; name:for1; indent:"   ";{
+   Write "l"
+}for1;
 newln
 exit()
