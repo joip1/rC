@@ -83,7 +83,7 @@ namespace rC {
               }, StringSplitOptions.None).Last().ToString().Split(new [] {
                 "\""
               }, StringSplitOptions.None).First().ToString());
-                
+                continue;
             }
 
           else if (line.ToLower().StartsWith("for") && line.ToLower().Contains("in range:")) {
@@ -153,7 +153,7 @@ namespace rC {
 
             ForLoop(range, looper, loopContent);
             Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-            
+            continue;
           }
          else if (references.Contains("threading") && line.StartsWith("newThread(")) {
             try {
@@ -192,7 +192,7 @@ namespace rC {
               // }
               Compile(lines_for_functions[names_for_functions.IndexOf(func_name)], numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
             }
-            
+            continue;
           }
           if (line.StartsWith("function ")) {
             //function main(str test);{
@@ -232,7 +232,7 @@ namespace rC {
             string toStrip = strValues[strNames.IndexOf(line.Split('(').Last().Split(')').First())];
             string cleaned = toStrip.Replace("\r", "").Replace("\n", "");
             strValues[strNames.IndexOf(line.Split('(').Last().Split(')').First())] = cleaned;
-            
+            continue;
           }
 
           if (line.StartsWith("strToNum(")) {
@@ -556,7 +556,7 @@ namespace rC {
               }
               Console.CursorTop = Convert.ToInt32(numberValues[numberNames.IndexOf("cursor_y")]);
             }
-            if (line == "exit") {
+            if (line == "exit()") {
               Environment.Exit(1);
             }
             foreach(var importation in references) {
@@ -1035,7 +1035,7 @@ namespace rC {
                     strValues[strNames.IndexOf(to)] = Split.split(from, split, f);
                   }
                 } catch {}
-                  
+                continue;  
               }
             }
             if (references.Contains("keys")) {
@@ -1367,7 +1367,7 @@ namespace rC {
                 }
 
               }
-
+continue;
             } else if (line.StartsWith("if")) {
 
               /*
