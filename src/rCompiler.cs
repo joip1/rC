@@ -30,7 +30,7 @@ namespace rC {
       List < List < double >> numListValues,
       List < List < string >> lines_for_functions,
       List < string > names_for_functions) {
-
+    
       //values and indicators
       List < int > pixelX = new List < int > ();
       List < int > pixelY = new List < int > ();
@@ -64,8 +64,12 @@ namespace rC {
         strValues.Add("\n");
         strNames.Add("path");
         strValues.Add("/usr/lib/rC");
-        foreach(var _line in code) {
-          string line = _line;
+        for (int _index = 0; _index < code.Count; _index++)
+        {
+
+  //TODO - Add general error matching case;        
+//        try{
+          string line = code[_index];
           //
           // line = line.Replace("$path$", strValues[strNames.IndexOf("path")]);
           // line = line.Replace("$PATH$", strValues[strNames.IndexOf("path")]);
@@ -263,7 +267,6 @@ continue;
                 int errorLine = code.IndexOf(line);
                 Console.WriteLine($"Invalid Syntax (Line {errorLine--})");
               }
-              continue;
             }
           else if (line.ToLower().StartsWith("for") && line.ToLower().Contains("in range:")) {
             int range = 0;
@@ -324,8 +327,23 @@ continue;
               }
             }
 
-            ForLoop(range, looper, loopContent);
-            Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+for (int x = 0; x < range; x++) {
+          if (numberNames.Contains(looper)) {
+            numberValues[numberNames.IndexOf(looper)] = x;
+          } else {
+            numberValues.Add(x);
+            numberNames.Add(looper);
+          }
+          
+          List<string> beforeCompiling = loopContent;
+         Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions); 
+        //  foreach (var item in beforeCompiling)
+        //   {
+        //       Console.WriteLine(item);
+        //   }
+        //   loopContent = beforeCompiling;
+        }            
+        Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
             continue;
           }
          else if (references.Contains("threading") && line.StartsWith("newThread(")) {
@@ -351,7 +369,7 @@ continue;
           else if (line.StartsWith("if")) {
 
               /*
-                  if name:1; statement:str(x==y); indent:" ";
+                  if name:1; statement:str(x==y); indent2:" ";
                       Write &>Hi<&
                   endIf(1)
 
@@ -362,37 +380,37 @@ continue;
   }g;
   */
               string name = "";
-              string indent = "";
+              string indent2 = "";
               string statement = "";
               List < string > loopContent = new List < string > ();
-              List < string > compileAfter = new List < string > ();
+              List < string > compileAfter2 = new List < string > ();
               try {
                 name = line.Split('"')[1].Split('"')[0].Split(';')[0];
                 statement = line.Split(new [] {
                   " "
                 }, StringSplitOptions.None)[1].Split(';')[0];
-                indent = "    ";
+                indent2 = "    ";
               } catch {
                 Console.WriteLine("Invalid Syntax Line: " + code.IndexOf(line));
               }
-              List < string > newCode1 = code;
-              if (newCode1.Contains("}" + name + ";")) {
-                newCode1.RemoveRange(0, newCode1.IndexOf(line) + 1);
-                foreach(var lineofCode in newCode1) {
-                  if (newCode1.IndexOf(lineofCode) > newCode1.IndexOf("}" + name + ";")) {
-                    compileAfter.Add(lineofCode);
+              List < string > newCode2 = code;
+              if (newCode2.Contains("}" + name + ";")) {
+                newCode2.RemoveRange(0, newCode2.IndexOf(line) + 1);
+                foreach(var lineofCode in newCode2) {
+                  if (newCode2.IndexOf(lineofCode) > newCode2.IndexOf("}" + name + ";")) {
+                    compileAfter2.Add(lineofCode);
                   }
                 }
-                newCode1.RemoveRange(newCode1.IndexOf("}" + name + ";"), newCode1.Count - newCode1.IndexOf("}" + name + ";"));
-                loopContent = newCode1;
+                newCode2.RemoveRange(newCode2.IndexOf("}" + name + ";"), newCode2.Count - newCode2.IndexOf("}" + name + ";"));
+                loopContent = newCode2;
 
               } else {
                 Console.WriteLine("\nNo End Was Found for If Statement with name: " + name);
               }
-              for (int i = 0; i < newCode1.Count; i++) {
-                if (newCode1[i].StartsWith(indent)) {
+              for (int i = 0; i < newCode2.Count; i++) {
+                if (newCode2[i].StartsWith(indent2)) {
                   try {
-                    newCode1[newCode1.IndexOf(newCode1[i])] = newCode1[i].Substring(indent.Length);
+                    newCode2[newCode2.IndexOf(newCode2[i])] = newCode2[i].Substring(indent2.Length);
                   } catch {}
                 }
               }
@@ -680,7 +698,7 @@ continue;
 
               }
 
-              Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+              Compile(compileAfter2, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
             } 
   
           foreach(var func_name in names_for_functions) {
@@ -732,7 +750,7 @@ continue;
           
             lines_for_functions.Add(func_content);
             Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-
+            continue;
           }
           
           if (line.StartsWith("strip(")) {
@@ -1041,6 +1059,7 @@ continue;
             }
             if (line == "exit()") {
               Environment.Exit(0);
+              continue;
             } else if (line.StartsWith("screen_width >>")) {
               try {
                 numberValues[numberNames.IndexOf("screen_width")] = Convert.ToInt32(line.Split('>').Last());
@@ -1063,9 +1082,9 @@ continue;
               }
               Console.CursorTop = Convert.ToInt32(numberValues[numberNames.IndexOf("cursor_y")]);
             }
-            if (line == "exit()") {
-              Environment.Exit(1);
-            }
+            // if (line == "exit()") {
+            //   Environment.Exit(1);
+            // }
             foreach(var importation in references) {
 
               if (line.StartsWith(importation)) {
@@ -1725,6 +1744,7 @@ continue;
             //  StoreValues.Store();
 
           }
+          
           if (pixelColors.Count >= 1 && pixelX.Count >= 1 && pixelY.Count >= 1) {
             for (int i = 0; i < pixelColors.Count; i++) {
               Pixel.Draw(pixelX[i], pixelY[i], pixelColors[i]);
@@ -1737,25 +1757,17 @@ continue;
           }
           execTime.Stop();
         }
-      } catch (System.InvalidOperationException) {
-
+      } catch {
+        Console.WriteLine("Execution Error...");
       }
       Console.ResetColor();
-      void ForLoop(int range,
-        string looper, List < string > loopContent)
+      // void ForLoop(int range,
+      //   string looper, List < string > loopContent)
 
-      {
+      // {
 
-        for (int x = 0; x < range; x++) {
-          if (numberNames.Contains(looper)) {
-            numberValues[numberNames.IndexOf(looper)] = x;
-          } else {
-            numberValues.Add(x);
-            numberNames.Add(looper);
-          }
-          Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-        }
-      }
+        
+      // }
     }
   }
 }
