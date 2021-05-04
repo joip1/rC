@@ -264,6 +264,7 @@ namespace rC {
               int errorLine = code.IndexOf(line);
               Console.WriteLine($"Invalid Syntax (Line {errorLine--})");
             }
+            continue;
           } else if (line.ToLower().StartsWith("for") && line.ToLower().Contains("in range:")) {
             int range = 0;
             /*
@@ -1654,20 +1655,33 @@ namespace rC {
               Console.ResetColor();
             } else if (line.ToLower().StartsWith("color.green")) {
               Console.ForegroundColor = ConsoleColor.Green;
+              continue;
             } else if (line.ToLower().StartsWith("color.blue")) {
               Console.ForegroundColor = ConsoleColor.Blue;
+                            continue;
+
             } else if (line.ToLower().StartsWith("color.red")) {
               Console.ForegroundColor = ConsoleColor.Red;
+                            continue;
+
             } else if (line.ToLower().StartsWith("color.magenta")) {
               Console.ForegroundColor = ConsoleColor.Magenta;
+                            continue;
+
             } else if (line.ToLower().StartsWith("color.yellow")) {
               Console.ForegroundColor = ConsoleColor.Yellow;
+                            continue;
+
             } else if (line.ToLower().StartsWith("color.white")) {
               Console.ForegroundColor = ConsoleColor.White;
+                            continue;
+
             }
 
             if (line.ToLower() == ("$readline")) {
               Console.ReadLine();
+                            continue;
+
             }
 
             //usage: replace:f; with:d; str:string;
@@ -1717,6 +1731,8 @@ namespace rC {
               }
 
               strValues[strNames.IndexOf(strToReplace)] = strChecked.Replace(toReplaceChecked, withChecked);
+                            continue;
+
             }
 
             //string definer
@@ -1728,7 +1744,7 @@ namespace rC {
                  Console.WriteLine(item);
              }
              foreach (var d in numberNames)
-             {
+             {nu
                  Console.WriteLine(d);
              }*/
             //  StoreValues.Store();
