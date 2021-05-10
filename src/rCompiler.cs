@@ -76,7 +76,7 @@ namespace rC {
           //
           // line = line.Replace("$path$", strValues[strNames.IndexOf("path")]);
           // line = line.Replace("$PATH$", strValues[strNames.IndexOf("path")]);
-          if (line.StartsWith("Write") && line.Contains(" \"") && line.StartsWith("WriteStr") == false && line.StartsWith("WriteNum") == false) {
+          if (line.StartsWith("Write") && line.Contains("\"") && line.StartsWith("WriteStr") == false && line.StartsWith("WriteNum") == false) {
             //check if it is a number 
             //var matchesNumber = numberNames.Where(x => line.Contains(line.Split(new[] { "Write &>" }, StringSplitOptions.None).Last().ToString().Split(new[] { "<&" }, StringSplitOptions.None).First().ToString()));
             if (line.Contains('$')) {
@@ -127,7 +127,7 @@ namespace rC {
             }
             continue;
           } else if (line.StartsWith("WriteNum") &&
-            line.Contains(" {") &&
+            line.Contains("{") &&
             line.Contains("}") &&
             line.ToLower().StartsWith("for") == false &&
             line.ToLower().Contains("in range %") == false &&
