@@ -1,9 +1,0 @@
-#!/usr/bin/rC
-
-function main(){
-    Write "Hello World!"
-}main;
-
-main()
-newln
-exit()

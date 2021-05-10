@@ -365,7 +365,113 @@ namespace rC {
             } catch {
               Console.WriteLine($"{line} : Error Starting Thread");
             }
+        
 
+            foreach(var num in numberNames) {
+
+              if (line.StartsWith(num.ToString() + "++")) {
+                numberValues[numberNames.IndexOf(num)]++;
+                continue;
+              } else if (line.StartsWith(num.ToString() + "--")) {
+                double newNum = numberValues[numberNames.IndexOf(num)];
+                newNum--;
+                numberValues[numberNames.IndexOf(num)] = newNum;
+                continue;
+              } else if (line.StartsWith(num.ToString() + "+")) {
+                try {
+                  double newNum = numberValues[numberNames.IndexOf(num)];
+                  newNum = newNum + Convert.ToDouble(line.Split('+').Last());
+                  numberValues[numberNames.IndexOf(num)] = newNum;
+                  continue;
+                } catch {
+                  try {
+                    foreach(var getNum in numberNames) {
+                      if (line.Split('+').Last() == getNum) {
+                        double newNum = numberValues[numberNames.IndexOf(num)];
+                        newNum = newNum + numberValues[numberNames.IndexOf(getNum)];
+                        numberValues[numberNames.IndexOf(num)] = newNum;
+                        continue;
+                      }
+                    }
+                  } catch {
+
+                  }
+                }
+              }
+              if (line.StartsWith(num.ToString() + "-")) {
+                try {
+                  numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] - Convert.ToDouble(line.Split('-').Last());
+                  continue;
+                } catch {
+                  try {
+                    foreach(var getNum in numberNames) {
+                      if (line.Split('-').Last() == getNum) {
+                        numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] - numberValues[numberNames.IndexOf(getNum)];
+                        continue;
+                      }
+                    }
+                  } catch {
+
+                  }
+                }
+                continue;
+              }
+              if (line.StartsWith(num.ToString() + "/")) {
+                try {
+                  numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] / Convert.ToDouble(line.Split('/').Last());
+                  continue;
+
+                } catch {
+                  try {
+                    foreach(var getNum in numberNames) {
+                      if (line.Split('/').Last() == getNum) {
+                        numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] / numberValues[numberNames.IndexOf(getNum)];
+                        continue;
+                      }
+                    }
+                  } catch {
+
+                  }
+                }
+                continue;
+              }
+              if (line.StartsWith(num.ToString() + "*")) {
+                try {
+                  numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] * Convert.ToDouble(line.Split('*').Last());
+                  continue;
+                } catch {
+                  try {
+                    foreach(var getNum in numberNames) {
+                      if (line.Split('*').Last() == getNum) {
+                        numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] * numberValues[numberNames.IndexOf(getNum)];
+                        continue;
+                      }
+                    }
+                  } catch {
+
+                  }
+                }
+              }
+              if (line.StartsWith(num.ToString() + "%")) {
+                try {
+                  numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] % Convert.ToDouble(line.Split('%').Last());
+                  continue;
+                } catch {
+                  try {
+                    foreach(var getNum in numberNames) {
+                      if (line.Split('%').Last() == getNum) {
+                        numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] % numberValues[numberNames.IndexOf(getNum)];
+                        continue;
+                      }
+                    }
+                  } catch {
+
+                  }
+                }
+                continue;
+              }
+
+            }
           } else if (line.StartsWith("if")) {
 
             /*
@@ -736,8 +842,13 @@ namespace rC {
             List < string > compileAfter = new List < string > ();
             int current_index = code.IndexOf(line);
             current_index++;
+            try{
             func_content = code.GetRange(current_index, (code.IndexOf("}" + nameFunc + ";") - current_index));
-
+            }
+            catch{
+              Console.WriteLine("Incorrect/Missing end statement for function "+nameFunc);
+              Environment.Exit(1);
+            }
             string indent = "    ";
 
             for (int i = 0; i < func_content.Count; i++) {
@@ -1241,98 +1352,6 @@ namespace rC {
               }
             }
 
-            foreach(var num in numberNames) {
-
-              if (line.StartsWith(num.ToString() + "++")) {
-                double newNum = numberValues[numberNames.IndexOf(num)];
-                newNum++;
-                numberValues[numberNames.IndexOf(num)] = newNum;
-              } else if (line.StartsWith(num.ToString() + "--")) {
-                double newNum = numberValues[numberNames.IndexOf(num)];
-                newNum--;
-                numberValues[numberNames.IndexOf(num)] = newNum;
-              } else if (line.StartsWith(num.ToString() + "+")) {
-                try {
-                  double newNum = numberValues[numberNames.IndexOf(num)];
-                  newNum = newNum + Convert.ToDouble(line.Split('+').Last());
-                  numberValues[numberNames.IndexOf(num)] = newNum;
-                } catch {
-                  try {
-                    foreach(var getNum in numberNames) {
-                      if (line.Split('+').Last() == getNum) {
-                        double newNum = numberValues[numberNames.IndexOf(num)];
-                        newNum = newNum + numberValues[numberNames.IndexOf(getNum)];
-                        numberValues[numberNames.IndexOf(num)] = newNum;
-                      }
-                    }
-                  } catch {
-
-                  }
-                }
-              }
-              if (line.StartsWith(num.ToString() + "-")) {
-                try {
-                  numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] - Convert.ToDouble(line.Split('-').Last());
-                } catch {
-                  try {
-                    foreach(var getNum in numberNames) {
-                      if (line.Split('-').Last() == getNum) {
-                        numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] - numberValues[numberNames.IndexOf(getNum)];
-                      }
-                    }
-                  } catch {
-
-                  }
-                }
-              }
-              if (line.StartsWith(num.ToString() + "/")) {
-                try {
-                  numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] / Convert.ToDouble(line.Split('/').Last());
-
-                } catch {
-                  try {
-                    foreach(var getNum in numberNames) {
-                      if (line.Split('/').Last() == getNum) {
-                        numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] / numberValues[numberNames.IndexOf(getNum)];
-                      }
-                    }
-                  } catch {
-
-                  }
-                }
-              }
-              if (line.StartsWith(num.ToString() + "*")) {
-                try {
-                  numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] * Convert.ToDouble(line.Split('*').Last());
-                } catch {
-                  try {
-                    foreach(var getNum in numberNames) {
-                      if (line.Split('*').Last() == getNum) {
-                        numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] * numberValues[numberNames.IndexOf(getNum)];
-                      }
-                    }
-                  } catch {
-
-                  }
-                }
-              }
-              if (line.StartsWith(num.ToString() + "%")) {
-                try {
-                  numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] % Convert.ToDouble(line.Split('%').Last());
-                } catch {
-                  try {
-                    foreach(var getNum in numberNames) {
-                      if (line.Split('%').Last() == getNum) {
-                        numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] % numberValues[numberNames.IndexOf(getNum)];
-                      }
-                    }
-                  } catch {
-
-                  }
-                }
-              }
-
-            }
             //to lower
             /*USAGE
             ___________________________________________________________________________________________________
