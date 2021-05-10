@@ -1000,18 +1000,13 @@ namespace rC {
 
           if (line.StartsWith("numToStr")) {
 
-            if (strNames.Contains(line.Split('>').First().Split('(').Last()) && numberNames.Contains(line.Split('>').Last().Split(',').Last().Split(')').First())) {
-              strValues[strNames.IndexOf(line.Split('>').First().Split('(').Last())] = numberValues[numberNames.IndexOf(line.Split('>').Last().Split(')').First())].ToString();
-            } else {
-              strNames.Add((line.Split('>').First().Split('(').Last()));
-              try {
-                strValues.Add(numberValues[numberNames.IndexOf(line.Split('>').Last().Split(')').First())].ToString());
-              } catch {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(line.Split('>').Last().Split(')').First() + " does not exist at Line With Index: " + code.IndexOf(line));
-                Console.ForegroundColor = ConsoleColor.White;
-              }
-
+            string to_convert = line.Split('(')[1].Split(')')[0];
+            if (strNames.Contains(to_convert) && numberNames.Contains(to_convert)){
+              strValues[strNames.IndexOf(to_convert)] = numberValues[numberNames.IndexOf(to_convert)].ToString();
+            }
+            else{
+              strNames.Add(to_convert);
+              strValues.Add(numberValues[numberNames.IndexOf(to_convert)].ToString());
             }
 
           }
