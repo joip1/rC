@@ -1251,15 +1251,21 @@ namespace rC {
                 double newNum = numberValues[numberNames.IndexOf(num)];
                 newNum++;
                 numberValues[numberNames.IndexOf(num)] = newNum;
+                                continue;
+
               } else if (line.StartsWith(num.ToString() + "--")) {
                 double newNum = numberValues[numberNames.IndexOf(num)];
                 newNum--;
                 numberValues[numberNames.IndexOf(num)] = newNum;
+                                continue;
+
               } else if (line.StartsWith(num.ToString() + "+")) {
                 try {
                   double newNum = numberValues[numberNames.IndexOf(num)];
                   newNum = newNum + Convert.ToDouble(line.Split('+').Last());
                   numberValues[numberNames.IndexOf(num)] = newNum;
+                                  continue;
+
                 } catch {
                   try {
                     foreach(var getNum in numberNames) {
@@ -1267,6 +1273,8 @@ namespace rC {
                         double newNum = numberValues[numberNames.IndexOf(num)];
                         newNum = newNum + numberValues[numberNames.IndexOf(getNum)];
                         numberValues[numberNames.IndexOf(num)] = newNum;
+                                        continue;
+
                       }
                     }
                   } catch {
@@ -1277,11 +1285,15 @@ namespace rC {
               if (line.StartsWith(num.ToString() + "-")) {
                 try {
                   numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] - Convert.ToDouble(line.Split('-').Last());
+                                  continue;
+
                 } catch {
                   try {
                     foreach(var getNum in numberNames) {
                       if (line.Split('-').Last() == getNum) {
                         numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] - numberValues[numberNames.IndexOf(getNum)];
+                                        continue;
+
                       }
                     }
                   } catch {
@@ -1292,12 +1304,16 @@ namespace rC {
               if (line.StartsWith(num.ToString() + "/")) {
                 try {
                   numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] / Convert.ToDouble(line.Split('/').Last());
+                                  continue;
+
 
                 } catch {
                   try {
                     foreach(var getNum in numberNames) {
                       if (line.Split('/').Last() == getNum) {
                         numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] / numberValues[numberNames.IndexOf(getNum)];
+                                        continue;
+
                       }
                     }
                   } catch {
@@ -1308,11 +1324,15 @@ namespace rC {
               if (line.StartsWith(num.ToString() + "*")) {
                 try {
                   numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] * Convert.ToDouble(line.Split('*').Last());
+                                  continue;
+
                 } catch {
                   try {
                     foreach(var getNum in numberNames) {
                       if (line.Split('*').Last() == getNum) {
                         numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] * numberValues[numberNames.IndexOf(getNum)];
+                                        continue;
+
                       }
                     }
                   } catch {
@@ -1323,11 +1343,15 @@ namespace rC {
               if (line.StartsWith(num.ToString() + "%")) {
                 try {
                   numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] % Convert.ToDouble(line.Split('%').Last());
+                                  continue;
+
                 } catch {
                   try {
                     foreach(var getNum in numberNames) {
                       if (line.Split('%').Last() == getNum) {
                         numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] % numberValues[numberNames.IndexOf(getNum)];
+                                        continue;
+
                       }
                     }
                   } catch {
@@ -1335,7 +1359,7 @@ namespace rC {
                   }
                 }
               }
-
+                continue;
             }
             //to lower
             /*USAGE
