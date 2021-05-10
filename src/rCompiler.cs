@@ -73,13 +73,7 @@ namespace rC {
           //TODO - Add general error matching case;        
           //        try{
           string line = code[_index];
-          //
-          // line = line.Replace("$path$", strValues[strNames.IndexOf("path")]);
-          // line = line.Replace("$PATH$", strValues[strNames.IndexOf("path")]);
-          if (line.StartsWith("Write") && line.Contains("\"") && line.StartsWith("WriteStr") == false && line.StartsWith("WriteNum") == false) {
-            //check if it is a number 
-            //var matchesNumber = numberNames.Where(x => line.Contains(line.Split(new[] { "Write &>" }, StringSplitOptions.None).Last().ToString().Split(new[] { "<&" }, StringSplitOptions.None).First().ToString()));
-            if (line.Contains('$')) {
+          if (line.Contains('$')) {
               foreach(var string_var in strNames) {
                 try {
                   string toReplace = "$" + string_var + "$";
@@ -96,6 +90,13 @@ namespace rC {
               }
 
             }
+          //
+          // line = line.Replace("$path$", strValues[strNames.IndexOf("path")]);
+          // line = line.Replace("$PATH$", strValues[strNames.IndexOf("path")]);
+          if (line.StartsWith("Write") && line.Contains("\"") && line.StartsWith("WriteStr") == false && line.StartsWith("WriteNum") == false) {
+            //check if it is a number 
+            //var matchesNumber = numberNames.Where(x => line.Contains(line.Split(new[] { "Write &>" }, StringSplitOptions.None).Last().ToString().Split(new[] { "<&" }, StringSplitOptions.None).First().ToString()));
+            
             Console.Write(line.Split(new [] {
               "Write \""
             }, StringSplitOptions.None).Last().ToString().Split(new [] {
