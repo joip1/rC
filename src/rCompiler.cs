@@ -825,7 +825,6 @@ namespace rC {
               numberValues[numberNames.IndexOf(str_to_sqrt)] = Math.Sqrt(numberValues[numberNames.IndexOf(str_to_sqrt)]);
             }else{
               numberNames.Add(line);
-              Console.WriteLine(str_to_sqrt);
               numberValues.Add(Math.Sqrt(Convert.ToDouble(line.Split('(')[1].Split(')')[0])));
             }
             continue;
