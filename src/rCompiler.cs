@@ -296,7 +296,11 @@ namespace rC {
                   }, StringSplitOptions.None).Last().Split(';')[0])]);
                 }
               }
+              if (line.Contains('"')){
               name = line.Split('"')[1].Split('"').First().Split(';').First();
+              }else{
+                name ="";
+              }
               indent = "    ";
             } catch {
               Console.WriteLine("Invalid Syntax Line: " + code.IndexOf(line));
@@ -380,7 +384,11 @@ namespace rC {
             List < string > loopContent = new List < string > ();
             List < string > compileAfter2 = new List < string > ();
             try {
+              if (line.Contains('"')){
               name = line.Split('"')[1].Split('"')[0].Split(';')[0];
+              }else{
+                name ="";
+              }
               statement = line.Split(new [] {
                 " "
               }, StringSplitOptions.None)[1].Split(';')[0];
@@ -809,7 +817,20 @@ namespace rC {
               Console.WriteLine("Fatal error on line: " + code.IndexOf(line));
             }
           }
-
+          if(line.ToLower().StartsWith("sqrt")){
+            
+            //sqrt(8) -> (1 )0
+            string str_to_sqrt = line.Split('(')[1].Split(')')[0];
+            if (numberNames.Contains(str_to_sqrt)){
+              numberValues[numberNames.IndexOf(str_to_sqrt)] = Math.Sqrt(numberValues[numberNames.IndexOf(str_to_sqrt)]);
+            }else{
+              numberNames.Add(line);
+              Console.WriteLine(str_to_sqrt);
+              numberValues.Add(Math.Sqrt(Convert.ToDouble(line.Split('(')[1].Split(')')[0])));
+            }
+            continue;
+          }
+  
           if (line.StartsWith("list(str) ")) {
             strListNames.Add(line.Split(')').Last().Split('\"')[1].Split('\"').First());
             strListValues.Add(new List < string > ());
@@ -1763,8 +1784,9 @@ namespace rC {
           }
           execTime.Stop();
         }
-      } catch {
-        Console.WriteLine("Execution Error...");
+      } catch (Exception exc){
+        Console.WriteLine(exc);
+      
       }
       Console.ResetColor();
       // void ForLoop(int range,
