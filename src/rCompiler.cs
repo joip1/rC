@@ -63,11 +63,12 @@ namespace rC {
         //str Name.Add >> "Value"
         //getStrListValue(Name[1])
         //updateStrListValue(Name[1])
+      
         strNames.Add("line_break");
         strValues.Add("\n");
         strNames.Add("path");
         strValues.Add("/usr/lib/rC");
-        for (int _index = 0; _index < code.Count; _index++) {
+        for(int _index = 0; _index < code.Count; _index++) {
 
           //TODO - Add general error matching case;        
           //        try{
@@ -1784,8 +1785,12 @@ namespace rC {
           execTime.Stop();
         }
       } catch (Exception exc){
-        Console.WriteLine(exc);
-      
+        bool except_errors = code.Contains("suppress_errors()");
+        if (except_errors ==true){
+
+        }else{
+          Console.WriteLine("Error while running, exception: "+exc);
+        }
       }
       Console.ResetColor();
       // void ForLoop(int range,
