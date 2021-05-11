@@ -1,6 +1,9 @@
-for f in range:10000; "k";{
-    num x >>31.21
-    x*109283901828349183832948   Wrcdite "$f$$line_break$"
-}k;
-
+num age >>13
+str name >>"Rodrigo"
+str \n >>line_break
+str date >>"3/11/2021"
+num x >>age
+x++
+Write "Hello, my name is $name$ $\n$I am $age$ years old!$\n$On $date$ I'll be $x$ years old!";
+newln
 exit()

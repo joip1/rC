@@ -90,6 +90,30 @@ namespace rC {
               }
 
             }
+            bool is_continue = false;
+               foreach(var func_name in names_for_functions) {
+            //int ocorrences = 0;
+            // foreach(var func_name_2 in names_for_functions){
+            //   if(func_name_2 == func_name){
+            //     ocorrences++;
+            //   }
+            // }
+            // if(ocorrences>=2){
+            //     Console.WriteLine("There is more than 1 function named: "+func_name);
+            // }
+            if (line.StartsWith(func_name + "(") || line.StartsWith(func_name + " (")) {
+              // foreach(var lineofcode in lines_for_functions[names_for_functions.IndexOf(func_name)]){
+              //     Console.WriteLine(lineofcode);
+              // }
+              Compile(lines_for_functions[names_for_functions.IndexOf(func_name)], numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+              is_continue = true;
+              break;
+            }
+            continue;
+          }
+          if (is_continue){
+            continue;
+          }
           //
           // line = line.Replace("$path$", strValues[strNames.IndexOf("path")]);
           // line = line.Replace("$PATH$", strValues[strNames.IndexOf("path")]);
@@ -706,24 +730,7 @@ namespace rC {
             Compile(compileAfter2, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
           }
 
-          foreach(var func_name in names_for_functions) {
-            //int ocorrences = 0;
-            // foreach(var func_name_2 in names_for_functions){
-            //   if(func_name_2 == func_name){
-            //     ocorrences++;
-            //   }
-            // }
-            // if(ocorrences>=2){
-            //     Console.WriteLine("There is more than 1 function named: "+func_name);
-            // }
-            if (line.StartsWith(func_name + "(") || line.StartsWith(func_name + " (")) {
-              // foreach(var lineofcode in lines_for_functions[names_for_functions.IndexOf(func_name)]){
-              //     Console.WriteLine(lineofcode);
-              // }
-              Compile(lines_for_functions[names_for_functions.IndexOf(func_name)], numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-            }
-            continue;
-          }
+       
 
           if (line.StartsWith("function ")) {
             //function main(str test);{
@@ -1244,27 +1251,30 @@ namespace rC {
                 }
               }
             }
-
+            bool is_continue_num = false;
             foreach(var num in numberNames) {
 
               if (line.StartsWith(num.ToString() + "++")) {
+                is_continue_num = true;
                 double newNum = numberValues[numberNames.IndexOf(num)];
                 newNum++;
                 numberValues[numberNames.IndexOf(num)] = newNum;
-                                continue;
+                break;
 
-              } else if (line.StartsWith(num.ToString() + "--")) {
+              } else if (line.StartsWith(num.ToString() + "--")) {                is_continue_num = true;
+
                 double newNum = numberValues[numberNames.IndexOf(num)];
                 newNum--;
                 numberValues[numberNames.IndexOf(num)] = newNum;
-                                continue;
+                break;
 
-              } else if (line.StartsWith(num.ToString() + "+")) {
+              } else if (line.StartsWith(num.ToString() + "+")) {                is_continue_num = true;
+
                 try {
                   double newNum = numberValues[numberNames.IndexOf(num)];
                   newNum = newNum + Convert.ToDouble(line.Split('+').Last());
                   numberValues[numberNames.IndexOf(num)] = newNum;
-                                  continue;
+                   break;
 
                 } catch {
                   try {
@@ -1273,8 +1283,7 @@ namespace rC {
                         double newNum = numberValues[numberNames.IndexOf(num)];
                         newNum = newNum + numberValues[numberNames.IndexOf(getNum)];
                         numberValues[numberNames.IndexOf(num)] = newNum;
-                                        continue;
-
+break;
                       }
                     }
                   } catch {
@@ -1282,7 +1291,8 @@ namespace rC {
                   }
                 }
               }
-              if (line.StartsWith(num.ToString() + "-")) {
+              if (line.StartsWith(num.ToString() + "-")) {                is_continue_num = true;
+
                 try {
                   numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] - Convert.ToDouble(line.Split('-').Last());
                                   continue;
@@ -1292,8 +1302,7 @@ namespace rC {
                     foreach(var getNum in numberNames) {
                       if (line.Split('-').Last() == getNum) {
                         numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] - numberValues[numberNames.IndexOf(getNum)];
-                                        continue;
-
+break;
                       }
                     }
                   } catch {
@@ -1301,19 +1310,18 @@ namespace rC {
                   }
                 }
               }
-              if (line.StartsWith(num.ToString() + "/")) {
+              if (line.StartsWith(num.ToString() + "/")) {                is_continue_num = true;
+
                 try {
                   numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] / Convert.ToDouble(line.Split('/').Last());
-                                  continue;
-
+break;
 
                 } catch {
                   try {
                     foreach(var getNum in numberNames) {
                       if (line.Split('/').Last() == getNum) {
                         numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] / numberValues[numberNames.IndexOf(getNum)];
-                                        continue;
-
+break;
                       }
                     }
                   } catch {
@@ -1321,18 +1329,18 @@ namespace rC {
                   }
                 }
               }
-              if (line.StartsWith(num.ToString() + "*")) {
+              if (line.StartsWith(num.ToString() + "*")) {                is_continue_num = true;
+
                 try {
                   numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] * Convert.ToDouble(line.Split('*').Last());
-                                  continue;
-
+break;
                 } catch {
                   try {
-                    foreach(var getNum in numberNames) {
+                    foreach(var getNum in numberNames) {                is_continue_num = true;
+
                       if (line.Split('*').Last() == getNum) {
                         numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] * numberValues[numberNames.IndexOf(getNum)];
-                                        continue;
-
+break;
                       }
                     }
                   } catch {
@@ -1340,18 +1348,17 @@ namespace rC {
                   }
                 }
               }
-              if (line.StartsWith(num.ToString() + "%")) {
+              if (line.StartsWith(num.ToString() + "%")) {                is_continue_num = true;
+
                 try {
                   numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] % Convert.ToDouble(line.Split('%').Last());
-                                  continue;
-
+break;
                 } catch {
                   try {
                     foreach(var getNum in numberNames) {
                       if (line.Split('%').Last() == getNum) {
                         numberValues[numberNames.IndexOf(num)] = numberValues[numberNames.IndexOf(num)] % numberValues[numberNames.IndexOf(getNum)];
-                                        continue;
-
+break;
                       }
                     }
                   } catch {
@@ -1360,6 +1367,9 @@ namespace rC {
                 }
               }
                 continue;
+            }
+            if (is_continue_num){
+              continue;
             }
             //to lower
             /*USAGE
