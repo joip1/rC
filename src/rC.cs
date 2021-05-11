@@ -38,14 +38,14 @@ namespace rC
             string[] loops = new string[] { "for", "compile_lines", "setcursorpos:", "sleep", "pixel", "color", "if", "CreateFile", "#", "import", "str", "number", "toLower", "toUpper" };
             bool isCompiling = true;
             List<string> numberNames = new List<string>();
-            List<double> numberValues = new List<double>();
+            List<float> numberValues = new List<float>();
             List<string> strNames = new List<string>();
             List<string> strValues = new List<string>();
             List<string> references = new List<string>();
             List<string> strListNames = new List<string>();
             List<List<string>> strListValues = new List<List<string>>();
             List<string> numListNames = new List<string>();
-            List<List<double>> numListValues = new List<List<double>>();
+            List<List<float>> numListValues = new List<List<float>>();
             List<List<string>> lines_for_functions = new List<List<string>>();
             List<string> names_for_functions = new List<string>();
 

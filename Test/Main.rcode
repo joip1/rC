@@ -1,15 +1,4 @@
-str \n >>line_break
-
-function main();{
-    num f >>0
-    num x >>1
-    
-    WriteNum {x}
-}main;
-    
-for x in range:1000;{
-    main()
-};
-
-newln
+num x >>0.3
+x+0.1
+Write "$x$"
 exit()
