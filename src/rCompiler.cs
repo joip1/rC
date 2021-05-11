@@ -217,7 +217,9 @@ namespace rC {
               int errorLine = code.IndexOf(line);
               Console.WriteLine($"Invalid Syntax (Line {errorLine++})");
             }
+            if(line.ToLower().Contains("add")!=true){
             continue;
+            }
           } else if (line.StartsWith("number ") || line.StartsWith("num ") && line.Contains(">>") &&
             line.ToLower().StartsWith("for") == false &&
             line.ToLower().Contains("in range %") == false &&
