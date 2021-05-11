@@ -75,7 +75,7 @@ namespace rC {
           //        try{
           string line = code[_index];
           current_line = line;
-          if(line == "\n" || line == "    \n" || line == ""){
+          if(line == "\n" || line == "    \n" || line == "" || line.StartsWith("#")){
             continue;
           }
            if (line.Contains('$')) {
