@@ -381,7 +381,6 @@ namespace rC {
 
               ThreadStart thread_start = new ThreadStart(newThreadStart);
               Thread newThread = new Thread(thread_start);
-              System.Threading.Thread.Sleep(15);
               newThread.Start();
               while (newThread.IsAlive != true) {
                 newThread.Start();
