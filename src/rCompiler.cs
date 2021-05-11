@@ -138,10 +138,7 @@ namespace rC {
             continue;
           } else if (line.StartsWith("WriteStr") &&
             line.Contains("{") &&
-            line.Contains("}") &&
-            line.ToLower().StartsWith("for") == false &&
-            line.ToLower().Contains("in range %") == false &&
-            line.Contains("$>") == false) {
+            line.Contains("}") ){
             foreach(var name in strNames) {
               var namesToCheck = line.Split('{')[1].Split('}')[0].Split(',');
 
@@ -158,10 +155,7 @@ namespace rC {
             continue;
           } else if (line.StartsWith("WriteNum") &&
             line.Contains("{") &&
-            line.Contains("}") &&
-            line.ToLower().StartsWith("for") == false &&
-            line.ToLower().Contains("in range %") == false &&
-            line.Contains("$>") == false)
+            line.Contains("}"))
 
           {
             foreach(var name in numberNames) {

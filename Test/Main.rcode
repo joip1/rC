@@ -1,9 +1,15 @@
-num age >>13
-str name >>"Rodrigo"
 str \n >>line_break
-str date >>"3/11/2021"
-num x >>age
-x++
-Write "Hello, my name is $name$ $\n$I am $age$ years old!$\n$On $date$ I'll be $x$ years old!";
+
+function main();{
+    num f >>0
+    num x >>1
+    
+    WriteNum {x}
+}main;
+    
+for x in range:1000;{
+    main()
+};
+
 newln
 exit()
