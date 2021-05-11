@@ -75,6 +75,9 @@ namespace rC {
           //        try{
           string line = code[_index];
           current_line = line;
+          if(line == "\n" || line == "    \n" || line == ""){
+            continue;
+          }
            if (line.Contains('$')) {
               foreach(var string_var in strNames) {
                 try {
