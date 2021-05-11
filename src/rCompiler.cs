@@ -35,6 +35,7 @@ namespace rC {
       //     Console.WriteLine(item);
       // }
       //values and indicators
+      string current_line = "";
       List < int > pixelX = new List < int > ();
       List < int > pixelY = new List < int > ();
       List < ConsoleColor > pixelColors = new List < ConsoleColor > ();
@@ -63,7 +64,7 @@ namespace rC {
         //str Name.Add >> "Value"
         //getStrListValue(Name[1])
         //updateStrListValue(Name[1])
-      
+
         strNames.Add("line_break");
         strValues.Add("\n");
         strNames.Add("path");
@@ -73,6 +74,7 @@ namespace rC {
           //TODO - Add general error matching case;        
           //        try{
           string line = code[_index];
+          current_line = line;
            if (line.Contains('$')) {
               foreach(var string_var in strNames) {
                 try {
@@ -1254,8 +1256,7 @@ namespace rC {
             bool is_continue_num = false;
             foreach(var num in numberNames) {
 
-              if (line.StartsWith(num.ToString() + "++")) {
-                is_continue_num = true;
+              if (line.StartsWith(num.ToString() + "++")) {is_continue_num = true;
                 double newNum = numberValues[numberNames.IndexOf(num)];
                 newNum++;
                 numberValues[numberNames.IndexOf(num)] = newNum;
@@ -1817,15 +1818,16 @@ break;
           }
           execTime.Stop();
         }
-      } catch (Exception exc){
+      } catch{
+        string f = current_line;
         bool except_errors = code.Contains("suppress_errors()");
         if (except_errors ==true){
 
         }else{
-          Console.WriteLine("Error while running, exception: "+exc);
+          Console.WriteLine("Error while running the following: "+f);
         }
       }
-      Console.ResetColor();
+     // Console.ResetColor();
       // void ForLoop(int range,
       //   string looper, List < string > loopContent)
 

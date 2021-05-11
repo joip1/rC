@@ -240,6 +240,7 @@ namespace rC
                         var dirToCopy = Directory.CreateDirectory(readline.Split(new[] { "create_project " }, StringSplitOptions.None).Last());
                         StreamWriter config_default = File.CreateText( dirToCopy.FullName + @"/Main.rcode");
                         config_default.Write(default_main);
+                        Directory.CreateDirectory(dirToCopy.FullName+@"/modules");
                         StreamWriter ConfigWriter = File.CreateText(dirToCopy.FullName + @"/run_config.rconfig");
                         ConfigWriter.WriteLine("init:Main.rcode");
                         ConfigWriter.Close();
