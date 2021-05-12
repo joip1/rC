@@ -515,6 +515,7 @@ namespace rC {
               numberNames.Add(line.Split('(').Last().Split(')').First());
               numberValues.Add(float.Parse(toConvert));
             }
+            continue;
           }
 
           if (line.StartsWith("list(str).ToCharArray:")) {
