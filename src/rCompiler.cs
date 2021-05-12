@@ -849,6 +849,8 @@ namespace rC {
                     linesFromFile.Add(lineReading);
                   }
                   specificLine_Compiler.Close();
+                  List<string> add_args = line.Split('(')[1].Split(')')[0].Split(new [] {";;"},StringSplitOptions.None).ToList();
+                  _Compile(add_args);
                   Compile(linesFromFile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
                   //Environment.Exit(1);
                   is_continue = true;
