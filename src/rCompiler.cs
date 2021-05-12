@@ -746,6 +746,7 @@ namespace rC {
               strNames.Add(to_convert);
               strValues.Add(numberValues[numberNames.IndexOf(to_convert)].ToString());
             }
+            continue;
 
           }
 
