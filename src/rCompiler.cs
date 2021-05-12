@@ -386,7 +386,7 @@ namespace rC {
 
                                  */
             string looper = "";
-            string indent = "";
+       //     string indent = "";
             string name = "";
             List < string > loopContent = new List < string > ();
             List < string > compileAfter = new List < string > ();
@@ -415,34 +415,25 @@ namespace rC {
               } else {
                 name = "";
               }
-              indent = "    ";
+//              indent = "    ";
             } catch {
               Console.WriteLine("Invalid Syntax Line: " + code.IndexOf(line));
             }
-            List < string > newCode1 = code;
-
-            if (newCode1.Contains("}" + name + ";")) {
-              newCode1.RemoveRange(0, newCode1.IndexOf(line) + 1);
-              foreach(var lineofCode in newCode1) {
-                if (newCode1.IndexOf(lineofCode) > newCode1.IndexOf("}" + name + ";")) {
-                  compileAfter.Add(lineofCode);
+            List<string> to__compile = new List<string>();
+              try {
+                    int current_index = code.IndexOf(line);
+                    current_index++;
+                    to__compile = code.GetRange(current_index, (code.IndexOf("}" + name + ";") - current_index));
+                    for (int i = 0; i < to__compile.Count; i++) {
+                if (to__compile[i].StartsWith(indent_if) ) {
+                    try {
+                    to__compile[to__compile.IndexOf(to__compile[i])] = to__compile[i].Substring(indent_if.Length);
+                    } catch {}
                 }
-              }
-
-              newCode1.RemoveRange(newCode1.IndexOf("}" + name + ";"), newCode1.Count - newCode1.IndexOf("}" + name + ";"));
-              loopContent = newCode1;
-            } else {
-              Console.WriteLine("\nNo End Was Found for For Loop with name: " + name);
-            }
-            for (int i = 0; i < newCode1.Count; i++) {
-              if (newCode1[i].StartsWith(indent)) {
-                try {
-                  newCode1[newCode1.IndexOf(newCode1[i])] = newCode1[i].Substring(indent.Length);
-                } catch {}
-              }
-            }
-              List<string> line_from_file2 = loopContent;
-
+                }
+                } catch {
+                Console.WriteLine("Incorrect/Missing end statement for for loop: " + name);
+                }
             for (int x = 0; x < range; x++) {
               if (numberNames.Contains(looper)) {
                 numberValues[numberNames.IndexOf(looper)] = x;
@@ -450,7 +441,7 @@ namespace rC {
                 numberValues.Add(x);
                 numberNames.Add(looper);
               }
-              _Compile(line_from_file2);
+              _Compile(to__compile);
             }
                 _Compile(compileAfter);
           } else if (references.Contains("threading") && line.StartsWith("newThread(")) {
