@@ -118,6 +118,9 @@ namespace rC {
               // foreach(var lineofcode in lines_for_functions[names_for_functions.IndexOf(func_name)]){
               //     Console.WriteLine(lineofcode);
               // }
+              // my_func(num x >>0)
+              List<string> add_args = line.Split('(')[1].Split(')')[0].Split(new [] {";;"},StringSplitOptions.None).ToList();
+              _Compile(add_args);
               Compile(lines_for_functions[names_for_functions.IndexOf(func_name)], numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
               is_continue = true;
               break;
@@ -127,7 +130,7 @@ namespace rC {
           if (is_continue) {
             continue;
           }
-
+          
           //
           // line = line.Replace("$path$", strValues[strNames.IndexOf("path")]);
           // line = line.Replace("$PATH$", strValues[strNames.IndexOf("path")]);
@@ -141,114 +144,106 @@ namespace rC {
               "\""
             }, StringSplitOptions.None).First().ToString());
             continue;
-          } else if (line.StartsWith("if ")) {
-            //if num(x==f); "1"{
-            //    
-            //}1;
-            string type_to_compare = line.Split(' ')[1].Split('(')[0];
-            string operand = "";
-            string statement = line.Split('(')[1].Split(')')[0];
-            string name = "";
-            bool _checked = false;
-            string indent_if = "    ";
-            if (line.Contains("==")) {
-              operand = "==";
-            } else if (line.Contains("<-")) {
-              operand = "<-";
-            } else if (line.Contains("+>")) {
-              operand = "+>";
-            } else if (line.Contains(">=")) {
-              operand = ">=";
-            } else if (line.Contains("<=")) {
-              operand = "<=";
-            } else if (line.Contains("!=")) {
-              operand = "!=";
-            }
-            string first_ = line.Split(new [] {
-              operand
-            }, StringSplitOptions.None)[0].Split('(')[1];
-            string last_ = line.Split(new [] {
-              operand
-            }, StringSplitOptions.None)[1].Split(')')[0];
-            if (type_to_compare == "str") {
-              string first_to_compare = strValues[strNames.IndexOf(first_)];
-              string last_to_compare = "";
-              if (statement.Contains('"')) {
-                last_to_compare = statement.Split('"')[1].Split('"')[0];
-              } else {
-                last_to_compare = strValues[strNames.IndexOf(statement.Split(new [] {
-                  operand
-                }, StringSplitOptions.None)[1])];
+          }else if(line.StartsWith("if "))
+          {
+              //if num(x==f); "1"{
+              //    
+              //}1;
+              string type_to_compare = line.Split(' ')[1].Split('(')[0];
+              string operand ="";
+              string statement = line.Split('(')[1].Split(')')[0];
+              string name = "";
+              bool _checked = false;
+              string indent_if = "    ";
+              if(line.Contains("==")){
+                  operand = "==";
+              }else if(line.Contains("<-")){
+                  operand = "<-";
+              }else if(line.Contains("+>")){
+                  operand = "+>";
+              }else if(line.Contains(">=")){
+                  operand = ">=";
+              }else if(line.Contains("<=")){
+                  operand = "<=";
+              }else if(line.Contains("!=")){
+                  operand = "!=";
               }
-              if (operand == "==") {
-                if (first_to_compare == last_to_compare) {
-                  _checked = true;
+            string first_ = line.Split(new []{operand},StringSplitOptions.None)[0].Split('(')[1];
+            string last_ = line.Split(new []{operand},StringSplitOptions.None)[1].Split(')')[0]; 
+            if(type_to_compare == "str"){
+                string first_to_compare = strValues[strNames.IndexOf(first_)];
+                string last_to_compare = "";
+                if(statement.Contains('"')){
+                    last_to_compare = statement.Split('"')[1].Split('"')[0];
+                }else{
+                    last_to_compare = strValues[strNames.IndexOf(statement.Split(new [] {operand},StringSplitOptions.None)[1])];
                 }
-              } else if (operand == "!=") {
-                if (first_to_compare != last_to_compare) {
-                  _checked = true;
+                if(operand == "=="){
+                    if(first_to_compare==last_to_compare){
+                        _checked = true;
+                    }
+                }else if(operand == "!="){
+                    if(first_to_compare!=last_to_compare){
+                    _checked = true;
+                    }
                 }
-              }
-
-            } else if (type_to_compare == "num") {
-              float first_to_compare = numberValues[numberNames.IndexOf(first_)];
-              float last_to_compare = numberValues[numberNames.IndexOf(last_)];
-              if (operand == "==") {
-                if (first_to_compare == last_to_compare) {
-                  _checked = true;
+                
+            }else if (type_to_compare == "num")
+            {
+                float first_to_compare = numberValues[numberNames.IndexOf(first_)];
+                float last_to_compare = numberValues[numberNames.IndexOf(last_)];
+                if(operand == "=="){
+                    if(first_to_compare==last_to_compare){
+                        _checked = true;
+                    }
+                }else if(operand == "!="){
+                    if(first_to_compare!=last_to_compare){
+                    _checked = true;
+                    }
+                }else if(operand == ">="){
+                    if(first_to_compare>=last_to_compare){
+                    _checked = true;
+                    }
+                }else if(operand == "<="){
+                    if(first_to_compare<=last_to_compare){
+                    _checked = true;
+                    }
+                }else if(operand == "+>"){
+                    if(first_to_compare>last_to_compare){
+                    _checked = true;
+                    }
+                }else if(operand == "<-"){
+                    if(first_to_compare<last_to_compare){
+                    _checked = true;
+                    }
                 }
-              } else if (operand == "!=") {
-                if (first_to_compare != last_to_compare) {
-                  _checked = true;
-                }
-              } else if (operand == ">=") {
-                if (first_to_compare >= last_to_compare) {
-                  _checked = true;
-                }
-              } else if (operand == "<=") {
-                if (first_to_compare <= last_to_compare) {
-                  _checked = true;
-                }
-              } else if (operand == "+>") {
-                if (first_to_compare > last_to_compare) {
-                  _checked = true;
-                }
-              } else if (operand == "<-") {
-                if (first_to_compare < last_to_compare) {
-                  _checked = true;
-                }
-              }
             }
 
-            if (_checked) {
-              if (line.Split(new [] {
-                  ");"
-                }, StringSplitOptions.None)[1].Contains('"')) {
-                name = line.Split(new [] {
-                  ");"
-                }, StringSplitOptions.None)[1].Split('"')[1].Split('"')[0];
-              } else {
-                name = "";
-              }
-              try {
-                int current_index = code.IndexOf(line);
-                current_index++;
-                List < string > to__compile = code.GetRange(current_index, (code.IndexOf("}" + name + ";") - current_index));
-                for (int i = 0; i < to__compile.Count; i++) {
-                  if (to__compile[i].StartsWith(indent_if)) {
+            if(_checked){
+                if(line.Split(new [] {");"},StringSplitOptions.None)[1].Contains('"')){
+                    name = line.Split(new [] {");"},StringSplitOptions.None)[1].Split('"')[1].Split('"')[0];
+                }else{
+                    name = "";
+                }
+                try {
+                    int current_index = code.IndexOf(line);
+                    current_index++;
+                    List<string> to__compile = code.GetRange(current_index, (code.IndexOf("}" + name + ";") - current_index));
+                    for (int i = 0; i < to__compile.Count; i++) {
+                if (to__compile[i].StartsWith(indent_if) ) {
                     try {
-                      to__compile[to__compile.IndexOf(to__compile[i])] = to__compile[i].Substring(indent_if.Length);
+                    to__compile[to__compile.IndexOf(to__compile[i])] = to__compile[i].Substring(indent_if.Length);
                     } catch {}
-                  }
+                }
                 }
                 _Compile(to__compile);
-              } catch {
+                } catch {
                 Console.WriteLine("Incorrect/Missing end statement for if statement: " + name);
-              }
-              continue;
+                }
+                continue;
             }
             continue;
-          }
+        }
           if (line.ToLower().StartsWith("newline") || line.ToLower().StartsWith("newln")) {
             Console.WriteLine("");
             continue;
@@ -470,7 +465,7 @@ namespace rC {
                 } catch {}
               }
             }
-            List < string > line_from_file2 = loopContent;
+              List<string> line_from_file2 = loopContent;
 
             for (int x = 0; x < range; x++) {
               if (numberNames.Contains(looper)) {
@@ -480,13 +475,8 @@ namespace rC {
                 numberNames.Add(looper);
               }
               _Compile(line_from_file2);
-              //  foreach (var item in beforeCompiling)
-              //   {
-              //       Console.WriteLine(item);
-              //   }
-              //   loopContent = beforeCompiling;
             }
-            _Compile(compileAfter);
+                _Compile(compileAfter);
           } else if (references.Contains("threading") && line.StartsWith("newThread(")) {
             try {
               string nameof_func = line.Split('(')[1].Split('(')[0];
@@ -505,7 +495,7 @@ namespace rC {
               Console.WriteLine($"{line} : Error Starting Thread");
             }
 
-          }
+          } 
 
           if (line.StartsWith("function ")) {
             //function main(str test);{
@@ -527,7 +517,7 @@ namespace rC {
             string indent = "    ";
 
             for (int i = 0; i < func_content.Count; i++) {
-              if (func_content[i].StartsWith(indent) /*&&func_content[i].StartsWith(indent+indent)==false*/ ) {
+              if (func_content[i].StartsWith(indent)) {
                 try {
                   func_content[func_content.IndexOf(func_content[i])] = func_content[i].Substring(indent.Length);
                 } catch {}
@@ -1590,12 +1580,12 @@ namespace rC {
             }
           }
         }
-      } catch (Exception exc) {
+      } catch (Exception exc){
         string f = current_line;
         bool except_errors = code.Contains("suppress_errors()");
         bool show_exceptions = code.Contains("show_exceptions()");
-        if (show_exceptions) {
-          Console.WriteLine("Error, Exception: " + exc);
+        if(show_exceptions){
+            Console.WriteLine("Error, Exception: "+exc);
         }
         if (except_errors == true) {
 
@@ -1603,7 +1593,7 @@ namespace rC {
           Console.WriteLine("Error while running the following: " + f);
         }
       }
-
+    
       // Console.ResetColor();
       // void ForLoop(int range,
       //   string looper, List < string > loopContent)
@@ -1611,11 +1601,11 @@ namespace rC {
       // {
 
       // }
-      void _Compile(List < string > to_compile_) {
-        Compile(to_compile_, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+      void _Compile(List<string> to_compile_){
+          Compile(to_compile_, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
 
-      }
     }
-
+    }
+    
   }
 }
