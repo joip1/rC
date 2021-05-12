@@ -1805,7 +1805,6 @@ namespace rC {
               Pixel.DrawChar(pixelXChar[j], pixelYChar[j], pixelColorsChar[j], charachtersToDraw[j]);
             }
           }
-          execTime.Stop();
         }
       } catch {
         string f = current_line;
