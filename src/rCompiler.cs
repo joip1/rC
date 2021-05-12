@@ -45,9 +45,9 @@ namespace rC {
       List < int > pixelYChar = new List < int > ();
       Random rand = new Random();
       List < ConsoleColor > pixelColorsChar = new List < ConsoleColor > ();
-      Stopwatch execTime = new Stopwatch();
+      //Stopwatch execTime = new Stopwatch();
       //read code line by line
-      execTime.Start();
+      //execTime.Start();
       // foreach (var __line in code){
       //   if(__line.Contains("$endl;")){
       //     code[code.IndexOf(__line)] = __line.Split(new [] {"$endl;"},StringSplitOptions.None)[0];
@@ -992,19 +992,6 @@ namespace rC {
             }
           }
 
-          if (line.ToLower() == "exectime(secs)") {
-            execTime.Stop();
-            Console.Write(execTime.Elapsed);
-            execTime.Start();
-          }
-          if (line.ToLower() == "exectime(ms)") {
-            execTime.Stop();
-            Console.Write(execTime.ElapsedMilliseconds);
-            execTime.Start();
-          }
-          if (line.ToLower() == "exectime()") {
-            Console.WriteLine("\nexectime() takes one argument");
-          }
 
           if (line.StartsWith("numToStr")) {
 
