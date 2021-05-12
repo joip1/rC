@@ -46,8 +46,6 @@ namespace rC {
       List < int > pixelYChar = new List < int > ();
       Random rand = new Random();
       List < ConsoleColor > pixelColorsChar = new List < ConsoleColor > ();
-      string indent_if = "    ";
-      string [] operands = {"==","!=","+>","<-","<=",">="};
       //read code line by line
       // foreach (var __line in code){
       //   if(__line.Contains("$endl;")){
@@ -151,16 +149,24 @@ namespace rC {
               //if num(x==f); "1"{
               //    
               //}1;
-              
               string type_to_compare = line.Split(' ')[1].Split('(')[0];
               string operand ="";
               string statement = line.Split('(')[1].Split(')')[0];
               string name = "";
               bool _checked = false;
-              foreach (var _operator in operands){
-                if (line.Contains(_operator)){
-                  operand = _operator;
-                }
+              string indent_if = "    ";
+              if(line.Contains("==")){
+                  operand = "==";
+              }else if(line.Contains("<-")){
+                  operand = "<-";
+              }else if(line.Contains("+>")){
+                  operand = "+>";
+              }else if(line.Contains(">=")){
+                  operand = ">=";
+              }else if(line.Contains("<=")){
+                  operand = "<=";
+              }else if(line.Contains("!=")){
+                  operand = "!=";
               }
             string first_ = line.Split(new []{operand},StringSplitOptions.None)[0].Split('(')[1];
             string last_ = line.Split(new []{operand},StringSplitOptions.None)[1].Split(')')[0]; 
@@ -173,33 +179,51 @@ namespace rC {
                     last_to_compare = strValues[strNames.IndexOf(statement.Split(new [] {operand},StringSplitOptions.None)[1])];
                 }
                 if(operand == "=="){
-                    _checked = first_to_compare==last_to_compare;
+                    if(first_to_compare==last_to_compare){
+                        _checked = true;
+                    }
                 }else if(operand == "!="){
-                    _checked = first_to_compare!=last_to_compare;
+                    if(first_to_compare!=last_to_compare){
+                    _checked = true;
+                    }
                 }
                 
             }else if (type_to_compare == "num")
             {
                 float first_to_compare = numberValues[numberNames.IndexOf(first_)];
                 float last_to_compare = numberValues[numberNames.IndexOf(last_)];
-               if(operand == "=="){
-                    _checked = first_to_compare==last_to_compare;
+                if(operand == "=="){
+                    if(first_to_compare==last_to_compare){
+                        _checked = true;
+                    }
                 }else if(operand == "!="){
-                    _checked = first_to_compare!=last_to_compare;
+                    if(first_to_compare!=last_to_compare){
+                    _checked = true;
+                    }
                 }else if(operand == ">="){
-                    _checked = first_to_compare>=last_to_compare;
+                    if(first_to_compare>=last_to_compare){
+                    _checked = true;
+                    }
                 }else if(operand == "<="){
-                    _checked = first_to_compare<=last_to_compare;
+                    if(first_to_compare<=last_to_compare){
+                    _checked = true;
+                    }
                 }else if(operand == "+>"){
-                    _checked = first_to_compare>last_to_compare;
+                    if(first_to_compare>last_to_compare){
+                    _checked = true;
+                    }
                 }else if(operand == "<-"){
-                    _checked = first_to_compare<last_to_compare;
+                    if(first_to_compare<last_to_compare){
+                    _checked = true;
+                    }
                 }
             }
 
             if(_checked){
                 if(line.Split(new [] {");"},StringSplitOptions.None)[1].Contains('"')){
                     name = line.Split(new [] {");"},StringSplitOptions.None)[1].Split('"')[1].Split('"')[0];
+                }else{
+                    name = "";
                 }
                 try {
                     int current_index = code.IndexOf(line);
