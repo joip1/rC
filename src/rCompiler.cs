@@ -30,6 +30,7 @@ namespace rC {
       List < List < float >> numListValues,
       List < List < string >> lines_for_functions,
       List < string > names_for_functions) {
+
       // foreach (var item in code)
 
       // {
@@ -45,9 +46,7 @@ namespace rC {
       List < int > pixelYChar = new List < int > ();
       Random rand = new Random();
       List < ConsoleColor > pixelColorsChar = new List < ConsoleColor > ();
-      //Stopwatch execTime = new Stopwatch();
       //read code line by line
-      //execTime.Start();
       // foreach (var __line in code){
       //   if(__line.Contains("$endl;")){
       //     code[code.IndexOf(__line)] = __line.Split(new [] {"$endl;"},StringSplitOptions.None)[0];
@@ -372,7 +371,6 @@ namespace rC {
                 numberNames.Add(looper);
               }
 
-              List < string > beforeCompiling = loopContent;
               Compile(loopContent, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
               //  foreach (var item in beforeCompiling)
               //   {
@@ -992,7 +990,6 @@ namespace rC {
             }
           }
 
-
           if (line.StartsWith("numToStr")) {
 
             string to_convert = line.Split('(')[1].Split(')')[0];
@@ -1090,6 +1087,7 @@ namespace rC {
             // if (line == "exit()") {
             //   Environment.Exit(1);
             // }
+            is_continue = false;
             foreach(var importation in references) {
 
               if (line.StartsWith(importation)) {
@@ -1106,10 +1104,15 @@ namespace rC {
                   specificLine_Compiler.Close();
                   Compile(linesFromFile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
                   //Environment.Exit(1);
+                  is_continue = true;
+                  break;
                 } catch {
                   Console.WriteLine("Method does not exist at line of index: " + code.IndexOf(line));
                 }
               }
+            }
+            if (is_continue) {
+              continue;
             }
             if (line.StartsWith("method")) {
               string fileToCompile = "";
