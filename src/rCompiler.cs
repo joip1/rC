@@ -82,13 +82,7 @@ namespace rC {
           if (line == "\n" || line == "    \n" || line == "" || line.StartsWith("#")) {
             continue;
           }
-          if (line.StartsWith("++")) {
-            numberValues[numberNames.IndexOf(line.Split('+')[2].Split(';')[0])]++;
-            continue;
-          } else if (line.StartsWith("--")) {
-            numberValues[numberNames.IndexOf(line.Split('-')[2].Split(';')[0])]--;
-            continue;
-          }
+          
           if (line.Contains('$')) {
             foreach(var string_var in strNames) {
               try {
@@ -107,12 +101,23 @@ namespace rC {
             }
 
           }
+          if (line.StartsWith("++")) {
+            numberValues[numberNames.IndexOf(line.Split('+')[2].Split(';')[0])]++;
+            continue;
+          } else if (line.StartsWith("--")) {
+            numberValues[numberNames.IndexOf(line.Split('-')[2].Split(';')[0])]--;
+            continue;
+          }
           if(line.StartsWith(";;")){
             List<string> __tocompile = line.Split(new []{";;"},StringSplitOptions.None).ToList();
             _Compile(__tocompile);
             continue;
           }
           bool is_continue = false;
+
+           if(line.Split(';')[0]=="break"){
+            return;
+            }
           foreach(var func_name in names_for_functions) {
             //int ocorrences = 0;
             // foreach(var func_name_2 in names_for_functions){
@@ -1575,6 +1580,7 @@ namespace rC {
               continue;
 
             }
+           
 
             //string definer
 
