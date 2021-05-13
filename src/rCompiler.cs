@@ -219,7 +219,10 @@ namespace rC {
                 }
                 _Compile(to__compile);
                 } catch {
+                  if(code.Contains("suppress_errors()")==false){
                 Console.WriteLine("Incorrect/Missing end statement for if statement: " + name);
+
+                  }
                 }
                 continue;
             }
@@ -437,7 +440,10 @@ namespace rC {
                 }
                 }
                 } catch {
+                  if(code.Contains("suppress_errors")==false){
                 Console.WriteLine("Incorrect/Missing end statement for for loop: " + name);
+
+                  }
                 }
             for (int x = 0; x < range; x++) {
               if (numberNames.Contains(looper)) {
@@ -447,8 +453,11 @@ namespace rC {
                 numberNames.Add(looper);
               }
               _Compile(to__compile);
+              continue;
+              //continue;
             }
-                _Compile(compileAfter);
+               // _Compile(compileAfter);
+                continue;
           } else if (references.Contains("threading") && line.StartsWith("newThread(")) {
             try {
               string nameof_func = line.Split('(')[1].Split('(')[0];
