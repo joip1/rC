@@ -69,6 +69,8 @@ namespace rC {
 
         strNames.Add("line_break");
         strValues.Add("\n");
+        strNames.Add("modules_path");
+        strValues.Add("modules");
         strNames.Add("path");
         strValues.Add("/usr/lib/rC");
         for (int _index = 0; _index < code.Count; _index++) {
