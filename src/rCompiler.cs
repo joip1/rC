@@ -37,6 +37,7 @@ namespace rC {
       //     Console.WriteLine(item);
       // }
       //values and indicators
+    
       string current_line = "";
       List < int > pixelX = new List < int > ();
       List < int > pixelY = new List < int > ();
@@ -124,10 +125,11 @@ namespace rC {
           }
           bool is_continue = false;
 
-          if (line.Split(';')[0] == "return") {
+          if (line.Split(';')[0] == "stop") {
             return;
+
           }
-          if (line.Split(';')[0] == "return") {
+          else if (line.Split(';')[0] == "stop_break") {
             break;
           }
           foreach(var func_name in names_for_functions) {
