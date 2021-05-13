@@ -897,7 +897,9 @@ namespace rC {
                   is_continue = true;
                   break;
                 } catch {
+                  if(code.Contains("suppress_errors()")==false){
                   Console.WriteLine("Method does not exist at line of index: " + code.IndexOf(line));
+                  }
                 }
               }
             }
