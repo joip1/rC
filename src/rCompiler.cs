@@ -424,8 +424,8 @@ namespace rC {
                 name = "";
               }
 //              indent = "    ";
-            } catch {
-              Console.WriteLine("Invalid Syntax Line: " + code.IndexOf(line));
+            } catch (Exception exc){
+              Console.WriteLine(exc);
             }
             List<string> to__compile = new List<string>();
               try {
@@ -590,13 +590,47 @@ namespace rC {
           }
 
           if (line.StartsWith("list(str) ")) {
-            strListNames.Add(line.Split(')').Last().Split('\"')[1].Split('\"').First());
+            strListNames.Add(line.Split(')')[1].Split('\"')[1].Split('\"').First());
             strListValues.Add(new List < string > ());
+
+            // list(str) "my_list" >>["1,2,3,"4","5"]
+            if(line.Contains(">>")){
+              List<string> values = line.Split('[').Last().Split(']')[0].Split(',').ToList();
+              for (int i = 0; i < values.Count; i++)
+              {
+                  if (values[i].Contains('"')){
+                    strListValues[strListNames.IndexOf(line.Split(')')[1].Split('\"')[1].Split('\"').First())].Add(values[i].Split('"')[1].Split('"')[0]);
+                  }else{
+                    if(strNames.Contains(values[i])){
+                      strListValues[strListNames.IndexOf(line.Split(')')[1].Split('\"')[1].Split('\"').First())].Add(values[i]);
+                    }else{
+                      Console.WriteLine("String " + values[i] + "does not exist");
+                    }
+                  }
+              }
+            }
           }
           if (line.StartsWith("list(num)")) {
-            numListNames.Add(line.Split(')').Last().Split('\"')[1].Split('\"').First());
+            numListNames.Add(line.Split(')')[1].Split('\"')[1].Split('\"').First());
             numListValues.Add(new List < float > ());
-
+            if(line.Contains(">>")){
+              List<string> values = line.Split('[').Last().Split(']')[0].Split(',').ToList();
+              for (int i = 0; i < values.Count; i++)
+              {
+                  if (numberNames.Contains(values[i])){
+                    numListValues[numListNames.IndexOf(line.Split(')')[1].Split('\"')[1].Split('\"').First())].Add((numberValues[numberNames.IndexOf(values[i])]));
+                  }else{
+                    try{
+                      numListValues[numListNames.IndexOf(line.Split(')')[1].Split('\"')[1].Split('\"').First())].Add(float.Parse(values[i]));
+                    }catch{
+                      if(code.Contains("suppress_errors()")==false){
+                        Console.WriteLine("Error while adding: "+ values[i] + " to list: "+line.Split(')')[1].Split('\"')[1].Split('\"').First());
+                      }
+                    }
+                  }
+              }
+            }
+            
           }
           foreach(var listName in strListNames) {
             // if(line.Contains(listName) && line.Contains('[')){
