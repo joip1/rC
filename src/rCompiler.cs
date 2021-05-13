@@ -336,9 +336,9 @@ namespace rC {
                 }
               }
 
-            } catch {
+            } catch (Exception exc){
               int errorLine = code.IndexOf(line);
-              Console.WriteLine($"Invalid Syntax (Line {errorLine++})");
+              Console.WriteLine($"Invalid Syntax (Line {errorLine++}) Exception: "+exc);
             }
             if (line.ToLower().Contains("add") != true) {
               continue;
@@ -762,6 +762,7 @@ namespace rC {
             } catch {
               Console.WriteLine("\nFatal Error (Syntax) On Line: " + code.IndexOf(line));
             }
+            continue;
           }
           if (line.ToLower().StartsWith("getstrlistvalue(") || line.StartsWith("getstrlistvalue (")) {
             int index = 0;
@@ -786,7 +787,7 @@ namespace rC {
             } catch {
               Console.WriteLine("Invalid Syntax on Line: " + code.IndexOf(line));
             }
-
+          continue;
           }
 
           foreach(var stringList in strListNames) {
