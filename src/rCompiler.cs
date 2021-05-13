@@ -440,7 +440,7 @@ namespace rC {
                 }
                 }
                 } catch {
-                  if(code.Contains("suppress_errors")==false){
+                  if(code.Contains("suppress_errors()")==false){
                 Console.WriteLine("Incorrect/Missing end statement for for loop: " + name);
 
                   }
