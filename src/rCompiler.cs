@@ -105,6 +105,11 @@ namespace rC {
             }
 
           }
+          if(line.StartsWith(";;")){
+            List<string> __tocompile = line.Split(new []{";;"},StringSplitOptions.None).ToList();
+            _Compile(__tocompile);
+            continue;
+          }
           bool is_continue = false;
           foreach(var func_name in names_for_functions) {
             //int ocorrences = 0;
