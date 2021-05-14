@@ -243,7 +243,7 @@ namespace rC {
                 current_index++;
                 int ind = code.Count;
                 List<string> init = code.GetRange(current_index, ind-current_index);
-                List < string >  to__compile = init.GetRange(0,init.Count-(init.IndexOf("}"+name+";")+1));                for (int i = 0; i < to__compile.Count; i++) {
+                List < string >  to__compile = init.GetRange(0,init.Count-(init.IndexOf("}"+name+";")+2));                for (int i = 0; i < to__compile.Count; i++) {
                   if (to__compile[i].StartsWith(indent_if)) {
                     try {
                       to__compile[to__compile.IndexOf(to__compile[i])] = to__compile[i].Substring(indent_if.Length);
@@ -361,7 +361,7 @@ namespace rC {
                 int ind = code.Count;
                 //}; -> 
                 List<string> init = code.GetRange(current_index, ind-current_index);
-                List < string >  to__compile = init.GetRange(0,init.Count-(init.IndexOf("}"+name+";")+1));
+                List < string >  to__compile = init.GetRange(0,init.Count-(init.IndexOf("}"+name+";")+2));
 
                 for (int i = 0; i < to__compile.Count; i++) {
                   if (to__compile[i].StartsWith(indent_if)) {
@@ -580,8 +580,7 @@ namespace rC {
                 name = "";
               }
               //              indent = "    ";
-            } catch (Exception exc) {
-              Console.WriteLine(exc);
+            } catch {
             }
             List < string > to__compile = new List < string > ();
             try {
@@ -589,12 +588,13 @@ namespace rC {
               current_index++;
               int ind = code.Count;
                 List<string> init = code.GetRange(current_index, ind-current_index);
-                to__compile = init.GetRange(0,init.Count-(init.IndexOf("}"+name+";")+1));              
-                for (int i = 0; i < to__compile.Count; i++) {
-                if (to__compile[i].StartsWith(indent_if)) {
-                  try {
-                    to__compile[to__compile.IndexOf(to__compile[i])] = to__compile[i].Substring(indent_if.Length);
-                  } catch {}
+              to__compile = init.GetRange(0,init.Count-(init.IndexOf("}"+name+";")+2)); 
+              to__compile.Add("    ");
+              for (int i = 0; i < to__compile.Count; i++) {
+              if (to__compile[i].StartsWith(indent_if)) {
+                try {
+                  to__compile[to__compile.IndexOf(to__compile[i])] = to__compile[i].Substring(indent_if.Length);
+                } catch {}
                 }
               }
             } catch {
@@ -610,8 +610,10 @@ namespace rC {
                 numberValues.Add(x);
                 numberNames.Add(looper);
               }
+             
               _Compile(to__compile);
               continue;
+
               //continue;
             }
             // _Compile(compileAfter);
@@ -651,7 +653,7 @@ namespace rC {
             try {
               int ind = code.Count;
               List<string> init = code.GetRange(current_index, ind-current_index);
-              func_content = init.GetRange(0,init.Count-(init.IndexOf("};")+1));
+              func_content = init.GetRange(0,init.Count-(init.IndexOf("};")+2));
             } catch {
               Console.WriteLine("Incorrect/Missing end statement for function: " + nameFunc);
             }
