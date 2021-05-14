@@ -1734,10 +1734,7 @@ namespace rC {
               continue;
 
             }
-            if(code.Contains("main()") == false && names_for_functions.Contains("main")){
-                Compile(lines_for_functions[names_for_functions.IndexOf("main")], numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-                continue;
-            }
+            
             //string definer
 
             //Write 
