@@ -28,6 +28,7 @@ namespace rC {
       List < List < string >> strListValues,
       List < string > numListNames,
       List < List < float >> numListValues,
+      
       List < List < string >> lines_for_functions,
       List < string > names_for_functions) {
 
@@ -364,7 +365,9 @@ namespace rC {
                     } catch {}
                   }
                 }
-                _Compile(to__compile);
+                if(_checked){
+                  _Compile(to__compile);
+                }
               } catch {
                 if (code.Contains("suppress_errors()") == false) {
                   Console.WriteLine("Incorrect/Missing end statement for if statement: " + name);
