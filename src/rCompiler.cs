@@ -87,6 +87,9 @@ namespace rC {
           //TODO - Add general error matching case;        
           //        try{
           string line = code[_index];
+          if(line=="};"){
+            continue;
+          }
           current_line = line;
           if (line == "\n" || line == "    \n" || line == "" || line.StartsWith("#")) {
             continue;
@@ -243,7 +246,9 @@ namespace rC {
                 current_index++;
                 int ind = code.Count;
                 List<string> init = code.GetRange(current_index, ind-current_index);
-                List < string >  to__compile = init.GetRange(0,init.Count-(init.IndexOf("}"+name+";")+2));                for (int i = 0; i < to__compile.Count; i++) {
+                List < string > to__compile = init.GetRange(0,init.Count-(init.IndexOf("}"+name+";")+1));
+
+                for (int i = 0; i < to__compile.Count; i++) {
                   if (to__compile[i].StartsWith(indent_if)) {
                     try {
                       to__compile[to__compile.IndexOf(to__compile[i])] = to__compile[i].Substring(indent_if.Length);
@@ -361,7 +366,9 @@ namespace rC {
                 int ind = code.Count;
                 //}; -> 
                 List<string> init = code.GetRange(current_index, ind-current_index);
-                List < string >  to__compile = init.GetRange(0,init.Count-(init.IndexOf("}"+name+";")+2));
+                List < string >  to__compile = init.GetRange(0,init.Count-(init.IndexOf("}"+name+";")+1));
+                foreach(var f in to__compile){
+                
 
                 for (int i = 0; i < to__compile.Count; i++) {
                   if (to__compile[i].StartsWith(indent_if)) {
@@ -373,7 +380,7 @@ namespace rC {
                 if(_checked){
                   _Compile(to__compile);
                 }
-              } catch (Exception exc){
+              }} catch (Exception exc){
                 if (code.Contains("suppress_errors()") == false) {
                   Console.WriteLine("Incorrect/Missing end statement for while loop: " + name + exc);
 
@@ -588,7 +595,21 @@ namespace rC {
               current_index++;
               int ind = code.Count;
                 List<string> init = code.GetRange(current_index, ind-current_index);
-              to__compile = init.GetRange(0,init.Count-(init.IndexOf("}"+name+";")+2)); 
+                /*
+                  0  Write "ho"
+                  1  Write "hi"
+                  2 };
+                  3 newln
+                  4 exit()
+                  Len = 5
+                */
+              to__compile = init.GetRange(0,init.Count-(init.IndexOf("}"+name+";")+1));
+              // foreach(var f in to__compile){
+              //   if(f.StartsWith(indent_if)==false){
+              //     to__compile.Remove(f);
+              //   }
+              // }
+             
               for (int i = 0; i < to__compile.Count; i++) {
               if (to__compile[i].StartsWith(indent_if)) {
                 try {
@@ -652,7 +673,11 @@ namespace rC {
             try {
               int ind = code.Count;
               List<string> init = code.GetRange(current_index, ind-current_index);
-              func_content = init.GetRange(0,init.Count-(init.IndexOf("};")+2));
+              func_content = init.GetRange(0,init.Count-(init.IndexOf("}"+nameFunc+";")+1));
+            
+              // foreach(var l in func_content){
+              //   Console.WriteLine(l);
+              // }
             } catch {
               Console.WriteLine("Incorrect/Missing end statement for function: " + nameFunc);
             }
