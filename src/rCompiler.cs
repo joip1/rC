@@ -28,7 +28,7 @@ namespace rC {
       List < List < string >> strListValues,
       List < string > numListNames,
       List < List < float >> numListValues,
-      
+
       List < List < string >> lines_for_functions,
       List < string > names_for_functions) {
 
@@ -38,7 +38,7 @@ namespace rC {
       //     Console.WriteLine(item);
       // }
       //values and indicators
-    
+
       string current_line = "";
       List < int > pixelX = new List < int > ();
       List < int > pixelY = new List < int > ();
@@ -129,8 +129,7 @@ namespace rC {
           if (line.Split(';')[0] == "stop") {
             return;
 
-          }
-          else if (line.Split(';')[0] == "stop_break") {
+          } else if (line.Split(';')[0] == "stop_break") {
             break;
           }
           foreach(var func_name in names_for_functions) {
@@ -259,7 +258,7 @@ namespace rC {
               continue;
             }
             continue;
-          }else if (line.StartsWith("while ")) {
+          } else if (line.StartsWith("while ")) {
             //while type() 
 
             string type_to_compare = line.Split(' ')[1].Split('(')[0];
@@ -313,68 +312,73 @@ namespace rC {
             }
 
             if (_checked) {
-              while(_checked){
+              while (_checked) {
                 if (type_to_compare == "str") {
-              string first_to_compare = strValues[strNames.IndexOf(first_)];
-              string last_to_compare = "";
-              if (statement.Contains('"')) {
-                last_to_compare = statement.Split('"')[1].Split('"')[0];
-              } else {
-                last_to_compare = strValues[strNames.IndexOf(statement.Split(new [] {
-                  operand
-                }, StringSplitOptions.None)[1])];
-              }
-              if (operand == "==") {
-                _checked = first_to_compare == last_to_compare;
-              } else if (operand == "!=") {
-                _checked = first_to_compare != last_to_compare;
-              }
+                  string first_to_compare = strValues[strNames.IndexOf(first_)];
+                  string last_to_compare = "";
+                  if (statement.Contains('"')) {
+                    last_to_compare = statement.Split('"')[1].Split('"')[0];
+                  } else {
+                    last_to_compare = strValues[strNames.IndexOf(statement.Split(new [] {
+                      operand
+                    }, StringSplitOptions.None)[1])];
+                  }
+                  if (operand == "==") {
+                    _checked = first_to_compare == last_to_compare;
+                  } else if (operand == "!=") {
+                    _checked = first_to_compare != last_to_compare;
+                  }
 
-            } else if (type_to_compare == "num") {
-              float first_to_compare = numberValues[numberNames.IndexOf(first_)];
-              float last_to_compare = numberValues[numberNames.IndexOf(last_)];
-              if (operand == "==") {
-                _checked = first_to_compare == last_to_compare;
-              } else if (operand == "!=") {
-                _checked = first_to_compare != last_to_compare;
-              } else if (operand == ">=") {
-                _checked = first_to_compare >= last_to_compare;
-              } else if (operand == "<=") {
-                _checked = first_to_compare <= last_to_compare;
-              } else if (operand == "+>") {
-                _checked = first_to_compare > last_to_compare;
-              } else if (operand == "<-") {
-                _checked = first_to_compare < last_to_compare;
-              }
-            }
-              if (line.Split(new [] {
-                  ");"
-                }, StringSplitOptions.None)[1].Contains('"')) {
-                name = line.Split(new [] {
-                  ");"
-                }, StringSplitOptions.None)[1].Split('"')[1].Split('"')[0];
-              }
-              try {
-                int current_index = code.IndexOf(line);
-                current_index++;
-                List < string > to__compile = code.GetRange(current_index, (code.IndexOf("}" + name + ";") - current_index));
-                for (int i = 0; i < to__compile.Count; i++) {
-                  if (to__compile[i].StartsWith(indent_if)) {
-                    try {
-                      to__compile[to__compile.IndexOf(to__compile[i])] = to__compile[i].Substring(indent_if.Length);
-                    } catch {}
+                } else if (type_to_compare == "num") {
+                  float first_to_compare = numberValues[numberNames.IndexOf(first_)];
+                  float last_to_compare = 0;
+                  if (numberNames.Contains(last_)) {
+                    last_to_compare = numberValues[numberNames.IndexOf(last_)];
+                  } else {
+                    last_to_compare = float.Parse(last_);
+                  }
+                  if (operand == "==") {
+                    _checked = first_to_compare == last_to_compare;
+                  } else if (operand == "!=") {
+                    _checked = first_to_compare != last_to_compare;
+                  } else if (operand == ">=") {
+                    _checked = first_to_compare >= last_to_compare;
+                  } else if (operand == "<=") {
+                    _checked = first_to_compare <= last_to_compare;
+                  } else if (operand == "+>") {
+                    _checked = first_to_compare > last_to_compare;
+                  } else if (operand == "<-") {
+                    _checked = first_to_compare < last_to_compare;
                   }
                 }
-                if(_checked){
-                  _Compile(to__compile);
+                if (line.Split(new [] {
+                    ");"
+                  }, StringSplitOptions.None)[1].Contains('"')) {
+                  name = line.Split(new [] {
+                    ");"
+                  }, StringSplitOptions.None)[1].Split('"')[1].Split('"')[0];
                 }
-              } catch {
-                if (code.Contains("suppress_errors()") == false) {
-                  Console.WriteLine("Incorrect/Missing end statement for if statement: " + name);
+                try {
+                  int current_index = code.IndexOf(line);
+                  current_index++;
+                  List < string > to__compile = code.GetRange(current_index, (code.IndexOf("}" + name + ";") - current_index));
+                  for (int i = 0; i < to__compile.Count; i++) {
+                    if (to__compile[i].StartsWith(indent_if)) {
+                      try {
+                        to__compile[to__compile.IndexOf(to__compile[i])] = to__compile[i].Substring(indent_if.Length);
+                      } catch {}
+                    }
+                  }
+                  if (_checked) {
+                    _Compile(to__compile);
+                  }
+                } catch {
+                  if (code.Contains("suppress_errors()") == false) {
+                    Console.WriteLine("Incorrect/Missing end statement for if statement: " + name);
 
+                  }
                 }
               }
-            }
               continue;
             }
             continue;
@@ -456,9 +460,9 @@ namespace rC {
                 }
               }
 
-            } catch (Exception exc){
+            } catch (Exception exc) {
               int errorLine = code.IndexOf(line);
-              Console.WriteLine($"Invalid Syntax (Line {errorLine++}) Exception: "+exc);
+              Console.WriteLine($"Invalid Syntax (Line {errorLine++}) Exception: " + exc);
             }
             if (line.ToLower().Contains("add") != true) {
               continue;
@@ -907,7 +911,7 @@ namespace rC {
             } catch {
               Console.WriteLine("Invalid Syntax on Line: " + code.IndexOf(line));
             }
-          continue;
+            continue;
           }
 
           foreach(var stringList in strListNames) {
