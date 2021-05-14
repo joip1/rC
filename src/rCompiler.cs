@@ -313,6 +313,39 @@ namespace rC {
 
             if (_checked) {
               while(_checked){
+                if (type_to_compare == "str") {
+              string first_to_compare = strValues[strNames.IndexOf(first_)];
+              string last_to_compare = "";
+              if (statement.Contains('"')) {
+                last_to_compare = statement.Split('"')[1].Split('"')[0];
+              } else {
+                last_to_compare = strValues[strNames.IndexOf(statement.Split(new [] {
+                  operand
+                }, StringSplitOptions.None)[1])];
+              }
+              if (operand == "==") {
+                _checked = first_to_compare == last_to_compare;
+              } else if (operand == "!=") {
+                _checked = first_to_compare != last_to_compare;
+              }
+
+            } else if (type_to_compare == "num") {
+              float first_to_compare = numberValues[numberNames.IndexOf(first_)];
+              float last_to_compare = numberValues[numberNames.IndexOf(last_)];
+              if (operand == "==") {
+                _checked = first_to_compare == last_to_compare;
+              } else if (operand == "!=") {
+                _checked = first_to_compare != last_to_compare;
+              } else if (operand == ">=") {
+                _checked = first_to_compare >= last_to_compare;
+              } else if (operand == "<=") {
+                _checked = first_to_compare <= last_to_compare;
+              } else if (operand == "+>") {
+                _checked = first_to_compare > last_to_compare;
+              } else if (operand == "<-") {
+                _checked = first_to_compare < last_to_compare;
+              }
+            }
               if (line.Split(new [] {
                   ");"
                 }, StringSplitOptions.None)[1].Contains('"')) {
