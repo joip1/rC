@@ -311,7 +311,7 @@ namespace rC {
                             else
                             {
                                 last_to_compare = float.Parse(last_);
-                            }float last_to_compare = 0;
+                            }
                   if (numberNames.Contains(last_)) {
                     last_to_compare = numberValues[numberNames.IndexOf(last_)];
                   } else {
