@@ -213,8 +213,16 @@ namespace rC {
 
             } else if (type_to_compare == "num") {
               float first_to_compare = numberValues[numberNames.IndexOf(first_)];
-              float last_to_compare = numberValues[numberNames.IndexOf(last_)];
-              if (operand == "==") {
+                            float last_to_compare = 0;
+                            if (numberNames.Contains(last_))
+                            {
+                                last_to_compare = numberValues[numberNames.IndexOf(last_)];
+                            }
+                            else
+                            {
+                                last_to_compare = float.Parse(last_);
+                            }
+                            if (operand == "==") {
                 _checked = first_to_compare == last_to_compare;
               } else if (operand == "!=") {
                 _checked = first_to_compare != last_to_compare;
@@ -295,8 +303,21 @@ namespace rC {
 
             } else if (type_to_compare == "num") {
               float first_to_compare = numberValues[numberNames.IndexOf(first_)];
-              float last_to_compare = numberValues[numberNames.IndexOf(last_)];
-              if (operand == "==") {
+                            float last_to_compare = 0;
+                            if (numberNames.Contains(last_))
+                            {
+                                last_to_compare = numberValues[numberNames.IndexOf(last_)];
+                            }
+                            else
+                            {
+                                last_to_compare = float.Parse(last_);
+                            }float last_to_compare = 0;
+                  if (numberNames.Contains(last_)) {
+                    last_to_compare = numberValues[numberNames.IndexOf(last_)];
+                  } else {
+                    last_to_compare = float.Parse(last_);
+                  }
+                            if (operand == "==") {
                 _checked = first_to_compare == last_to_compare;
               } else if (operand == "!=") {
                 _checked = first_to_compare != last_to_compare;
