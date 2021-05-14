@@ -673,7 +673,7 @@ namespace rC {
             try {
               int ind = code.Count;
               List<string> init = code.GetRange(current_index, ind-current_index);
-              func_content = init.GetRange(0,init.Count-(init.IndexOf("}"+nameFunc+";")+1));
+              func_content = init.GetRange(0,init.Count-(init.IndexOf("};")+1));
             
               // foreach(var l in func_content){
               //   Console.WriteLine(l);
