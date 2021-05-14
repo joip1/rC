@@ -589,7 +589,6 @@ namespace rC {
               int ind = code.Count;
                 List<string> init = code.GetRange(current_index, ind-current_index);
               to__compile = init.GetRange(0,init.Count-(init.IndexOf("}"+name+";")+2)); 
-              to__compile.Add("    ");
               for (int i = 0; i < to__compile.Count; i++) {
               if (to__compile[i].StartsWith(indent_if)) {
                 try {
