@@ -241,8 +241,9 @@ namespace rC {
               try {
                 int current_index = code.IndexOf(line);
                 current_index++;
-                List < string > to__compile = code.GetRange(current_index, code.Count-1).GetRange(0, (code.GetRange(current_index, code.Count-1).IndexOf("}" + name + ";")));
-                for (int i = 0; i < to__compile.Count; i++) {
+                int ind = code.Count;
+                List<string> init = code.GetRange(current_index, ind-current_index);
+                List < string >  to__compile = init.GetRange(0,init.Count-(init.IndexOf("}"+name+";")+1));                for (int i = 0; i < to__compile.Count; i++) {
                   if (to__compile[i].StartsWith(indent_if)) {
                     try {
                       to__compile[to__compile.IndexOf(to__compile[i])] = to__compile[i].Substring(indent_if.Length);
@@ -357,7 +358,10 @@ namespace rC {
               try {
                 int current_index = code.IndexOf(line);
                 current_index++;
-                List < string >               to__compile = code.GetRange(current_index, code.Count-1).GetRange(0, (code.GetRange(current_index, code.Count-1).IndexOf("}" + name + ";")));
+                int ind = code.Count;
+                //}; -> 
+                List<string> init = code.GetRange(current_index, ind-current_index);
+                List < string >  to__compile = init.GetRange(0,init.Count-(init.IndexOf("}"+name+";")+1));
 
                 for (int i = 0; i < to__compile.Count; i++) {
                   if (to__compile[i].StartsWith(indent_if)) {
@@ -369,9 +373,9 @@ namespace rC {
                 if(_checked){
                   _Compile(to__compile);
                 }
-              } catch {
+              } catch (Exception exc){
                 if (code.Contains("suppress_errors()") == false) {
-                  Console.WriteLine("Incorrect/Missing end statement for while loop: " + name);
+                  Console.WriteLine("Incorrect/Missing end statement for while loop: " + name + exc);
 
                 }
               }
@@ -583,8 +587,10 @@ namespace rC {
             try {
               int current_index = code.IndexOf(line);
               current_index++;
-              to__compile = code.GetRange(current_index, code.Count-1).GetRange(0, (code.GetRange(current_index, code.Count-1).IndexOf("}" + name + ";")));
-              for (int i = 0; i < to__compile.Count; i++) {
+              int ind = code.Count;
+                List<string> init = code.GetRange(current_index, ind-current_index);
+                to__compile = init.GetRange(0,init.Count-(init.IndexOf("}"+name+";")+1));              
+                for (int i = 0; i < to__compile.Count; i++) {
                 if (to__compile[i].StartsWith(indent_if)) {
                   try {
                     to__compile[to__compile.IndexOf(to__compile[i])] = to__compile[i].Substring(indent_if.Length);
@@ -638,12 +644,14 @@ namespace rC {
               "function "
             }, StringSplitOptions.None).Last().Split('(').First();
             names_for_functions.Add(nameFunc);
-            List < string > func_content = code;
+            List < string > func_content = new List<string>();
             List < string > compileAfter = new List < string > ();
             int current_index = code.IndexOf(line);
             current_index++;
             try {
-              func_content = code.GetRange(current_index, (code.IndexOf("}" + nameFunc + ";") - current_index));
+              int ind = code.Count;
+              List<string> init = code.GetRange(current_index, ind-current_index);
+              func_content = init.GetRange(0,init.Count-(init.IndexOf("};")+1));
             } catch {
               Console.WriteLine("Incorrect/Missing end statement for function: " + nameFunc);
             }
@@ -1726,7 +1734,10 @@ namespace rC {
               continue;
 
             }
-
+            if(code.Contains("main()") == false && names_for_functions.Contains("main")){
+                Compile(lines_for_functions[names_for_functions.IndexOf("main")], numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+                continue;
+            }
             //string definer
 
             //Write 
