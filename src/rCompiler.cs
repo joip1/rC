@@ -28,7 +28,7 @@ namespace rC {
       List < List < string >> strListValues,
       List < string > numListNames,
       List < List < float >> numListValues,
-      
+
       List < List < string >> lines_for_functions,
       List < string > names_for_functions) {
 
@@ -38,7 +38,7 @@ namespace rC {
       //     Console.WriteLine(item);
       // }
       //values and indicators
-    
+
       string current_line = "";
       List < int > pixelX = new List < int > ();
       List < int > pixelY = new List < int > ();
@@ -87,9 +87,6 @@ namespace rC {
           //TODO - Add general error matching case;        
           //        try{
           string line = code[_index];
-          if(line=="};"){
-            continue;
-          }
           current_line = line;
           if (line == "\n" || line == "    \n" || line == "" || line.StartsWith("#")) {
             continue;
@@ -132,8 +129,7 @@ namespace rC {
           if (line.Split(';')[0] == "stop") {
             return;
 
-          }
-          else if (line.Split(';')[0] == "stop_break") {
+          } else if (line.Split(';')[0] == "stop_break") {
             break;
           }
           foreach(var func_name in names_for_functions) {
@@ -244,10 +240,7 @@ namespace rC {
               try {
                 int current_index = code.IndexOf(line);
                 current_index++;
-                int ind = code.Count;
-                List<string> init = code.GetRange(current_index, ind-current_index);
-                List < string > to__compile = init.GetRange(0,init.Count-(init.IndexOf("}"+name+";")+1));
-
+                List < string > to__compile = code.GetRange(current_index, (code.IndexOf("}" + name + ";") - current_index));
                 for (int i = 0; i < to__compile.Count; i++) {
                   if (to__compile[i].StartsWith(indent_if)) {
                     try {
@@ -265,7 +258,7 @@ namespace rC {
               continue;
             }
             continue;
-          }else if (line.StartsWith("while ")) {
+          } else if (line.StartsWith("while ")) {
             //while type() 
 
             string type_to_compare = line.Split(' ')[1].Split('(')[0];
@@ -319,74 +312,69 @@ namespace rC {
             }
 
             if (_checked) {
-              while(_checked){
+              while (_checked) {
                 if (type_to_compare == "str") {
-              string first_to_compare = strValues[strNames.IndexOf(first_)];
-              string last_to_compare = "";
-              if (statement.Contains('"')) {
-                last_to_compare = statement.Split('"')[1].Split('"')[0];
-              } else {
-                last_to_compare = strValues[strNames.IndexOf(statement.Split(new [] {
-                  operand
-                }, StringSplitOptions.None)[1])];
-              }
-              if (operand == "==") {
-                _checked = first_to_compare == last_to_compare;
-              } else if (operand == "!=") {
-                _checked = first_to_compare != last_to_compare;
-              }
+                  string first_to_compare = strValues[strNames.IndexOf(first_)];
+                  string last_to_compare = "";
+                  if (statement.Contains('"')) {
+                    last_to_compare = statement.Split('"')[1].Split('"')[0];
+                  } else {
+                    last_to_compare = strValues[strNames.IndexOf(statement.Split(new [] {
+                      operand
+                    }, StringSplitOptions.None)[1])];
+                  }
+                  if (operand == "==") {
+                    _checked = first_to_compare == last_to_compare;
+                  } else if (operand == "!=") {
+                    _checked = first_to_compare != last_to_compare;
+                  }
 
-            } else if (type_to_compare == "num") {
-              float first_to_compare = numberValues[numberNames.IndexOf(first_)];
-              float last_to_compare = numberValues[numberNames.IndexOf(last_)];
-              if (operand == "==") {
-                _checked = first_to_compare == last_to_compare;
-              } else if (operand == "!=") {
-                _checked = first_to_compare != last_to_compare;
-              } else if (operand == ">=") {
-                _checked = first_to_compare >= last_to_compare;
-              } else if (operand == "<=") {
-                _checked = first_to_compare <= last_to_compare;
-              } else if (operand == "+>") {
-                _checked = first_to_compare > last_to_compare;
-              } else if (operand == "<-") {
-                _checked = first_to_compare < last_to_compare;
-              }
-            }
-              if (line.Split(new [] {
-                  ");"
-                }, StringSplitOptions.None)[1].Contains('"')) {
-                name = line.Split(new [] {
-                  ");"
-                }, StringSplitOptions.None)[1].Split('"')[1].Split('"')[0];
-              }
-              try {
-                int current_index = code.IndexOf(line);
-                current_index++;
-                int ind = code.Count;
-                //}; -> 
-                List<string> init = code.GetRange(current_index, ind-current_index);
-                List < string >  to__compile = init.GetRange(0,init.Count-(init.IndexOf("}"+name+";")+1));
-                foreach(var f in to__compile){
-                
-
-                for (int i = 0; i < to__compile.Count; i++) {
-                  if (to__compile[i].StartsWith(indent_if)) {
-                    try {
-                      to__compile[to__compile.IndexOf(to__compile[i])] = to__compile[i].Substring(indent_if.Length);
-                    } catch {}
+                } else if (type_to_compare == "num") {
+                  float first_to_compare = numberValues[numberNames.IndexOf(first_)];
+                  float last_to_compare = numberValues[numberNames.IndexOf(last_)];
+                  if (operand == "==") {
+                    _checked = first_to_compare == last_to_compare;
+                  } else if (operand == "!=") {
+                    _checked = first_to_compare != last_to_compare;
+                  } else if (operand == ">=") {
+                    _checked = first_to_compare >= last_to_compare;
+                  } else if (operand == "<=") {
+                    _checked = first_to_compare <= last_to_compare;
+                  } else if (operand == "+>") {
+                    _checked = first_to_compare > last_to_compare;
+                  } else if (operand == "<-") {
+                    _checked = first_to_compare < last_to_compare;
                   }
                 }
-                if(_checked){
-                  _Compile(to__compile);
+                if (line.Split(new [] {
+                    ");"
+                  }, StringSplitOptions.None)[1].Contains('"')) {
+                  name = line.Split(new [] {
+                    ");"
+                  }, StringSplitOptions.None)[1].Split('"')[1].Split('"')[0];
                 }
-              }} catch (Exception exc){
-                if (code.Contains("suppress_errors()") == false) {
-                  Console.WriteLine("Incorrect/Missing end statement for while loop: " + name + exc);
+                try {
+                  int current_index = code.IndexOf(line);
+                  current_index++;
+                  List < string > to__compile = to__compile = code.GetRange(current_index, code.Count - 1).GetRange(0, (code.GetRange(current_index, code.Count - 1).IndexOf("}" + name + ";") - current_index) + 1);;
 
+                  for (int i = 0; i < to__compile.Count; i++) {
+                    if (to__compile[i].StartsWith(indent_if)) {
+                      try {
+                        to__compile[to__compile.IndexOf(to__compile[i])] = to__compile[i].Substring(indent_if.Length);
+                      } catch {}
+                    }
+                  }
+                  if (_checked) {
+                    _Compile(to__compile);
+                  }
+                } catch {
+                  if (code.Contains("suppress_errors()") == false) {
+                    Console.WriteLine("Incorrect/Missing end statement for if statement: " + name);
+
+                  }
                 }
               }
-            }
               continue;
             }
             continue;
@@ -468,9 +456,9 @@ namespace rC {
                 }
               }
 
-            } catch (Exception exc){
+            } catch (Exception exc) {
               int errorLine = code.IndexOf(line);
-              Console.WriteLine($"Invalid Syntax (Line {errorLine++}) Exception: "+exc);
+              Console.WriteLine($"Invalid Syntax (Line {errorLine++}) Exception: " + exc);
             }
             if (line.ToLower().Contains("add") != true) {
               continue;
@@ -587,34 +575,20 @@ namespace rC {
                 name = "";
               }
               //              indent = "    ";
-            } catch {
+            } catch (Exception exc) {
+              Console.WriteLine(exc);
             }
             List < string > to__compile = new List < string > ();
             try {
               int current_index = code.IndexOf(line);
               current_index++;
-              int ind = code.Count;
-                List<string> init = code.GetRange(current_index, ind-current_index);
-                /*
-                  0  Write "ho"
-                  1  Write "hi"
-                  2 };
-                  3 newln
-                  4 exit()
-                  Len = 5
-                */
-              to__compile = init.GetRange(0,init.Count-(init.IndexOf("}"+name+";")+1));
-              // foreach(var f in to__compile){
-              //   if(f.StartsWith(indent_if)==false){
-              //     to__compile.Remove(f);
-              //   }
-              // }
-             
+              to__compile = code.GetRange(current_index, code.Count - 1).GetRange(0, (code.GetRange(current_index, code.Count - 1).IndexOf("}" + name + ";") - current_index) + 1);
+
               for (int i = 0; i < to__compile.Count; i++) {
-              if (to__compile[i].StartsWith(indent_if)) {
-                try {
-                  to__compile[to__compile.IndexOf(to__compile[i])] = to__compile[i].Substring(indent_if.Length);
-                } catch {}
+                if (to__compile[i].StartsWith(indent_if)) {
+                  try {
+                    to__compile[to__compile.IndexOf(to__compile[i])] = to__compile[i].Substring(indent_if.Length);
+                  } catch {}
                 }
               }
             } catch {
@@ -630,10 +604,8 @@ namespace rC {
                 numberValues.Add(x);
                 numberNames.Add(looper);
               }
-             
               _Compile(to__compile);
               continue;
-
               //continue;
             }
             // _Compile(compileAfter);
@@ -666,18 +638,13 @@ namespace rC {
               "function "
             }, StringSplitOptions.None).Last().Split('(').First();
             names_for_functions.Add(nameFunc);
-            List < string > func_content = new List<string>();
+            List < string > func_content = code;
             List < string > compileAfter = new List < string > ();
             int current_index = code.IndexOf(line);
             current_index++;
             try {
-              int ind = code.Count;
-              List<string> init = code.GetRange(current_index, ind-current_index);
-              func_content = init.GetRange(0,init.Count-(init.IndexOf("};")+1));
-            
-              // foreach(var l in func_content){
-              //   Console.WriteLine(l);
-              // }
+              func_content = code.GetRange(current_index, code.Count - 1).GetRange(0, (code.GetRange(current_index, code.Count - 1).IndexOf("};") - current_index) + 1);
+
             } catch {
               Console.WriteLine("Incorrect/Missing end statement for function: " + nameFunc);
             }
@@ -942,7 +909,7 @@ namespace rC {
             } catch {
               Console.WriteLine("Invalid Syntax on Line: " + code.IndexOf(line));
             }
-          continue;
+            continue;
           }
 
           foreach(var stringList in strListNames) {
@@ -1760,7 +1727,7 @@ namespace rC {
               continue;
 
             }
-            
+
             //string definer
 
             //Write 
