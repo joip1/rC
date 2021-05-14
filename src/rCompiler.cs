@@ -241,7 +241,7 @@ namespace rC {
               try {
                 int current_index = code.IndexOf(line);
                 current_index++;
-                List < string > to__compile = code.GetRange(current_index, (code.IndexOf("}" + name + ";") - current_index));
+                List < string > to__compile = code.GetRange(current_index, code.Count-1).GetRange(current_index, (code.IndexOf("}" + name + ";") - current_index));
                 for (int i = 0; i < to__compile.Count; i++) {
                   if (to__compile[i].StartsWith(indent_if)) {
                     try {
@@ -357,7 +357,7 @@ namespace rC {
               try {
                 int current_index = code.IndexOf(line);
                 current_index++;
-                List < string > to__compile = code.GetRange(current_index, (code.IndexOf("}" + name + ";") - current_index));
+                List < string > to__compile = code.GetRange(current_index, (code.GetRange(current_index, code.Count-1).IndexOf("}" + name + ";") - current_index));
                 for (int i = 0; i < to__compile.Count; i++) {
                   if (to__compile[i].StartsWith(indent_if)) {
                     try {
@@ -582,7 +582,7 @@ namespace rC {
             try {
               int current_index = code.IndexOf(line);
               current_index++;
-              to__compile = code.GetRange(current_index, (code.IndexOf("}" + name + ";") - current_index));
+              to__compile = code.GetRange(current_index, code.Count-1).GetRange(current_index, (code.IndexOf("}" + name + ";") - current_index));
               for (int i = 0; i < to__compile.Count; i++) {
                 if (to__compile[i].StartsWith(indent_if)) {
                   try {
