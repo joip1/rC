@@ -879,6 +879,15 @@ namespace rC {
 
             }
 
+            if(line.StartsWith(listName + ".RemoveAt")){
+              int index = 0;
+              if(numberNames.Contains(line.Split('(')[1].Split(')')[0])){
+                  index = Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split('(')[1].Split(')')[0])]);
+              }else{
+                index = Convert.ToInt32(line.Split('(')[1].Split(')')[0]);
+              }
+              strListValues[strListNames.IndexOf(listName)].RemoveAt(index);
+            }
             foreach(var name in strNames) {
               if (name.ToLower().StartsWith(listName.ToLower() + ".add")) {
                 if (strListValues[strListNames.IndexOf(listName)].Contains(strValues[strNames.IndexOf(name)]) == false) {
@@ -908,6 +917,15 @@ namespace rC {
                 throw new Exception("Fatal error on line: " + code.IndexOf(line));
               }
 
+            }
+            if(line.StartsWith(listName + ".RemoveAt")){
+              int index = 0;
+              if(numberNames.Contains(line.Split('(')[1].Split(')')[0])){
+                  index = Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split('(')[1].Split(')')[0])]);
+              }else{
+                index = Convert.ToInt32(line.Split('(')[1].Split(')')[0]);
+              }
+              numListValues[numListNames.IndexOf(listName)].RemoveAt(index);
             }
             foreach(var name in numberNames) {
               if (name.ToLower().StartsWith(listName.ToLower() + ".add")) {
