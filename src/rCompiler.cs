@@ -47,6 +47,7 @@ namespace rC {
       List < int > pixelXChar = new List < int > ();
       List < int > pixelYChar = new List < int > ();
       Random rand = new Random();
+      
       List < ConsoleColor > pixelColorsChar = new List < ConsoleColor > ();
       string indent_if = "    ";
       string[] operands = {
@@ -489,8 +490,8 @@ namespace rC {
             line.ToLower().StartsWith("for") == false &&
             line.ToLower().Contains("in range %") == false &&
             line.Contains("$>") == false) {
-            try {
               rand = new Random();
+            try {
               if (numberNames.Contains(line.Split(' ')[1].Split('>').First())) {
                 if (line.ToLower().Contains("$readline") == false) {
                   try {
@@ -504,7 +505,6 @@ namespace rC {
                       numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = float.Parse(line.Split('>').Last());
                     }
                   } catch {
-                    rand = new Random();
                     if (line.Split('>').Last().Contains("rand:")) {
                       numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = rand.Next(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new [] {
                         "rand:"
@@ -519,7 +519,6 @@ namespace rC {
                   numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = float.Parse(Console.ReadLine());
                 }
               } else {
-                rand = new Random();
                 if (line.ToLower().Contains("$readline") == false) {
                   numberNames.Add(line.Split(' ')[1].Split('>').First());
                   try {
