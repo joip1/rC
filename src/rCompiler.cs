@@ -31,16 +31,16 @@ namespace rC {
       List < List < string >> strListValues,
       List < string > numListNames,
       List < List < float >> numListValues,
-
       List < List < string >> lines_for_functions,
-      List < string > names_for_functions) {
+      List < string > names_for_functions,
+      List < string > definers_to_replace,
+      List < string > defined_to_replace) {
 
-      // foreach (var item in code)
-
-      // {
-      //     Console.WriteLine(item);
-      // }
-      //values and indicators
+      /*
+      define =:>>
+      // definers_to_replace
+      // defined_to
+      */
 
       string current_line = "";
       List < int > pixelX = new List < int > ();
@@ -83,8 +83,18 @@ namespace rC {
 
           //TODO - Add general error matching case;        
           //        try{
+
+          //
           string line = code[_index];
           current_line = line;
+          if (definers_to_replace.Count > 0) {
+            for (int i = 0; i < definers_to_replace.Count; i++) {
+              if (line.Contains(definers_to_replace[i])) {
+                line = line.Replace(definers_to_replace[i], defined_to_replace[i]);
+              }
+            }
+          }
+
           if (line == "\n" || line == "    \n" || line == "" || line.StartsWith("#")) {
             continue;
           }
@@ -107,6 +117,16 @@ namespace rC {
               } catch {
 
               }
+            }
+
+          }
+          if (line.StartsWith("define ")) {
+            // define "=":">>"
+            if (definers_to_replace.Contains(line.Split(' ')[1].Split('"')[1].Split('"')[0].Split(':')[0]) == false) {
+              definers_to_replace.Add(line.Split(' ')[1].Split('"')[1].Split('"')[0].Split(':')[0]);
+            }
+            if (defined_to_replace.Contains(line.Split(':')[1].Split('"')[1].Split('"')[0]) == false) {
+              defined_to_replace.Add(line.Split(':')[1].Split('"')[1].Split('"')[0]);
             }
 
           }
@@ -151,7 +171,7 @@ namespace rC {
                 ";;"
               }, StringSplitOptions.None).ToList();
               _Compile(add_args);
-              Compile(lines_for_functions[names_for_functions.IndexOf(func_name)], numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+              Compile(lines_for_functions[names_for_functions.IndexOf(func_name)], numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions, definers_to_replace, defined_to_replace);
               is_continue = true;
               break;
             }
@@ -640,7 +660,7 @@ namespace rC {
             try {
               string nameof_func = line.Split('(')[1].Split('(')[0];
               void newThreadStart() {
-                rCompiler.Compile(lines_for_functions[names_for_functions.IndexOf(nameof_func)], numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+                rCompiler.Compile(lines_for_functions[names_for_functions.IndexOf(nameof_func)], numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions, definers_to_replace, defined_to_replace);
                 Console.WriteLine("");
               }
 
@@ -691,7 +711,7 @@ namespace rC {
             }
 
             lines_for_functions.Add(func_content);
-            Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+            Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions, definers_to_replace, defined_to_replace);
             continue;
           }
 
@@ -1074,7 +1094,7 @@ namespace rC {
                     ";;"
                   }, StringSplitOptions.None).ToList();
                   _Compile(add_args);
-                  Compile(linesFromFile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+                  Compile(linesFromFile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions, definers_to_replace, defined_to_replace);
                   //Environment.Exit(1);
                   is_continue = true;
                   break;
@@ -1112,13 +1132,13 @@ namespace rC {
                 }, StringSplitOptions.None).Last().Split(';').First());
                 firstIndex--;
                 List < string > newCompile = code;
-                Compile(newCompile.GetRange(firstIndex, (lastIndex - firstIndex)), numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+                Compile(newCompile.GetRange(firstIndex, (lastIndex - firstIndex)), numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions, definers_to_replace, defined_to_replace);
               } catch {
                 if (line.Split(new [] {
                     "content:"
                   }, StringSplitOptions.None).Last().Split(';').First() == "all") {
                   List < string > newCompile = code;
-                  Compile(newCompile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+                  Compile(newCompile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions, definers_to_replace, defined_to_replace);
                 } else {
                   try {
                     int firstIndex = Convert.ToInt32(line.Split(new [] {
@@ -1129,7 +1149,7 @@ namespace rC {
                     }, StringSplitOptions.None).Last().Split(';').First());
                     firstIndex--;
                     List < string > newCompile = code;
-                    Compile(newCompile.GetRange(firstIndex, (lastIndex - firstIndex)), numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+                    Compile(newCompile.GetRange(firstIndex, (lastIndex - firstIndex)), numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions, definers_to_replace, defined_to_replace);
                   } catch {
 
                   }
@@ -1730,7 +1750,7 @@ namespace rC {
 
       // }
       void _Compile(List < string > to_compile_) {
-        Compile(to_compile_, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
+        Compile(to_compile_, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions, definers_to_replace, defined_to_replace);
 
       }
     }
