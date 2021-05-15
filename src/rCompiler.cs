@@ -17,6 +17,9 @@ namespace rC {
     //write,read,delete,create file
     //numToStr(str>>num)
     //TODO - add import files
+
+    //define "=" : ">>" 
+    //include "hea
     public static void Compile(
       List < string > code,
       List < string > numberNames,
@@ -47,7 +50,7 @@ namespace rC {
       List < int > pixelXChar = new List < int > ();
       List < int > pixelYChar = new List < int > ();
       Random rand = new Random();
-      
+
       List < ConsoleColor > pixelColorsChar = new List < ConsoleColor > ();
       string indent_if = "    ";
       string[] operands = {
@@ -85,7 +88,7 @@ namespace rC {
           if (line == "\n" || line == "    \n" || line == "" || line.StartsWith("#")) {
             continue;
           }
-          if(line.StartsWith("}")){
+          if (line.StartsWith("}")) {
             continue;
           }
 
@@ -210,16 +213,13 @@ namespace rC {
 
             } else if (type_to_compare == "num") {
               float first_to_compare = numberValues[numberNames.IndexOf(first_)];
-                            float last_to_compare = 0;
-                            if (numberNames.Contains(last_))
-                            {
-                                last_to_compare = numberValues[numberNames.IndexOf(last_)];
-                            }
-                            else
-                            {
-                                last_to_compare = float.Parse(last_);
-                            }
-                            if (operand == "==") {
+              float last_to_compare = 0;
+              if (numberNames.Contains(last_)) {
+                last_to_compare = numberValues[numberNames.IndexOf(last_)];
+              } else {
+                last_to_compare = float.Parse(last_);
+              }
+              if (operand == "==") {
                 _checked = first_to_compare == last_to_compare;
               } else if (operand == "!=") {
                 _checked = first_to_compare != last_to_compare;
@@ -245,19 +245,19 @@ namespace rC {
               try {
                 int current_index = code.IndexOf(line);
                 current_index++;
-                List < string > to__compile = code.GetRange(current_index, code.Count-current_index).GetRange(0, (code.GetRange(current_index, code.Count-current_index).IndexOf("}" + name + ";") - 0));
+                List < string > to__compile = code.GetRange(current_index, code.Count - current_index).GetRange(0, (code.GetRange(current_index, code.Count - current_index).IndexOf("}" + name + ";") - 0));
                 for (int i = 0; i < to__compile.Count; i++) {
                   if (to__compile[i].StartsWith(indent_if)) {
                     try {
                       to__compile[i] = to__compile[i].Substring(indent_if.Length);
-                      
+
                     } catch {}
                   }
                 }
                 _Compile(to__compile);
               } catch (Exception exc) {
                 if (code.Contains("suppress_errors()") == false) {
-                  Console.WriteLine("Incorrect/Missing end statement for if statement: " + name +exc);
+                  Console.WriteLine("Incorrect/Missing end statement for if statement: " + name + exc);
 
                 }
               }
@@ -301,21 +301,18 @@ namespace rC {
 
             } else if (type_to_compare == "num") {
               float first_to_compare = numberValues[numberNames.IndexOf(first_)];
-                            float last_to_compare = 0;
-                            if (numberNames.Contains(last_))
-                            {
-                                last_to_compare = numberValues[numberNames.IndexOf(last_)];
-                            }
-                            else
-                            {
-                                last_to_compare = float.Parse(last_);
-                            }
-                  if (numberNames.Contains(last_)) {
-                    last_to_compare = numberValues[numberNames.IndexOf(last_)];
-                  } else {
-                    last_to_compare = float.Parse(last_);
-                  }
-                            if (operand == "==") {
+              float last_to_compare = 0;
+              if (numberNames.Contains(last_)) {
+                last_to_compare = numberValues[numberNames.IndexOf(last_)];
+              } else {
+                last_to_compare = float.Parse(last_);
+              }
+              if (numberNames.Contains(last_)) {
+                last_to_compare = numberValues[numberNames.IndexOf(last_)];
+              } else {
+                last_to_compare = float.Parse(last_);
+              }
+              if (operand == "==") {
                 _checked = first_to_compare == last_to_compare;
               } else if (operand == "!=") {
                 _checked = first_to_compare != last_to_compare;
@@ -380,7 +377,7 @@ namespace rC {
                 try {
                   int current_index = code.IndexOf(line);
                   current_index++;
-                  List < string > to__compile = code.GetRange(current_index, code.Count-current_index).GetRange(0, (code.GetRange(current_index, code.Count-current_index).IndexOf("}" + name + ";") - 0));
+                  List < string > to__compile = code.GetRange(current_index, code.Count - current_index).GetRange(0, (code.GetRange(current_index, code.Count - current_index).IndexOf("}" + name + ";") - 0));
                   for (int i = 0; i < to__compile.Count; i++) {
                     if (to__compile[i].StartsWith(indent_if)) {
                       try {
@@ -490,7 +487,7 @@ namespace rC {
             line.ToLower().StartsWith("for") == false &&
             line.ToLower().Contains("in range %") == false &&
             line.Contains("$>") == false) {
-              rand = new Random();
+            rand = new Random();
             try {
               if (numberNames.Contains(line.Split(' ')[1].Split('>').First())) {
                 if (line.ToLower().Contains("$readline") == false) {
@@ -542,7 +539,6 @@ namespace rC {
                     }
                   } catch {
                     if (line.Split('>').Last().Contains("rand:")) {
-                      Ssystem.Threading.Thread.Sleep(1);
                       numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = rand.Next(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new [] {
                         "rand:"
                       }, StringSplitOptions.None).Last().Split(',').First())]), Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new [] {
@@ -612,8 +608,8 @@ namespace rC {
               //2
               //3
               //::4
-        
-              to__compile = code.GetRange(current_index, code.Count-current_index).GetRange(0, (code.GetRange(current_index, code.Count-current_index).IndexOf("}" + name + ";") - 0));
+
+              to__compile = code.GetRange(current_index, code.Count - current_index).GetRange(0, (code.GetRange(current_index, code.Count - current_index).IndexOf("}" + name + ";") - 0));
               for (int i = 0; i < to__compile.Count; i++) {
                 if (to__compile[i].StartsWith(indent_if)) {
                   try {
@@ -673,17 +669,15 @@ namespace rC {
             int current_index = code.IndexOf(line);
             current_index++;
             try {
-              func_content = code.GetRange(current_index, code.Count-current_index).GetRange(0, (code.GetRange(current_index, code.Count-current_index).IndexOf("};") - 0));
-          
-            } catch (Exception exc){
-              Console.WriteLine(exc);
-              try{
-              func_content = code.GetRange(current_index, code.Count-current_index).GetRange(0, (code.GetRange(current_index, code.Count-current_index).IndexOf("}" + nameFunc + ";") - 0));
-              }
-              catch{
+              func_content = code.GetRange(current_index, code.Count - current_index).GetRange(0, (code.GetRange(current_index, code.Count - current_index).IndexOf("};") - 0));
 
-              
-              Console.WriteLine("Incorrect/Missing end statement for function: " + nameFunc);
+            } catch (Exception exc) {
+              Console.WriteLine(exc);
+              try {
+                func_content = code.GetRange(current_index, code.Count - current_index).GetRange(0, (code.GetRange(current_index, code.Count - current_index).IndexOf("}" + nameFunc + ";") - 0));
+              } catch {
+
+                Console.WriteLine("Incorrect/Missing end statement for function: " + nameFunc);
               }
             }
             string indent = "    ";
@@ -692,11 +686,9 @@ namespace rC {
               if (func_content[i].StartsWith(indent)) {
                 try {
                   func_content[i] = func_content[i].Substring(indent.Length);
-                } catch {
-                }
+                } catch {}
               }
             }
-         
 
             lines_for_functions.Add(func_content);
             Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
@@ -1096,92 +1088,17 @@ namespace rC {
             if (is_continue) {
               continue;
             }
-            if (line.StartsWith("headers")) {
-              string fileToCompile = "";
-              try {
-                int firstIndex = Convert.ToInt32(line.Split(new [] {
-                  "first:"
-                }, StringSplitOptions.None).Last().Split(';').First());
-                int lastIndex = Convert.ToInt32(line.Split(new [] {
-                  "last:"
-                }, StringSplitOptions.None).Last().Split(';').First());
-                firstIndex--;
-                fileToCompile = line.Split(new [] {
-                  "file:"
-                }, StringSplitOptions.None).Last().Split(';').First();
-
-                if (!File.Exists(fileToCompile)) {
-                  Console.ForegroundColor = ConsoleColor.Red;
-                  Console.WriteLine("ERROR: File Does Not Exist (Line Index: " + code.IndexOf(line) + ")(" + line + ")");
-                  Console.ResetColor();
-                } else {
-                  StreamReader specificLine_Compiler = File.OpenText(fileToCompile);
-                  string lineReading;
-                  List < string > linesFromFile = new List < string > ();
-                  while ((lineReading = specificLine_Compiler.ReadLine()) != null) {
-                    linesFromFile.Add(lineReading);
-                  }
-                  specificLine_Compiler.Close();
-                  if (line.Split(new [] {
-                      "content:"
-                    }, StringSplitOptions.None).Last().Split(';').First() == "all") {
-                    Compile(linesFromFile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-                  } else {
-                    Compile(linesFromFile.GetRange(firstIndex, lastIndex - (firstIndex)), numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-                  }
-                }
-              } catch {
-                try {
-                  fileToCompile = line.ToLower().Split(new [] {
-                    "file:"
-                  }, StringSplitOptions.None).Last().Split(';').First();
-                  if (line.Split(new [] {
-                      "content:"
-                    }, StringSplitOptions.None).Last().Split(';').First() == "all") {
-                    StreamReader specificLine_Compiler = File.OpenText(fileToCompile);
-                    string lineReading;
-                    List < string > linesFromFile = new List < string > ();
-                    while ((lineReading = specificLine_Compiler.ReadLine()) != null) {
-                      linesFromFile.Add(lineReading);
-                    }
-                    specificLine_Compiler.Close();
-                    Compile(linesFromFile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-                  }
-                } catch {
-                  try {
-
-                    StreamReader specificLine_Compiler = File.OpenText(fileToCompile);
-                    string lineReading;
-                    int firstIndex = Convert.ToInt32(line.Split(new [] {
-                      "first:"
-                    }, StringSplitOptions.None).Last().Split(';').First());
-                    int lastIndex = Convert.ToInt32(line.Split(new [] {
-                      "last:"
-                    }, StringSplitOptions.None).Last().Split(';').First());
-                    firstIndex--;
-                    fileToCompile = line.ToLower().Split(new [] {
-                      "file:"
-                    }, StringSplitOptions.None).Last().Split(';').First();
-                    List < string > linesFromFile = new List < string > ();
-                    while ((lineReading = specificLine_Compiler.ReadLine()) != null) {
-                      linesFromFile.Add(lineReading);
-                    }
-                    specificLine_Compiler.Close();
-                    if (line.Split(new [] {
-                        "content:"
-                      }, StringSplitOptions.None).Last().Split(';').First() == "all") {
-                      Compile(linesFromFile, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-                    } else {
-                      Compile(linesFromFile.GetRange(firstIndex, lastIndex - (firstIndex)), numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
-                    }
-                  } catch {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine("INVALID SYNTAX IN LINE " + code.IndexOf(line) + "(" + line + ")");
-                    Console.ResetColor();
-                  }
-                }
-
+            if (line.StartsWith("include ")) {
+              //include "headers.h.rcode"
+              string file_to_read = line.Split('"')[1].Split('"')[0];
+              StreamReader _line_reader = File.OpenText(file_to_read);
+              List < string > to__compile = new List < string > ();
+              string _current_line = "";
+              while ((_current_line = _line_reader.ReadLine()) != null) {
+                to__compile.Add(_current_line);
               }
+              _Compile(to__compile);
+              continue;
             }
 
             if (line.ToLower().StartsWith("compile_lines")) {
