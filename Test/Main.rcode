@@ -1,15 +1,6 @@
+function main(); => {
+    Write "Hi"
+}main;
 
-
-
-
-
-for  f in range:1000;{
-    Write "HI"
-};
-
-
-for y in range:1000;{
-    Write "Ho"
-};
-
+main()
 exit()

@@ -91,6 +91,9 @@ namespace rC {
           if (line == "\n" || line == "    \n" || line == "" || line.StartsWith("#")) {
             continue;
           }
+          if(line.StartsWith("}")){
+            continue;
+          }
 
           if (line.Contains('$')) {
             foreach(var string_var in strNames) {
