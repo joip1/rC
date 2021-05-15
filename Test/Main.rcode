@@ -1,6 +1,4 @@
-function main(); => {
-    Write "Hi"
-}main;
-
+HEADERS: 
 main()
+newln
 exit()

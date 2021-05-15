@@ -51,7 +51,12 @@ namespace rC
 
             strListNames.Add("args");
             strListValues.Add(new List<string>());
-
+        strNames.Add("line_break");
+        strValues.Add("\n");
+        strNames.Add("modules_path");
+        strValues.Add("modules");
+        strNames.Add("path");
+        strValues.Add("/usr/lib/rC");
             foreach (var arg in args)
             {
                 int x = Array.IndexOf(args,arg);
