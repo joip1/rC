@@ -1,4 +1,15 @@
-num x >>0.3
-x+0.1
-Write "$x$"
+
+
+
+
+
+for  f in range:1000;{
+    Write "HI"
+};
+
+
+for y in range:1000;{
+    Write "Ho"
+};
+
 exit()

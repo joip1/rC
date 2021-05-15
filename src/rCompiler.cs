@@ -248,7 +248,7 @@ namespace rC {
               try {
                 int current_index = code.IndexOf(line);
                 current_index++;
-                List < string > to__compile = code.GetRange(current_index, (code.IndexOf("}" + name + ";") - current_index));
+                List < string > to__compile = code.GetRange(current_index, code.Count-current_index).GetRange(0, (code.GetRange(current_index, code.Count-current_index).IndexOf("}" + name + ";") - 0));
                 for (int i = 0; i < to__compile.Count; i++) {
                   if (to__compile[i].StartsWith(indent_if)) {
                     try {
@@ -382,7 +382,7 @@ namespace rC {
                 try {
                   int current_index = code.IndexOf(line);
                   current_index++;
-                  List < string > to__compile = code.GetRange(current_index, (code.IndexOf("}" + name + ";") - current_index));
+                  List < string > to__compile = code.GetRange(current_index, code.Count-current_index).GetRange(0, (code.GetRange(current_index, code.Count-current_index).IndexOf("}" + name + ";") - 0));
                   for (int i = 0; i < to__compile.Count; i++) {
                     if (to__compile[i].StartsWith(indent_if)) {
                       try {
@@ -607,7 +607,13 @@ namespace rC {
             try {
               int current_index = code.IndexOf(line);
               current_index++;
-              to__compile = code.GetRange(current_index, (code.IndexOf("}" + name + ";") - current_index));
+              //0
+              //1
+              //2
+              //3
+              //::4
+        
+              to__compile = code.GetRange(current_index, code.Count-current_index).GetRange(0, (code.GetRange(current_index, code.Count-current_index).IndexOf("}" + name + ";") - 0));
               for (int i = 0; i < to__compile.Count; i++) {
                 if (to__compile[i].StartsWith(indent_if)) {
                   try {
@@ -667,9 +673,18 @@ namespace rC {
             int current_index = code.IndexOf(line);
             current_index++;
             try {
-              func_content = code.GetRange(current_index, (code.IndexOf("}" + nameFunc + ";") - current_index));
+              func_content = code.GetRange(current_index, code.Count-current_index).GetRange(0, (code.GetRange(current_index, code.Count-current_index).IndexOf("};") - 0));
             } catch {
+              try{
+
+              
+              func_content = code.GetRange(current_index, code.Count-current_index).GetRange(0, (code.GetRange(current_index, code.Count-current_index).IndexOf("}" + nameFunc + ";") - 0));
+              }
+              catch{
+
+              
               Console.WriteLine("Incorrect/Missing end statement for function: " + nameFunc);
+              }
             }
             string indent = "    ";
 
