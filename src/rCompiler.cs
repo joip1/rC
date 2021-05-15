@@ -1112,7 +1112,7 @@ namespace rC {
                   Console.WriteLine("ERROR: File Does Not Exist (Line Index: " + code.IndexOf(line) + ")(" + line + ")");
                   Console.ResetColor();
                 } else {
-                  StreamReader specificLine_Compiler = File.OpenText(fileToCompile + ".rcode");
+                  StreamReader specificLine_Compiler = File.OpenText(fileToCompile);
                   string lineReading;
                   List < string > linesFromFile = new List < string > ();
                   while ((lineReading = specificLine_Compiler.ReadLine()) != null) {
@@ -1135,7 +1135,7 @@ namespace rC {
                   if (line.Split(new [] {
                       "content:"
                     }, StringSplitOptions.None).Last().Split(';').First() == "all") {
-                    StreamReader specificLine_Compiler = File.OpenText(fileToCompile + ".rcode");
+                    StreamReader specificLine_Compiler = File.OpenText(fileToCompile);
                     string lineReading;
                     List < string > linesFromFile = new List < string > ();
                     while ((lineReading = specificLine_Compiler.ReadLine()) != null) {
@@ -1147,7 +1147,7 @@ namespace rC {
                 } catch {
                   try {
 
-                    StreamReader specificLine_Compiler = File.OpenText(fileToCompile + ".rcode");
+                    StreamReader specificLine_Compiler = File.OpenText(fileToCompile);
                     string lineReading;
                     int firstIndex = Convert.ToInt32(line.Split(new [] {
                       "first:"
