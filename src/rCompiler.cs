@@ -91,6 +91,7 @@ namespace rC {
             for (int i = 0; i < definers_to_replace.Count; i++) {
               if (line.Contains(definers_to_replace[i])) {
                 line = line.Replace(definers_to_replace[i], defined_to_replace[i]);
+                code[_index] = line;
               }
             }
           }
