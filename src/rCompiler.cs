@@ -75,8 +75,6 @@ namespace rC {
         //str Name.Add >> "Value"
         //getStrListValue(Name[1])
         //updateStrListValue(Name[1])
-
-        
         for (int _index = 0; _index < code.Count; _index++) {
 
           //TODO - Add general error matching case;        
@@ -1096,7 +1094,7 @@ namespace rC {
             if (is_continue) {
               continue;
             }
-            if (line.StartsWith("method")) {
+            if (line.StartsWith("headers")) {
               string fileToCompile = "";
               try {
                 int firstIndex = Convert.ToInt32(line.Split(new [] {
