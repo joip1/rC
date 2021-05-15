@@ -684,9 +684,6 @@ namespace rC {
                 } catch {}
               }
             }
-            foreach(var codeline in func_content) {
-              Console.WriteLine(codeline);
-            }
 
             lines_for_functions.Add(func_content);
             Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
