@@ -122,11 +122,12 @@ namespace rC {
           }
           if (line.StartsWith("define ")) {
             // define "=":">>"
-            if (definers_to_replace.Contains(line.Split(' ')[1].Split('"')[1].Split('"')[0].Split(':')[0]) == false) {
-              definers_to_replace.Add(line.Split(' ')[1].Split('"')[1].Split('"')[0].Split(':')[0]);
+            if (definers_to_replace.Contains(line.Split(':')[0].Split('"')[1]) == false) {
+              definers_to_replace.Add(line.Split(':')[0].Split('"')[1]);
             }
-            if (defined_to_replace.Contains(line.Split(':')[1].Split('"')[1].Split('"')[0]) == false) {
-              defined_to_replace.Add(line.Split(':')[1].Split('"')[1].Split('"')[0]);
+
+            if (defined_to_replace.Contains(line.Split(':')[1].Split('"')[1]) == false) {
+              defined_to_replace.Add(line.Split(':')[1].Split('"')[1]);
             }
 
           }
