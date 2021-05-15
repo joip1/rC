@@ -496,6 +496,7 @@ namespace rC {
                 if (line.ToLower().Contains("$readline") == false) {
                   try {
                     if (line.Split('>').Last().Contains("rand:")) {
+                      System.Threading.Thread.Sleep(1);
                       numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = rand.Next(Convert.ToInt32(line.Split(new [] {
                         "rand:"
                       }, StringSplitOptions.None).Last().Split(',').First()), Convert.ToInt32(line.Split(new [] {
@@ -506,6 +507,7 @@ namespace rC {
                     }
                   } catch {
                     if (line.Split('>').Last().Contains("rand:")) {
+                      System.Threading.Thread.Sleep(1);
                       numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = rand.Next(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new [] {
                         "rand:"
                       }, StringSplitOptions.None).Last().Split(',').First())]), Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new [] {
@@ -523,6 +525,7 @@ namespace rC {
                   numberNames.Add(line.Split(' ')[1].Split('>').First());
                   try {
                     if (line.Split('>').Last().Contains("rand:")) {
+                      System.Threading.Thread.Sleep(1);
                       numberValues.Add(rand.Next(Convert.ToInt32(line.Split(new [] {
                         "rand:"
                       }, StringSplitOptions.None).Last().Split(',').First()), Convert.ToInt32(line.Split(new [] {
@@ -539,6 +542,7 @@ namespace rC {
                     }
                   } catch {
                     if (line.Split('>').Last().Contains("rand:")) {
+                      Ssystem.Threading.Thread.Sleep(1);
                       numberValues[numberNames.IndexOf(line.Split(' ')[1].Split('>').First())] = rand.Next(Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new [] {
                         "rand:"
                       }, StringSplitOptions.None).Last().Split(',').First())]), Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new [] {
