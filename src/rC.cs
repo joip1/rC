@@ -48,6 +48,8 @@ namespace rC
             List<List<float>> numListValues = new List<List<float>>();
             List<List<string>> lines_for_functions = new List<List<string>>();
             List<string> names_for_functions = new List<string>();
+            List<string> definers_to_replace = new List<string>();
+            List<string> defined_to_replace = new List<string>();
 
             strListNames.Add("args");
             strListValues.Add(new List<string>());
@@ -87,7 +89,7 @@ namespace rC
                     Console.WriteLine("Exception: Could not find file: "+args[0]);
                 }
                 // void newThreadStart(){
-                //     rCompiler.Compile(run_code,numberNames,numberValues,strNames,strValues,references,strListNames,strListValues,numListNames,numListValues,lines_for_functions,names_for_functions);
+                //     rCompiler.Compile(run_code,numberNames,numberValues,strNames,strValues,references,strListNames,strListValues,numListNames,numListValues,lines_for_functions,names_for_functions, definers_to_replace, defined_to_replace);
                 // }
                 // for (int i = 0; i < 2; i++)
                 // {
@@ -95,7 +97,7 @@ namespace rC
                 //     Thread new_thread = new Thread(newThread);
                 //     new_thread.Start();
                 // }
-                rCompiler.Compile(run_code,numberNames,numberValues,strNames,strValues,references,strListNames,strListValues,numListNames,numListValues,lines_for_functions,names_for_functions);
+                rCompiler.Compile(run_code,numberNames,numberValues,strNames,strValues,references,strListNames,strListValues,numListNames,numListValues,lines_for_functions,names_for_functions, definers_to_replace, defined_to_replace);
 
 
             }
@@ -113,7 +115,7 @@ namespace rC
                     }
                     reader_file.Close();
                    
-                    rCompiler.Compile(run_code, numberNames, numberValues, strNames, strValues, references,strListNames,strListValues,numListNames,numListValues,lines_for_functions,names_for_functions);
+                    rCompiler.Compile(run_code, numberNames, numberValues, strNames, strValues, references,strListNames,strListValues,numListNames,numListValues,lines_for_functions,names_for_functions, definers_to_replace, defined_to_replace);
                 } catch{
 
                     }
@@ -135,7 +137,7 @@ namespace rC
                                     run_code.Add(line_init);
                                 }
                                 reader_init.Close();
-                                rCompiler.Compile(run_code, numberNames, numberValues, strNames, strValues, references,strListNames,strListValues,numListNames,numListValues,lines_for_functions,names_for_functions);
+                                rCompiler.Compile(run_code, numberNames, numberValues, strNames, strValues, references,strListNames,strListValues,numListNames,numListValues,lines_for_functions,names_for_functions, definers_to_replace, defined_to_replace);
                             }
                             else
                             {
@@ -185,7 +187,7 @@ namespace rC
                                 entryPoint_Code.Add(read);
                             }
                             reader.Close();
-                            rCompiler.Compile(entryPoint_Code, numberNames, numberValues, strNames, strValues, references,strListNames,strListValues,numListNames,numListValues,lines_for_functions,names_for_functions);
+                            rCompiler.Compile(entryPoint_Code, numberNames, numberValues, strNames, strValues, references,strListNames,strListValues,numListNames,numListValues,lines_for_functions,names_for_functions, definers_to_replace, defined_to_replace);
                             Console.Write("\n");
                         }
                         else if (!File.Exists("run_config.rconfig"))
@@ -258,7 +260,7 @@ namespace rC
                     else if (readline.StartsWith("compile >>") || readline.StartsWith("run >>"))
                     {
                         codeLines.Add(readline);
-                        rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues, references,strListNames,strListValues,numListNames,numListValues,lines_for_functions,names_for_functions);
+                        rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues, references,strListNames,strListValues,numListNames,numListValues,lines_for_functions,names_for_functions, definers_to_replace, defined_to_replace);
                         Console.ReadLine();
                         //isCompiling = false;
                     }
@@ -367,7 +369,7 @@ namespace rC
                 }
                 Console.Clear();
                 List<string> compileAfter = codeLines;
-                rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues, references,strListNames,strListValues,numListNames,numListValues,lines_for_functions,names_for_functions);
+                rCompiler.Compile(codeLines, numberNames, numberValues, strNames, strValues, references,strListNames,strListValues,numListNames,numListValues,lines_for_functions,names_for_functions, definers_to_replace, defined_to_replace);
 
                 Console.ReadLine();
             }
