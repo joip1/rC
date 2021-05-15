@@ -84,7 +84,7 @@ namespace rC {
           if (line == "\n" || line == "    \n" || line == "" || line.StartsWith("#")) {
             continue;
           }
-          if (line.StartsWith("}")) {
+          if(line.StartsWith("}")){
             continue;
           }
 
@@ -209,13 +209,16 @@ namespace rC {
 
             } else if (type_to_compare == "num") {
               float first_to_compare = numberValues[numberNames.IndexOf(first_)];
-              float last_to_compare = 0;
-              if (numberNames.Contains(last_)) {
-                last_to_compare = numberValues[numberNames.IndexOf(last_)];
-              } else {
-                last_to_compare = float.Parse(last_);
-              }
-              if (operand == "==") {
+                            float last_to_compare = 0;
+                            if (numberNames.Contains(last_))
+                            {
+                                last_to_compare = numberValues[numberNames.IndexOf(last_)];
+                            }
+                            else
+                            {
+                                last_to_compare = float.Parse(last_);
+                            }
+                            if (operand == "==") {
                 _checked = first_to_compare == last_to_compare;
               } else if (operand == "!=") {
                 _checked = first_to_compare != last_to_compare;
@@ -241,19 +244,19 @@ namespace rC {
               try {
                 int current_index = code.IndexOf(line);
                 current_index++;
-                List < string > to__compile = code.GetRange(current_index, code.Count - current_index).GetRange(0, (code.GetRange(current_index, code.Count - current_index).IndexOf("}" + name + ";") - 0));
+                List < string > to__compile = code.GetRange(current_index, code.Count-current_index).GetRange(0, (code.GetRange(current_index, code.Count-current_index).IndexOf("}" + name + ";") - 0));
                 for (int i = 0; i < to__compile.Count; i++) {
                   if (to__compile[i].StartsWith(indent_if)) {
                     try {
                       to__compile[i] = to__compile[i].Substring(indent_if.Length);
-
+                      
                     } catch {}
                   }
                 }
                 _Compile(to__compile);
               } catch (Exception exc) {
                 if (code.Contains("suppress_errors()") == false) {
-                  Console.WriteLine("Incorrect/Missing end statement for if statement: " + name + exc);
+                  Console.WriteLine("Incorrect/Missing end statement for if statement: " + name +exc);
 
                 }
               }
@@ -297,18 +300,21 @@ namespace rC {
 
             } else if (type_to_compare == "num") {
               float first_to_compare = numberValues[numberNames.IndexOf(first_)];
-              float last_to_compare = 0;
-              if (numberNames.Contains(last_)) {
-                last_to_compare = numberValues[numberNames.IndexOf(last_)];
-              } else {
-                last_to_compare = float.Parse(last_);
-              }
-              if (numberNames.Contains(last_)) {
-                last_to_compare = numberValues[numberNames.IndexOf(last_)];
-              } else {
-                last_to_compare = float.Parse(last_);
-              }
-              if (operand == "==") {
+                            float last_to_compare = 0;
+                            if (numberNames.Contains(last_))
+                            {
+                                last_to_compare = numberValues[numberNames.IndexOf(last_)];
+                            }
+                            else
+                            {
+                                last_to_compare = float.Parse(last_);
+                            }
+                  if (numberNames.Contains(last_)) {
+                    last_to_compare = numberValues[numberNames.IndexOf(last_)];
+                  } else {
+                    last_to_compare = float.Parse(last_);
+                  }
+                            if (operand == "==") {
                 _checked = first_to_compare == last_to_compare;
               } else if (operand == "!=") {
                 _checked = first_to_compare != last_to_compare;
@@ -373,7 +379,7 @@ namespace rC {
                 try {
                   int current_index = code.IndexOf(line);
                   current_index++;
-                  List < string > to__compile = code.GetRange(current_index, code.Count - current_index).GetRange(0, (code.GetRange(current_index, code.Count - current_index).IndexOf("}" + name + ";") - 0));
+                  List < string > to__compile = code.GetRange(current_index, code.Count-current_index).GetRange(0, (code.GetRange(current_index, code.Count-current_index).IndexOf("}" + name + ";") - 0));
                   for (int i = 0; i < to__compile.Count; i++) {
                     if (to__compile[i].StartsWith(indent_if)) {
                       try {
@@ -603,8 +609,8 @@ namespace rC {
               //2
               //3
               //::4
-
-              to__compile = code.GetRange(current_index, code.Count - current_index).GetRange(0, (code.GetRange(current_index, code.Count - current_index).IndexOf("}" + name + ";") - 0));
+        
+              to__compile = code.GetRange(current_index, code.Count-current_index).GetRange(0, (code.GetRange(current_index, code.Count-current_index).IndexOf("}" + name + ";") - 0));
               for (int i = 0; i < to__compile.Count; i++) {
                 if (to__compile[i].StartsWith(indent_if)) {
                   try {
@@ -664,15 +670,17 @@ namespace rC {
             int current_index = code.IndexOf(line);
             current_index++;
             try {
-              func_content = code.GetRange(current_index, code.Count - current_index).GetRange(0, (code.GetRange(current_index, code.Count - current_index).IndexOf("};") - 0));
-
-            } catch (Exception exc) {
+              func_content = code.GetRange(current_index, code.Count-current_index).GetRange(0, (code.GetRange(current_index, code.Count-current_index).IndexOf("};") - 0));
+          
+            } catch (Exception exc){
               Console.WriteLine(exc);
-              try {
-                func_content = code.GetRange(current_index, code.Count - current_index).GetRange(0, (code.GetRange(current_index, code.Count - current_index).IndexOf("}" + nameFunc + ";") - 0));
-              } catch {
+              try{
+              func_content = code.GetRange(current_index, code.Count-current_index).GetRange(0, (code.GetRange(current_index, code.Count-current_index).IndexOf("}" + nameFunc + ";") - 0));
+              }
+              catch{
 
-                Console.WriteLine("Incorrect/Missing end statement for function: " + nameFunc);
+              
+              Console.WriteLine("Incorrect/Missing end statement for function: " + nameFunc);
               }
             }
             string indent = "    ";
@@ -681,9 +689,11 @@ namespace rC {
               if (func_content[i].StartsWith(indent)) {
                 try {
                   func_content[i] = func_content[i].Substring(indent.Length);
-                } catch {}
+                } catch {
+                }
               }
             }
+         
 
             lines_for_functions.Add(func_content);
             Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions);
@@ -1097,7 +1107,7 @@ namespace rC {
                   "file:"
                 }, StringSplitOptions.None).Last().Split(';').First();
 
-                if (!File.Exists(fileToCompile + ".rcode")) {
+                if (!File.Exists(fileToCompile)) {
                   Console.ForegroundColor = ConsoleColor.Red;
                   Console.WriteLine("ERROR: File Does Not Exist (Line Index: " + code.IndexOf(line) + ")(" + line + ")");
                   Console.ResetColor();
