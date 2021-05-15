@@ -138,7 +138,7 @@ namespace rC {
             numberValues[numberNames.IndexOf(line.Split('-')[2].Split(';')[0])]--;
             continue;
           }
-          if (line.StartsWith(";;")) {
+          if (line.Contains(";;")) {
             List < string > __tocompile = line.Split(new [] {
               ";;"
             }, StringSplitOptions.None).ToList();
