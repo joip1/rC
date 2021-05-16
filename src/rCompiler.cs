@@ -472,7 +472,9 @@ namespace rC {
                   strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = line.Split('>')[2].Split('\"')[1].Split('\"').First();
 
                 } else if (line.Split('>').Last().ToLower().Split(' ')[0] == "$readkey") {
-                  strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Console.ReadKey().Key.ToString();
+                  if(Console.KeyAvailable){
+                    strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Console.ReadKey().Key.ToString();
+                  }
                 } else if (line.Split('>').Last().ToLower().Split(' ')[0] == "$readline") {
                   strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Console.ReadLine();
                 }
@@ -490,8 +492,11 @@ namespace rC {
                     }
                   }
                 } else if (line.Split('>').Last().ToLower() == "$readkey") {
-                  strNames.Add(line.Split(' ')[1].Split('>').First());
-                  strValues.Add(Console.ReadKey().Key.ToString());
+                  if(Console.KeyAvailable){
+                    strNames.Add(line.Split(' ')[1].Split('>').First());
+                   strValues.Add(Console.ReadKey().Key.ToString());
+                  }
+                  
                 } else if (line.Split('>').Last().ToLower() == ("$readline")) {
                   strNames.Add(line.Split(' ')[1].Split('>').First());
                   strValues.Add(Console.ReadLine());
