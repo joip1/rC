@@ -20,6 +20,8 @@ namespace rC {
 
     //define "=" : ">>" 
     //include "hea
+
+  
     public static void Compile(
       List < string > code,
       List < string > numberNames,
@@ -102,7 +104,21 @@ namespace rC {
           if (line.StartsWith("}")) {
             continue;
           }
-
+          if(strNames.Contains("keyavailable")==false){
+            if(Console.KeyAvailable == true){
+              strNames.Add("keyavailable");
+              strValues.Add("True");
+            }else{
+              strNames.Add("keyavailable");
+              strValues.Add("False");
+            }
+          }else if (strNames.Contains("keyavailable")==true){
+            if(Console.KeyAvailable){
+                strValues[strNames.IndexOf("keyavailable")] = "True";
+            }else{
+                strValues[strNames.IndexOf("keyavailable")] = "False";
+            }
+          }
           if (line.Contains('$')) {
             foreach(var string_var in strNames) {
               try {
@@ -278,7 +294,7 @@ namespace rC {
                 }
                 _Compile(to__compile);
               } catch (Exception exc) {
-                if (code.Contains("suppress_errors()") == false) {
+               if (code.Contains("suppress_errors()") == false) {
                   Console.WriteLine("Incorrect/Missing end statement for if statement: " + name + exc);
 
                 }
@@ -286,7 +302,9 @@ namespace rC {
               continue;
             }
             continue;
-          } else if (line.StartsWith("while ")) {
+          } 
+            
+          else if (line.StartsWith("while ")) {
             //while type() 
 
             string type_to_compare = line.Split(' ')[1].Split('(')[0];
