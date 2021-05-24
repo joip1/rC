@@ -1,7 +1,16 @@
-str i >>"Hi"
-str o >>"Ho"
+function x() => {
+    str return >>"Hi"
+};
 
-while str:i!=o;{
-    Write "Hi"
+function y() => {
+    str return >>"Ho"
+};
+
+
+show_exceptions()
+str f >>"h"
+Write "$x()$"
+if str:x()!=y();{
+    Write "False"
 };
 exit()

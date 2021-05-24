@@ -270,7 +270,8 @@ namespace rC {
             }
             string first_ = line.Split(new [] {
               operand
-            }, StringSplitOptions.None)[0].Split(':')[1];
+            }, StringSplitOptions.None)[0].Split(':')[1].Split(operand)[0];
+            Console.WriteLine(first_);
             string last_ = line.Split(new [] {
               operand
             }, StringSplitOptions.None)[1].Split(';')[0];
