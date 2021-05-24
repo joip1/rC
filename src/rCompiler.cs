@@ -110,7 +110,7 @@ namespace rC {
               foreach(var func_name in names_for_functions) {
 
             if(line.Contains(func_name+"(")&&line.StartsWith(func_name)==false){
-                List < string > add_args = line.Split(func_name)[1].Split('(')[1].Split(')')[0].Split(new [] {
+                List < string > add_args = line.Split(new[] { func_name },StringSplitOptions.None)[1].Split('(')[1].Split(')')[0].Split(new [] {
                 ";;"
               }, StringSplitOptions.None).ToList();
               _Compile(add_args);
@@ -270,7 +270,7 @@ namespace rC {
             }
             string first_ = line.Split(new [] {
               operand
-            }, StringSplitOptions.None)[0].Split(':')[1].Split(operand)[0];
+            }, StringSplitOptions.None)[0].Split(':')[1].Split(new[] { operand }, StringSplitOptions.None)[0];
            // Console.WriteLine(first_);
             string last_ = line.Split(new [] {
               operand
