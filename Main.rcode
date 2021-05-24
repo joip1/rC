@@ -6,11 +6,4 @@ function y() => {
     str return >>"Ho"
 };
 
-
-show_exceptions()
-str f >>"h"
-Write "$x()$"
-if str:x()!=y();{
-    Write "False"
-};
-exit()
+->str f >>x();;if str:f!=y();{;;    Write "Hi";;};
