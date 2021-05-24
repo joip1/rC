@@ -258,9 +258,9 @@ namespace rC {
             //    
             //}1;
 
-            string type_to_compare = line.Split(' ')[1].Split('(')[0];
+            string type_to_compare = line.Split(' ')[1].Split(':')[0];
             string operand = "";
-            string statement = line.Split('(')[1].Split(')')[0];
+            string statement = line.Split(':')[1].Split(';')[0];
             string name = "";
             bool _checked = false;
             foreach(var _operator in operands) {
@@ -270,10 +270,10 @@ namespace rC {
             }
             string first_ = line.Split(new [] {
               operand
-            }, StringSplitOptions.None)[0].Split('(')[1];
+            }, StringSplitOptions.None)[0].Split(':')[1];
             string last_ = line.Split(new [] {
               operand
-            }, StringSplitOptions.None)[1].Split(')')[0];
+            }, StringSplitOptions.None)[1].Split(';')[0];
             if (type_to_compare == "str") {
               string first_to_compare = strValues[strNames.IndexOf(first_)];
               string last_to_compare = "";
@@ -348,9 +348,9 @@ namespace rC {
           else if (line.StartsWith("while ")) {
             //while type() 
 
-            string type_to_compare = line.Split(' ')[1].Split('(')[0];
+            string type_to_compare = line.Split(':')[1].Split(';')[0];
             string operand = "";
-            string statement = line.Split('(')[1].Split(')')[0];
+            string statement = line.Split(':')[1].Split(';')[0];
             string name = "";
             bool _checked = false;
             foreach(var _operator in operands) {
@@ -360,10 +360,10 @@ namespace rC {
             }
             string first_ = line.Split(new [] {
               operand
-            }, StringSplitOptions.None)[0].Split('(')[1];
+            }, StringSplitOptions.None)[0].Split(':')[1];
             string last_ = line.Split(new [] {
               operand
-            }, StringSplitOptions.None)[1].Split(')')[0];
+            }, StringSplitOptions.None)[1].Split(';')[0];
             if (type_to_compare == "str") {
               string first_to_compare = strValues[strNames.IndexOf(first_)];
               string last_to_compare = "";

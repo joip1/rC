@@ -1,0 +1,7 @@
+str i >>"Hi"
+str o >>"Ho"
+
+if str:i!=o;);{
+    Write "Hi"
+};
+exit()
