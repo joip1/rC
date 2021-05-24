@@ -1,7 +1,7 @@
 str i >>"Hi"
 str o >>"Ho"
 
-if str:i!=o;{
+while str:i!=o;{
     Write "Hi"
 };
 exit()

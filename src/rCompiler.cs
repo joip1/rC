@@ -348,7 +348,7 @@ namespace rC {
           else if (line.StartsWith("while ")) {
             //while type() 
 
-            string type_to_compare = line.Split(':')[1].Split(';')[0];
+            string type_to_compare = line.Split(' ')[1].Split(':')[0];
             string operand = "";
             string statement = line.Split(':')[1].Split(';')[0];
             string name = "";
