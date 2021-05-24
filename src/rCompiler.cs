@@ -42,6 +42,8 @@ namespace rC {
       define =:>>
       // definers_to_replace
       // defined_to
+
+      //to return something just declare a variable named "return", like "str return >>x"
       */
 
       string current_line = "";
@@ -104,6 +106,73 @@ namespace rC {
           if (line.StartsWith("}")) {
             continue;
           }
+          bool is_continue = false;
+              foreach(var func_name in names_for_functions) {
+
+            if(line.Contains(func_name+"(")&&line.StartsWith(func_name)==false){
+                List < string > add_args = line.Split('(')[1].Split(')')[0].Split(new [] {
+                ";;"
+              }, StringSplitOptions.None).ToList();
+              _Compile(add_args);
+              if(strNames.Contains("return")){
+                strValues[strNames.IndexOf("return")] = "";
+              }
+              if(numberNames.Contains("return")){
+                numberValues[numberNames.IndexOf("return")] = 0;
+              }
+              Compile(lines_for_functions[names_for_functions.IndexOf(func_name)], numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions, definers_to_replace, defined_to_replace);
+              //str x >>f(2)
+              string func_call = func_name+line.Split(new []{func_name},StringSplitOptions.None)[1].Split('(')[0]+line.Split(new []{func_name},StringSplitOptions.None)[1].Split(')')[0]+")";;
+              if(strNames.Contains("return")){
+                if(strNames.Contains(func_call)){
+                  strValues[strNames.IndexOf(func_call)] = strValues[strNames.IndexOf("return")];
+                }else{
+//                  Console.WriteLine(func_call+":"+strValues[strNames.IndexOf("return")]);
+
+                  strNames.Add(func_call);
+                  strValues.Add(strValues[strNames.IndexOf("return")]);
+                  
+                }
+              }
+              if(numberNames.Contains("return")){
+                if(numberNames.Contains(func_call)){
+                  numberValues[numberNames.IndexOf(func_call)] = numberValues[numberNames.IndexOf("return")];
+                }else{
+                  numberNames.Add(func_call);
+                  numberValues.Add(numberValues[numberNames.IndexOf("return")]);
+                }
+              }
+
+              is_continue = false;
+              break;
+            }
+            //int ocorrences = 0;
+            // foreach(var func_name_2 in names_for_functions){
+            //   if(func_name_2 == func_name){
+            //     ocorrences++;
+            //   }
+            // }
+            // if(ocorrences>=2){
+            //     Console.WriteLine("There is more than 1 function named: "+func_name);
+            // }
+            if (line.StartsWith(func_name + "(") || line.StartsWith(func_name + " (")) {
+              // foreach(var lineofcode in lines_for_functions[names_for_functions.IndexOf(func_name)]){
+              //     Console.WriteLine(lineofcode);
+              // }
+              // my_func(num x >>0)
+              List < string > add_args = line.Split('(')[1].Split(')')[0].Split(new [] {
+                ";;"
+              }, StringSplitOptions.None).ToList();
+              _Compile(add_args);
+              Compile(lines_for_functions[names_for_functions.IndexOf(func_name)], numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions, definers_to_replace, defined_to_replace);
+              is_continue = true;
+              break;
+            }
+            continue;
+          }
+          if (is_continue) {
+            continue;
+          }
           if(strNames.Contains("keyavailable")==false){
             if(Console.KeyAvailable == true){
               strNames.Add("keyavailable");
@@ -162,7 +231,6 @@ namespace rC {
             _Compile(__tocompile);
             continue;
           }
-          bool is_continue = false;
 
           if (line.Split(';')[0] == "stop") {
             return;
@@ -170,34 +238,7 @@ namespace rC {
           } else if (line.Split(';')[0] == "stop_break") {
             break;
           }
-          foreach(var func_name in names_for_functions) {
-            //int ocorrences = 0;
-            // foreach(var func_name_2 in names_for_functions){
-            //   if(func_name_2 == func_name){
-            //     ocorrences++;
-            //   }
-            // }
-            // if(ocorrences>=2){
-            //     Console.WriteLine("There is more than 1 function named: "+func_name);
-            // }
-            if (line.StartsWith(func_name + "(") || line.StartsWith(func_name + " (")) {
-              // foreach(var lineofcode in lines_for_functions[names_for_functions.IndexOf(func_name)]){
-              //     Console.WriteLine(lineofcode);
-              // }
-              // my_func(num x >>0)
-              List < string > add_args = line.Split('(')[1].Split(')')[0].Split(new [] {
-                ";;"
-              }, StringSplitOptions.None).ToList();
-              _Compile(add_args);
-              Compile(lines_for_functions[names_for_functions.IndexOf(func_name)], numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions, definers_to_replace, defined_to_replace);
-              is_continue = true;
-              break;
-            }
-            continue;
-          }
-          if (is_continue) {
-            continue;
-          }
+      
 
           //
           // line = line.Replace("$path$", strValues[strNames.IndexOf("path")]);
@@ -504,7 +545,9 @@ namespace rC {
                     strValues.Add(line.Split('>')[2].Split('\"')[1].Split('\"').First());
                   } else {
                     try {
+                     
                       strValues.Add(strValues[strNames.IndexOf(line.Split('>')[2])]);
+                      
                     } catch {
                       Console.WriteLine("Error: " + line);
                     }

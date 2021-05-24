@@ -1,0 +1,8 @@
+function x() => {
+    str return >>"123"
+};
+str f >>x()
+Write "$f$"
+Write "Hi"
+
+exit()
