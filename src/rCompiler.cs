@@ -110,7 +110,7 @@ namespace rC {
               foreach(var func_name in names_for_functions) {
 
             if(line.Contains(func_name+"(")&&line.StartsWith(func_name)==false){
-                List < string > add_args = line.Split('(')[1].Split(')')[0].Split(new [] {
+                List < string > add_args = line.Split(func_name)[1].Split('(')[1].Split(')')[0].Split(new [] {
                 ";;"
               }, StringSplitOptions.None).ToList();
               _Compile(add_args);
