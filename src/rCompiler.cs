@@ -224,8 +224,8 @@ namespace rC {
             numberValues[numberNames.IndexOf(line.Split('-')[2].Split(';')[0])]--;
             continue;
           }
-          if (line.StartsWith(";;")&&line.StartsWith("define")==false) {
-            List < string > __tocompile = line.Split(new [] {
+          if (line.StartsWith("->")&&line.StartsWith("define")==false) {
+            List < string > __tocompile = line..Split(new [] {"->"},StringSplitOptions.None).Split(new [] {
               ";;"
             }, StringSplitOptions.None).ToList();
             _Compile(__tocompile);
