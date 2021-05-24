@@ -225,7 +225,7 @@ namespace rC {
             continue;
           }
           if (line.StartsWith("->")&&line.StartsWith("define")==false) {
-            List < string > __tocompile = line..Split(new [] {"->"},StringSplitOptions.None).Split(new [] {
+            List < string > __tocompile = line.Split(new [] {"->"},StringSplitOptions.None)[1].Split(new [] {
               ";;"
             }, StringSplitOptions.None).ToList();
             _Compile(__tocompile);
