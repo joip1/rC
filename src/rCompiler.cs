@@ -315,10 +315,10 @@ namespace rC {
 
             if (_checked) {
               if (line.Split(new [] {
-                  ");"
+                  ";"
                 }, StringSplitOptions.None)[1].Contains('"')) {
                 name = line.Split(new [] {
-                  ");"
+                  ";"
                 }, StringSplitOptions.None)[1].Split('"')[1].Split('"')[0];
               }
               try {
@@ -449,10 +449,10 @@ namespace rC {
                   }
                 }
                 if (line.Split(new [] {
-                    ");"
+                    ";"
                   }, StringSplitOptions.None)[1].Contains('"')) {
                   name = line.Split(new [] {
-                    ");"
+                    ";"
                   }, StringSplitOptions.None)[1].Split('"')[1].Split('"')[0];
                 }
                 try {
