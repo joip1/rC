@@ -6,4 +6,4 @@ function y() => {
     str return >>"Ho"
 };
 
-->str f >>x();;if str:f!=y();{;;    Write "Hi";;};
+Write "$x()$ $x()$"

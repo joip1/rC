@@ -144,7 +144,7 @@ namespace rC {
               }
 
               is_continue = false;
-              break;
+             // break;
             }
             //int ocorrences = 0;
             // foreach(var func_name_2 in names_for_functions){
