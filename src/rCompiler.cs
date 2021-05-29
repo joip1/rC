@@ -155,20 +155,7 @@ namespace rC {
             // if(ocorrences>=2){
             //     Console.WriteLine("There is more than 1 function named: "+func_name);
             // }
-            if (line.StartsWith(func_name + "(") || line.StartsWith(func_name + " (")) {
-              // foreach(var lineofcode in lines_for_functions[names_for_functions.IndexOf(func_name)]){
-              //     Console.WriteLine(lineofcode);
-              // }
-              // my_func(num x >>0)
-              List < string > add_args = line.Split('(')[1].Split(')')[0].Split(new [] {
-                ";;"
-              }, StringSplitOptions.None).ToList();
-              _Compile(add_args);
-              Compile(lines_for_functions[names_for_functions.IndexOf(func_name)], numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions, definers_to_replace, defined_to_replace);
-              is_continue = true;
-              break;
-            }
-            continue;
+          
           }
           if (is_continue) {
             continue;
