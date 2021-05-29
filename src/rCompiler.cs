@@ -109,7 +109,7 @@ namespace rC {
           bool is_continue = false;
               foreach(var func_name in names_for_functions) {
 
-            if(line.Contains(func_name+"(")&&line.StartsWith(func_name)==false){
+            if(line.Contains(func_name+"(")){
                 List < string > add_args = line.Split(new[] { func_name },StringSplitOptions.None)[1].Split('(')[1].Split(')')[0].Split(new [] {
                 ";;"
               }, StringSplitOptions.None).ToList();
