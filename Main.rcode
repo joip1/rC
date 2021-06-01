@@ -6,5 +6,6 @@ function f():
     str return = "Hi";
 
 for i in range:1000:
+    
     WriteStr {f()}
 exit()
