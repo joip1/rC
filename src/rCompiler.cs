@@ -763,7 +763,6 @@ namespace rC {
                 //  Console.WriteLine(start[i]);
                 if (start[i].StartsWith(indent_if) || start[i].StartsWith("    ")) {
                   to__compile.Add(start[i]);
-                  Console.WriteLine(start[i]);
 
                 } else {
                   if (start[i] != "" && start[i] != " " && start[i] != "\n") {
