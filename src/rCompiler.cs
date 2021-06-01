@@ -327,6 +327,7 @@ namespace rC {
                 List < string > start = code.GetRange(_index, code.Count - _index);
 
                 List < string > to__compile = new List < string > ();
+                 to__compile.Add("    ");
                 for (int i = 1; i < start.Count; i++) {
 
                   //  Console.WriteLine(start[i]);
@@ -498,6 +499,7 @@ namespace rC {
                   List < string > start = code.GetRange(_index, code.Count - _index);
 
                   to__compile = new List < string > ();
+                   to__compile.Add("    ");
 
                   for (int i = 1; i < start.Count; i++) {
 
@@ -755,11 +757,13 @@ namespace rC {
               List < string > start = code.GetRange(_index, code.Count - _index);
 
               to__compile = new List < string > ();
+              to__compile.Add("    ");
 
               for (int i = 1; i < start.Count; i++) {
                 //  Console.WriteLine(start[i]);
                 if (start[i].StartsWith(indent_if) || start[i].StartsWith("    ")) {
                   to__compile.Add(start[i]);
+                  Console.WriteLine(start[i]);
 
                 } else {
                   if (start[i] != "" && start[i] != " " && start[i] != "\n") {
