@@ -121,12 +121,7 @@ namespace rC {
                 numberValues[numberNames.IndexOf("return")] = 0;
               }
               
-              string indent = "	";
-              for(int i = 0; i<lines_for_functions[names_for_functions.IndexOf(func_name)].Count();i++){
-                if(lines_for_functions[names_for_functions.IndexOf(func_name)][i].StartsWith(indent)){
-                  lines_for_functions[names_for_functions.IndexOf(func_name)][i] = lines_for_functions[names_for_functions.IndexOf(func_name)][i].Substring(indent.Length);
-                }
-              }
+
 
 
               Compile(lines_for_functions[names_for_functions.IndexOf(func_name)], numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions, definers_to_replace, defined_to_replace);
@@ -736,14 +731,14 @@ List<string> start = code.GetRange(_index, code.Count-_index);
 
 
             to__compile = new List<string>();
-            
+         
             for (int i = 1; i < start.Count; i++)
             {
-              
               //  Console.WriteLine(start[i]);
                 if(start[i].StartsWith(indent_if))
                 {
                   to__compile.Add(start[i]);
+                  
                 }else{
                   if(start[i]!=""||start[i]!=" "||start[i]!="\n")
                   {
@@ -842,13 +837,17 @@ List<string> start = code.GetRange(_index, code.Count-_index);
             string indent = indent_if;
 
             for (int i = 0; i < func_content.Count; i++) {
+            
               if (func_content[i].StartsWith(indent)) {
                 try {
                   func_content[i] = func_content[i].Substring(indent.Length);
+                  
                 } catch {}
               }
             }
-
+            foreach(var line__ in func_content){
+              Console.WriteLine(line__);
+            }
             lines_for_functions.Add(func_content);
             //Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions, definers_to_replace, defined_to_replace);
             continue;
