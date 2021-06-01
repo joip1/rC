@@ -59,8 +59,8 @@ namespace rC {
       string[] operands = {
         "==",
         "!=",
-        "+>",
-        "<-",
+        ">",
+        "<",
         "<=",
         ">="
       };
@@ -303,9 +303,9 @@ namespace rC {
                 _checked = first_to_compare >= last_to_compare;
               } else if (operand == "<=") {
                 _checked = first_to_compare <= last_to_compare;
-              } else if (operand == "+>") {
+              } else if (operand == ">") {
                 _checked = first_to_compare > last_to_compare;
-              } else if (operand == "<-") {
+              } else if (operand == "<") {
                 _checked = first_to_compare < last_to_compare;
               }
             }
@@ -435,9 +435,9 @@ namespace rC {
                 _checked = first_to_compare >= last_to_compare;
               } else if (operand == "<=") {
                 _checked = first_to_compare <= last_to_compare;
-              } else if (operand == "+>") {
+              } else if (operand == ">") {
                 _checked = first_to_compare > last_to_compare;
-              } else if (operand == "<-") {
+              } else if (operand == "<") {
                 _checked = first_to_compare < last_to_compare;
               }
             }
@@ -476,9 +476,9 @@ namespace rC {
                     _checked = first_to_compare >= last_to_compare;
                   } else if (operand == "<=") {
                     _checked = first_to_compare <= last_to_compare;
-                  } else if (operand == "+>") {
+                  } else if (operand == ">") {
                     _checked = first_to_compare > last_to_compare;
-                  } else if (operand == "<-") {
+                  } else if (operand == "<") {
                     _checked = first_to_compare < last_to_compare;
                   }
                 }
@@ -1465,8 +1465,8 @@ namespace rC {
             ___________________________________________________________________________________________________
             str f >> 
             str name >>$readline
-            toLower (f>>name)      <---- gets the value of name.toLower and assigns it to the variable f
-            toLower (name)    <---- gets the value of name.toLower and assigns it to itself
+            toLower (f>>name)      <--- gets the value of name.toLower and assigns it to the variable f
+            toLower (name)    <--- gets the value of name.toLower and assigns it to itself
             __________________________________________________________________________________________________*/
             if (line.StartsWith("toLower (") && line.Contains(")") && line.Contains(">>")) {
               if (strNames.Contains(line.Split(new [] {
