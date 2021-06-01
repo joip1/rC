@@ -837,7 +837,7 @@ namespace rC {
                 func_content.Add(start[i]);
 
               } else {
-                if (start[i] != "" || start[i] != " " || start[i] != "\n") {
+                if (start[i] != "" && start[i] != " " && start[i] != "\n") {
                   break;
                 }
               }
