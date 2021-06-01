@@ -56,7 +56,7 @@ namespace rC {
       Random rand = new Random();
 
       List < ConsoleColor > pixelColorsChar = new List < ConsoleColor > ();
-      string indent_if = "    ";
+      string indent_if = "	";
       string[] operands = {
         "==",
         "!=",
@@ -120,7 +120,8 @@ namespace rC {
               if(numberNames.Contains("return")){
                 numberValues[numberNames.IndexOf("return")] = 0;
               }
-              string indent = "    ";
+              
+              string indent = "	";
               for(int i = 0; i<lines_for_functions[names_for_functions.IndexOf(func_name)].Count();i++){
                 if(lines_for_functions[names_for_functions.IndexOf(func_name)][i].StartsWith(indent)){
                   lines_for_functions[names_for_functions.IndexOf(func_name)][i] = lines_for_functions[names_for_functions.IndexOf(func_name)][i].Substring(indent.Length);
