@@ -255,6 +255,7 @@ namespace rC {
             //  Write "Hi"
 
             string type_to_compare = line.Split(' ')[1].Split(':')[0];
+
             string operand = "";
             string statement = line.Split(':')[1].Split(':')[0];
             string name = "";
@@ -312,10 +313,10 @@ namespace rC {
 
             if (_checked) {
               if (line.Split(new [] {
-                  ";"
+                  ":"
                 }, StringSplitOptions.None)[1].Contains('"')) {
                 name = line.Split(new [] {
-                  ";"
+                  ":"
                 }, StringSplitOptions.None)[1].Split('"')[1].Split('"')[0];
               }
               try {
@@ -332,6 +333,7 @@ List<string> start = code.GetRange(_index, code.Count-_index);
               //  Console.WriteLine(start[i]);
                 if(start[i].StartsWith(indent_if))
                 {
+                  
                   to__compile.Add(start[i]);
                 }else{
                   if(start[i]!=""||start[i]!=" "||start[i]!="  "||start[i]!="  ")
@@ -464,10 +466,10 @@ List<string> start = code.GetRange(_index, code.Count-_index);
                   }
                 }
                 if (line.Split(new [] {
-                    ";"
+                    ":"
                   }, StringSplitOptions.None)[1].Contains('"')) {
                   name = line.Split(new [] {
-                    ";"
+                    ":"
                   }, StringSplitOptions.None)[1].Split('"')[1].Split('"')[0];
                 }
                 try {
@@ -755,7 +757,6 @@ List<string> start = code.GetRange(_index, code.Count-_index);
                 if (to__compile[i].StartsWith(indent_if)) {
                   try {
                     to__compile[i] = to__compile[i].Substring(indent_if.Length);
-                    Console.WriteLine(to__compile[i]);
                   } catch {}
                 }
               }
