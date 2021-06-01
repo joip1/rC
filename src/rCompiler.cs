@@ -1072,7 +1072,7 @@ List<string> start = code.GetRange(_index, code.Count-_index);
               }
             }
           }
-          if (line.ToLower().StartsWith("getnumlistvalue(") || line.StartsWith("getnumlistvalue (")) {
+          if (line.ToLower().StartsWith("lnval(") || line.StartsWith("lnval (")) {
             int index = 0;
             try {
               if (numberNames.Contains(line.Split('[')[1].Split(']')[0])) {
@@ -1091,7 +1091,7 @@ List<string> start = code.GetRange(_index, code.Count-_index);
             }
             continue;
           }
-          if (line.ToLower().StartsWith("getstrlistvalue(") || line.StartsWith("getstrlistvalue (")) {
+          if (line.ToLower().StartsWith("lsval(") || line.StartsWith("lsval (")) {
             int index = 0;
             try {
               if (numberNames.Contains(line.Split('[')[1].Split(']')[0])) {

@@ -1,6 +1,8 @@
-for i in range:1000:
-    if num:i==2:
-        Write "$i$"
-        show_exceptions()
-    show_exceptions()
+
+str n_var >>line_break
+define "\n":"$n_var$"
+for i in range:10000:
+    if num:i==i:
+        Write "$i$\n"
+        
 exit()
