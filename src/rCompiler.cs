@@ -89,6 +89,7 @@ namespace rC {
 
           string line = code[_index];
           current_line = line;
+
           if (definers_to_replace.Count > 0) {
             for (int i = 0; i < definers_to_replace.Count; i++) {
               if (line.Contains(definers_to_replace[i])) {
@@ -97,7 +98,9 @@ namespace rC {
               }
             }
           }
-
+          if(line.Split(' ').First()=="continue"){
+            continue;
+          }
           if (line == "\n" || line == "    \n" || line == "" || line.StartsWith("#")) {
             continue;
           }
@@ -324,7 +327,6 @@ namespace rC {
                 List < string > start = code.GetRange(_index, code.Count - _index);
 
                 List < string > to__compile = new List < string > ();
-                
                 for (int i = 1; i < start.Count; i++) {
 
                   //  Console.WriteLine(start[i]);
