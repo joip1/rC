@@ -252,7 +252,7 @@ namespace rC {
             //  Write "Hi"
 
             string type_to_compare = line.Split(' ')[1].Split(':')[0];
-
+            List<string> else_val = new List<string>();
             string operand = "";
             string statement = line.Split(':')[1].Split(':')[0];
             string name = "";
@@ -285,7 +285,7 @@ namespace rC {
                 _checked = first_to_compare == last_to_compare;
               } else if (operand == "!=") {
                 _checked = first_to_compare != last_to_compare;
-              }
+              } 
 
             } else if (type_to_compare == "num") {
               float first_to_compare = numberValues[numberNames.IndexOf(first_)];
@@ -324,18 +324,17 @@ namespace rC {
                 List < string > start = code.GetRange(_index, code.Count - _index);
 
                 List < string > to__compile = new List < string > ();
-
+                
                 for (int i = 1; i < start.Count; i++) {
 
                   //  Console.WriteLine(start[i]);
                   if (start[i].StartsWith(indent_if) || start[i].StartsWith("    ")) {
 
                     to__compile.Add(start[i]);
-                  } else {
-                    if (start[i] != "" || start[i] != " " || start[i] != "\n") {
+                  } 
+                    else if (start[i] != "" && start[i] != " " && start[i] != "\n") {
                       break;
                     }
-                  }
 
                 }
                 for (int i = 0; i < to__compile.Count; i++) {
@@ -357,6 +356,27 @@ namespace rC {
                 }
               }
               continue;
+            }else
+            {
+              List < string > start = code.GetRange(_index, code.Count - _index);
+              for (int i = 0; i < start.Count; i++)
+              {
+                  if(start[i].StartsWith("else:")){
+                      List<string> else_start = start.GetRange(i, start.Count-i);
+                      for (int p = 1; p < else_start.Count; p++)
+                      {
+                          if(else_start[p].StartsWith("    ")){
+                            else_val.Add(else_start[p].Substring("    ".Length));
+                          }else if(else_start[p].StartsWith(indent_if)){
+                            else_val.Add(else_start[p].Substring(indent_if.Length));
+                          }else if(else_start[p] != " " && else_start[p]!=""&&else_start[p]!="\n"){
+                            break;
+                          }
+                      }
+                    } 
+              }
+            
+                _Compile(else_val);
             }
             continue;
           } else if (line.StartsWith("while ")) {
@@ -483,7 +503,7 @@ namespace rC {
                     if (start[i].StartsWith(indent_if)) {
                       to__compile.Add(start[i]);
                     } else {
-                      if (start[i] != "" || start[i] != " " || start[i] != "\n") {
+                      if (start[i] != "" && start[i] != " " && start[i] != "\n") {
                         break;
                       }
                     }
@@ -740,7 +760,7 @@ namespace rC {
                   to__compile.Add(start[i]);
 
                 } else {
-                  if (start[i] != "" || start[i] != " " || start[i] != "\n") {
+                  if (start[i] != "" && start[i] != " " && start[i] != "\n") {
                     break;
                   }
                 }
