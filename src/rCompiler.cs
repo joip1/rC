@@ -88,7 +88,6 @@ namespace rC {
           //TODO - Add general error matching case;        
           //        try{
 
-          //
           string line = code[_index];
           current_line = line;
           if (definers_to_replace.Count > 0) {
@@ -811,8 +810,10 @@ List<string> start = code.GetRange(_index, code.Count-_index);
             func_content = new List<string>();
             for (int i = 1; i < start.Count; i++)
             {
-                if(start[i].StartsWith(indent_if)){
+                if(start[i].StartsWith(indent_if) || start[i].StartsWith("    ")){
                   func_content.Add(start[i]);
+
+                  
                 }else{
                   if(start[i]!=""||start[i]!=" "||start[i]!="\n"){
                     break;
@@ -837,11 +838,14 @@ List<string> start = code.GetRange(_index, code.Count-_index);
             string indent = indent_if;
 
             for (int i = 0; i < func_content.Count; i++) {
-            
-              if (func_content[i].StartsWith(indent)) {
+              if (func_content[i].StartsWith(indent) || func_content[i].StartsWith("    ")) {
                 try {
-                  func_content[i] = func_content[i].Substring(indent.Length);
-                  
+                  if(func_content[i].StartsWith(indent_if)){
+                    func_content[i] = func_content[i].Substring(indent.Length);
+                  }
+                  else if(func_content[i].StartsWith("    ")){
+                    func_content[i] = func_content[i].Substring("    ".Length);
+                  }
                 } catch {}
               }
             }
