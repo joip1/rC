@@ -89,7 +89,6 @@ namespace rC {
 
           string line = code[_index];
           current_line = line;
-          Console.WriteLine(line);
           if (definers_to_replace.Count > 0) {
             for (int i = 0; i < definers_to_replace.Count; i++) {
               if (line.Contains(definers_to_replace[i])) {
