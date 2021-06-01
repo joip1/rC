@@ -56,7 +56,7 @@ namespace rC {
       Random rand = new Random();
 
       List < ConsoleColor > pixelColorsChar = new List < ConsoleColor > ();
-      string indent_if = "    ";
+      string indent_if = "	";
       string[] operands = {
         "==",
         "!=",
@@ -336,7 +336,7 @@ List<string> start = code.GetRange(_index, code.Count-_index);
                   
                   to__compile.Add(start[i]);
                 }else{
-                  if(start[i]!=""||start[i]!=" "||start[i]!="  "||start[i]!="  ")
+                  if(start[i]!=""||start[i]!=" "||start[i]!="\n")
                   {
                     break;
                   }
@@ -489,7 +489,7 @@ List<string> start = code.GetRange(_index, code.Count-_index);
                 {
                   to__compile.Add(start[i]);
                 }else{
-                  if(start[i]!=""||start[i]!=" "||start[i]!="  "||start[i]!="  ")
+                  if(start[i]!=""||start[i]!=" "||start[i]!="\n")
                   {
                     break;
                   }
@@ -745,7 +745,7 @@ List<string> start = code.GetRange(_index, code.Count-_index);
                 {
                   to__compile.Add(start[i]);
                 }else{
-                  if(start[i]!=""||start[i]!=" "||start[i]!="  "||start[i]!="  ")
+                  if(start[i]!=""||start[i]!=" "||start[i]!="\n")
                   {
                     break;
                   }
@@ -819,7 +819,7 @@ List<string> start = code.GetRange(_index, code.Count-_index);
                 if(start[i].StartsWith(indent_if)){
                   func_content.Add(start[i]);
                 }else{
-                  if(start[i]!=""||start[i]!=" "||start[i]!="  "||start[i]!="   "){
+                  if(start[i]!=""||start[i]!=" "||start[i]!="\n"){
                     break;
                   }
                 }
@@ -839,7 +839,7 @@ List<string> start = code.GetRange(_index, code.Count-_index);
             //     Console.WriteLine("Incorrect/Missing end statement for function: " + nameFunc);
             //   }
             // }
-            string indent = "    ";
+            string indent = indent_if;
 
             for (int i = 0; i < func_content.Count; i++) {
               if (func_content[i].StartsWith(indent)) {

@@ -1,8 +1,10 @@
+define "\n":"$line_break$"
+define " = ":" >>"
+define "*":"$"
+list(str) "names" = ["Rodrigo", "Margarida", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel", "Vicente", "Miguel", "Manuel"]
+function f():
+    str return = "Hi";
 
-str n_var >>line_break
-define "\n":"$n_var$"
-for i in range:10000:
-    if num:i==i:
-        Write "$i$\n"
-        
+for i in range:1000:
+    WriteStr {f()}
 exit()
