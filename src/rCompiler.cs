@@ -123,9 +123,11 @@ namespace rC {
               string indent = "    ";
               for(int i = 0; i<lines_for_functions[names_for_functions.IndexOf(func_name)].Count();i++){
                 if(lines_for_functions[names_for_functions.IndexOf(func_name)][i].StartsWith(indent)){
-                  lines_for_functions[names_for_functions.IndexOf(func_name)][i] = lines_for_functions[names_for_functions.IndexOf(func_name)][i].Substring(indent_if.Length);
+                  lines_for_functions[names_for_functions.IndexOf(func_name)][i] = lines_for_functions[names_for_functions.IndexOf(func_name)][i].Substring(indent.Length);
                 }
-              };
+              }
+
+
               Compile(lines_for_functions[names_for_functions.IndexOf(func_name)], numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions, definers_to_replace, defined_to_replace);
               //str x >>f(2)
               string func_call = func_name+line.Split(new []{func_name},StringSplitOptions.None)[1].Split('(')[0]+line.Split(new []{func_name},StringSplitOptions.None)[1].Split(')')[0]+")";;
