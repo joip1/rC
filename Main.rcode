@@ -1,9 +1,7 @@
-function x() => {
-    str return >>"Hi"
-};
+function m():
+    for l in range:100;
+        Write "Hi"
 
-function y() => {
-    str return >>"Ho"
-};
+m()
 
-Write "$x()$ $x()$"
+exit()

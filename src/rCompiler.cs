@@ -56,7 +56,7 @@ namespace rC {
       Random rand = new Random();
 
       List < ConsoleColor > pixelColorsChar = new List < ConsoleColor > ();
-      string indent_if = "	";
+      string indent_if = "    ";
       string[] operands = {
         "==",
         "!=",
@@ -250,13 +250,13 @@ namespace rC {
             }, StringSplitOptions.None).First().ToString());
             continue;
           } else if (line.StartsWith("if ")) {
-            //if num(x==f); "1"{
-            //    
-            //}1;
+            //if num:x==f:
+            
+            //  Write "Hi"
 
             string type_to_compare = line.Split(' ')[1].Split(':')[0];
             string operand = "";
-            string statement = line.Split(':')[1].Split(';')[0];
+            string statement = line.Split(':')[1].Split(':')[0];
             string name = "";
             bool _checked = false;
             foreach(var _operator in operands) {
@@ -270,7 +270,7 @@ namespace rC {
            // Console.WriteLine(first_);
             string last_ = line.Split(new [] {
               operand
-            }, StringSplitOptions.None)[1].Split(';')[0];
+            }, StringSplitOptions.None)[1].Split(':')[0];
             if (type_to_compare == "str") {
               string first_to_compare = strValues[strNames.IndexOf(first_)];
               string last_to_compare = "";
@@ -321,8 +321,26 @@ namespace rC {
               try {
                 int current_index = code.IndexOf(line);
                 current_index++;
-                List < string > to__compile = code.GetRange(current_index, code.Count - current_index).GetRange(0, (code.GetRange(current_index, code.Count - current_index).IndexOf("}" + name + ";") - 0));
-                for (int i = 0; i < to__compile.Count; i++) {
+List<string> start = code.GetRange(_index, code.Count-_index);
+
+
+              List<string> to__compile = new List<string>();
+            
+            for (int i = 1; i < start.Count; i++)
+            {
+              
+              //  Console.WriteLine(start[i]);
+                if(start[i].StartsWith(indent_if))
+                {
+                  to__compile.Add(start[i]);
+                }else{
+                  if(start[i]!=""||start[i]!=" "||start[i]!="  "||start[i]!="  ")
+                  {
+                    break;
+                  }
+                }
+                
+            }                for (int i = 0; i < to__compile.Count; i++) {
                   if (to__compile[i].StartsWith(indent_if)) {
                     try {
                       to__compile[i] = to__compile[i].Substring(indent_if.Length);
@@ -347,7 +365,7 @@ namespace rC {
 
             string type_to_compare = line.Split(' ')[1].Split(':')[0];
             string operand = "";
-            string statement = line.Split(':')[1].Split(';')[0];
+            string statement = line.Split(':')[1].Split(':')[0];
             string name = "";
             bool _checked = false;
             foreach(var _operator in operands) {
@@ -360,7 +378,7 @@ namespace rC {
             }, StringSplitOptions.None)[0].Split(':')[1];
             string last_ = line.Split(new [] {
               operand
-            }, StringSplitOptions.None)[1].Split(';')[0];
+            }, StringSplitOptions.None)[1].Split(':')[0];
             if (type_to_compare == "str") {
               string first_to_compare = strValues[strNames.IndexOf(first_)];
               string last_to_compare = "";
@@ -455,8 +473,27 @@ namespace rC {
                 try {
                   int current_index = code.IndexOf(line);
                   current_index++;
-                  List < string > to__compile = code.GetRange(current_index, code.Count - current_index).GetRange(0, (code.GetRange(current_index, code.Count - current_index).IndexOf("}" + name + ";") - 0));
-                  for (int i = 0; i < to__compile.Count; i++) {
+                  List<string> to__compile = new List<string>();
+List<string> start = code.GetRange(_index, code.Count-_index);
+
+
+            to__compile = new List<string>();
+            
+            for (int i = 1; i < start.Count; i++)
+            {
+              
+              //  Console.WriteLine(start[i]);
+                if(start[i].StartsWith(indent_if))
+                {
+                  to__compile.Add(start[i]);
+                }else{
+                  if(start[i]!=""||start[i]!=" "||start[i]!="  "||start[i]!="  ")
+                  {
+                    break;
+                  }
+                }
+                
+            }                  for (int i = 0; i < to__compile.Count; i++) {
                     if (to__compile[i].StartsWith(indent_if)) {
                       try {
                         to__compile[i] = to__compile[i].Substring(indent_if.Length);
@@ -663,20 +700,20 @@ namespace rC {
               try {
                 range = Convert.ToInt32(line.Split(new [] {
                   "in range:"
-                }, StringSplitOptions.None).Last().Split(';')[0]);
+                }, StringSplitOptions.None).Last().Split(':')[0]);
               } catch {
                 try {
                   range = Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new [] {
                     "in range:"
-                  }, StringSplitOptions.None).Last().Split(';')[0])]);
+                  }, StringSplitOptions.None).Last().Split(':')[0])]);
                 } catch {
                   range = Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split(new [] {
                     "in range:"
-                  }, StringSplitOptions.None).Last().Split(';')[0])]);
+                  }, StringSplitOptions.None).Last().Split(':')[0])]);
                 }
               }
               if (line.Contains('"')) {
-                name = line.Split('"')[1].Split('"').First().Split(';').First();
+                name = line.Split('"')[1].Split('"').First().Split(':').First();
               } else {
                 name = "";
               }
@@ -693,16 +730,37 @@ namespace rC {
               //2
               //3
               //::4
+            List<string> start = code.GetRange(_index, code.Count-_index);
 
-              to__compile = code.GetRange(current_index, code.Count - current_index).GetRange(0, (code.GetRange(current_index, code.Count - current_index).IndexOf("}" + name + ";") - 0));
+
+            to__compile = new List<string>();
+            
+            for (int i = 1; i < start.Count; i++)
+            {
+              
+              //  Console.WriteLine(start[i]);
+                if(start[i].StartsWith(indent_if))
+                {
+                  to__compile.Add(start[i]);
+                }else{
+                  if(start[i]!=""||start[i]!=" "||start[i]!="  "||start[i]!="  ")
+                  {
+                    break;
+                  }
+                }
+                
+            }
               for (int i = 0; i < to__compile.Count; i++) {
+                
                 if (to__compile[i].StartsWith(indent_if)) {
                   try {
                     to__compile[i] = to__compile[i].Substring(indent_if.Length);
+                    Console.WriteLine(to__compile[i]);
                   } catch {}
                 }
               }
             } catch {
+              
               if (code.Contains("suppress_errors()") == false) {
                 Console.WriteLine("Incorrect/Missing end statement for for loop: " + name);
 
@@ -749,22 +807,37 @@ namespace rC {
               "function "
             }, StringSplitOptions.None).Last().Split('(').First();
             names_for_functions.Add(nameFunc);
-            List < string > func_content = code;
+            List < string > func_content = new List<string>();
             List < string > compileAfter = new List < string > ();
             int current_index = code.IndexOf(line);
             current_index++;
-            try {
-              func_content = code.GetRange(current_index, code.Count - current_index).GetRange(0, (code.GetRange(current_index, code.Count - current_index).IndexOf("};") - 0));
-
-            } catch (Exception exc) {
-              Console.WriteLine(exc);
-              try {
-                func_content = code.GetRange(current_index, code.Count - current_index).GetRange(0, (code.GetRange(current_index, code.Count - current_index).IndexOf("}" + nameFunc + ";") - 0));
-              } catch {
-
-                Console.WriteLine("Incorrect/Missing end statement for function: " + nameFunc);
-              }
+            List<string> start = code.GetRange(_index, code.Count-_index);
+            func_content = new List<string>();
+            for (int i = 1; i < start.Count; i++)
+            {
+                if(start[i].StartsWith(indent_if)){
+                  func_content.Add(start[i]);
+                }else{
+                  if(start[i]!=""||start[i]!=" "||start[i]!="  "||start[i]!="   "){
+                    break;
+                  }
+                }
+                
             }
+
+
+            // try {
+            //   func_content = code.GetRange(current_index, code.Count - current_index).GetRange(0, (code.GetRange(current_index, code.Count - current_index).IndexOf("};") - 0));
+            //   _curr_i++;
+            // } catch (Exception exc) {
+            //   Console.WriteLine(exc);
+            //   try {
+            //     func_content = code.GetRange(current_index, code.Count - current_index).GetRange(0, (code.GetRange(current_index, code.Count - current_index).IndexOf("}" + nameFunc + ";") - 0));
+            //   } catch {
+
+            //     Console.WriteLine("Incorrect/Missing end statement for function: " + nameFunc);
+            //   }
+            // }
             string indent = "    ";
 
             for (int i = 0; i < func_content.Count; i++) {
@@ -776,7 +849,7 @@ namespace rC {
             }
 
             lines_for_functions.Add(func_content);
-            Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions, definers_to_replace, defined_to_replace);
+            //Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions, definers_to_replace, defined_to_replace);
             continue;
           }
 
