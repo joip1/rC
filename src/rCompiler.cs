@@ -968,7 +968,7 @@ namespace rC {
                   strListValues[strListNames.IndexOf(line.Split(')')[1].Split('\"')[1].Split('\"').First())].Add(values[i].Split('"')[1].Split('"')[0]);
                 } else {
                   if (strNames.Contains(values[i])) {
-                    strListValues[strListNames.IndexOf(line.Split(')')[1].Split('\"')[1].Split('\"').First())].Add(values[i]);
+                    strListValues[strListNames.IndexOf(line.Split(')')[1].Split('\"')[1].Split('\"').First())].Add(strValues[strNames.IndexOf(values[i])]);
                   } else {
                     Console.WriteLine("String " + values[i] + "does not exist");
                   }
