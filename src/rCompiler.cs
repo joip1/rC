@@ -504,7 +504,7 @@ namespace rC {
                   for (int i = 1; i < start.Count; i++) {
 
                     //  Console.WriteLine(start[i]);
-                    if (start[i].StartsWith(indent_if)) {
+                    if (start[i].StartsWith(indent_if) || start[i].StartsWith("    ")) {
                       to__compile.Add(start[i]);
                     } else {
                       if (start[i] != "" && start[i] != " " && start[i] != "\n") {
@@ -513,6 +513,7 @@ namespace rC {
                     }
 
                   }
+                  
                   for (int i = 0; i < to__compile.Count; i++) {
                     if (to__compile[i].StartsWith(indent_if) || start[i].StartsWith("    ")) {
                       try {
@@ -525,6 +526,7 @@ namespace rC {
                     }
                   }
                   if (_checked) {
+                  
                     _Compile(to__compile);
                   }
                 } catch {
