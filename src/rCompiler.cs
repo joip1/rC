@@ -328,6 +328,7 @@ namespace rC {
 
                 List < string > to__compile = new List < string > ();
                  to__compile.Add("    ");
+                 to__compile.Add(line.Split(':')[2]);
                 for (int i = 1; i < start.Count; i++) {
 
                   //  Console.WriteLine(start[i]);
@@ -500,7 +501,7 @@ namespace rC {
 
                   to__compile = new List < string > ();
                    to__compile.Add("    ");
-
+                  to__compile.Add(line.Split(':')[2]);
                   for (int i = 1; i < start.Count; i++) {
 
                     //  Console.WriteLine(start[i]);
@@ -757,9 +758,9 @@ namespace rC {
               //3
               //::4
               List < string > start = code.GetRange(_index, code.Count - _index);
-
               to__compile = new List < string > ();
               to__compile.Add("    ");
+              to__compile.Add(line.Split(':')[2]);
 
               for (int i = 1; i < start.Count; i++) {
                 //  Console.WriteLine(start[i]);
