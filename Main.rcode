@@ -1,5 +1,6 @@
-num e >>0
-while num:e==0:
+num e >>10000
+while num:e>0:
     Write "Hi"
+    --e;
 
 exit()

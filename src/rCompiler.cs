@@ -111,9 +111,9 @@ namespace rC {
           foreach(var func_name in names_for_functions) {
 
             if (line.Contains(func_name + "(") && line.StartsWith(indent_if) == false && line.StartsWith("    ")==false) {
-              List < string > add_args = line.Split(new [] {
-                func_name
-              }, StringSplitOptions.None)[1].Split('(')[1].Split(')')[0].Split(new [] {
+                List < string > add_args = line.Split(new [] {
+                  func_name
+                }, StringSplitOptions.None)[1].Split('(')[1].Split(')')[0].Split(new [] {
                 ";;"
               }, StringSplitOptions.None).ToList();
               _Compile(add_args);
@@ -1104,15 +1104,16 @@ namespace rC {
             try {
               if (numberNames.Contains(line.Split('[')[1].Split(']')[0])) {
                 index = Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split('[')[1].Split(']')[0])]);
+              }else {
+                index = Convert.ToInt32(line.Split('[')[1].Split(']')[0]);
+              }
                 if (numberNames.Contains(line.Split('(')[1].Split(')')[0])) {
                   numberValues[numberNames.IndexOf(line.Split('(')[1].Split(')')[0])] = numListValues[numListNames.IndexOf(line.Split('(')[1].Split('[')[0])][index];
                 } else {
                   numberNames.Add(line.Split('(')[1].Split(')')[0]);
                   numberValues.Add(numListValues[numListNames.IndexOf(line.Split('(')[1].Split('[')[0])][index]);
                 }
-              } else {
-                index = Convert.ToInt32(line.Split('[')[1].Split(']')[0]);
-              }
+            
             } catch {
               Console.WriteLine("\nFatal Error (Syntax) On Line: " + code.IndexOf(line));
             }
