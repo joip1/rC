@@ -341,6 +341,7 @@ namespace rC {
                     }
 
                 }
+                to__compile.Add(line.Split(':')[2]);
                 for (int i = 0; i < to__compile.Count; i++) {
                   if (to__compile[i].StartsWith(indent_if) || start[i].StartsWith("    ")) {
                     try {
@@ -501,7 +502,6 @@ namespace rC {
 
                   to__compile = new List < string > ();
                    to__compile.Add("    ");
-                  to__compile.Add(line.Split(':')[2]);
                   for (int i = 1; i < start.Count; i++) {
 
                     //  Console.WriteLine(start[i]);
@@ -514,6 +514,7 @@ namespace rC {
                     }
 
                   }
+                  to__compile.Add(line.Split(':')[2]);
                   
                   for (int i = 0; i < to__compile.Count; i++) {
                     if (to__compile[i].StartsWith(indent_if) || start[i].StartsWith("    ")) {
@@ -760,12 +761,13 @@ namespace rC {
               List < string > start = code.GetRange(_index, code.Count - _index);
               to__compile = new List < string > ();
               to__compile.Add("    ");
-              to__compile.Add(line.Split(':')[2]);
+              
 
               for (int i = 1; i < start.Count; i++) {
                 //  Console.WriteLine(start[i]);
                 if (start[i].StartsWith(indent_if) || start[i].StartsWith("    ")) {
                   to__compile.Add(start[i]);
+                  
 
                 } else {
                   if (start[i] != "" && start[i] != " " && start[i] != "\n") {
@@ -774,6 +776,7 @@ namespace rC {
                 }
 
               }
+              to__compile.Add(line.Split(':')[2]);
               for (int i = 0; i < to__compile.Count; i++) {
 
                 if (to__compile[i].StartsWith(indent_if) || start[i].StartsWith("    ")) {
@@ -783,6 +786,7 @@ namespace rC {
                     } else if (to__compile[i].StartsWith("    ")) {
                       to__compile[i] = to__compile[i].Substring("    ".Length);
                     }
+                    Console.WriteLine(to__compile[i]);
                   } catch {}
                 }
               }
@@ -840,7 +844,6 @@ namespace rC {
             current_index++;
             List < string > start = code.GetRange(_index, code.Count - _index);
             func_content = new List < string > ();
-            func_content.Add(line.Split(':')[1]);
             for (int i = 1; i < start.Count; i++) {
               if (start[i].StartsWith(indent_if) || start[i].StartsWith("    ")) {
                 func_content.Add(start[i]);
@@ -866,7 +869,7 @@ namespace rC {
             //   }
             // }
             string indent = indent_if;
-
+            to__compile.Add(line.Split(':')[1]);
             for (int i = 0; i < func_content.Count; i++) {
               if (func_content[i].StartsWith(indent) || func_content[i].StartsWith("    ")) {
                 try {
