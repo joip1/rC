@@ -840,6 +840,7 @@ namespace rC {
             current_index++;
             List < string > start = code.GetRange(_index, code.Count - _index);
             func_content = new List < string > ();
+            func_content.Add(line.Split(':')[1]);
             for (int i = 1; i < start.Count; i++) {
               if (start[i].StartsWith(indent_if) || start[i].StartsWith("    ")) {
                 func_content.Add(start[i]);
