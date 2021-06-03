@@ -328,7 +328,7 @@ namespace rC {
 
                 List < string > to__compile = new List < string > ();
                  to__compile.Add("    ");
-                 to__compile.Add(line.Split(':')[2]);
+                
                 for (int i = 1; i < start.Count; i++) {
 
                   //  Console.WriteLine(start[i]);
@@ -341,7 +341,7 @@ namespace rC {
                     }
 
                 }
-                to__compile.Add(line.Split(':')[2]);
+                
                 for (int i = 0; i < to__compile.Count; i++) {
                   if (to__compile[i].StartsWith(indent_if) || start[i].StartsWith("    ")) {
                     try {
@@ -514,7 +514,7 @@ namespace rC {
                     }
 
                   }
-                  to__compile.Add(line.Split(':')[2]);
+                  
                   
                   for (int i = 0; i < to__compile.Count; i++) {
                     if (to__compile[i].StartsWith(indent_if) || start[i].StartsWith("    ")) {
@@ -776,7 +776,11 @@ namespace rC {
                 }
 
               }
+              try{
               to__compile.Add(line.Split(':')[2]);
+              }catch{
+              }
+            
               for (int i = 0; i < to__compile.Count; i++) {
 
                 if (to__compile[i].StartsWith(indent_if) || start[i].StartsWith("    ")) {
@@ -786,7 +790,6 @@ namespace rC {
                     } else if (to__compile[i].StartsWith("    ")) {
                       to__compile[i] = to__compile[i].Substring("    ".Length);
                     }
-                    Console.WriteLine(to__compile[i]);
                   } catch {}
                 }
               }
@@ -869,7 +872,6 @@ namespace rC {
             //   }
             // }
             string indent = indent_if;
-            to__compile.Add(line.Split(':')[1]);
             for (int i = 0; i < func_content.Count; i++) {
               if (func_content[i].StartsWith(indent) || func_content[i].StartsWith("    ")) {
                 try {
