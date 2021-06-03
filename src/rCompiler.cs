@@ -586,8 +586,13 @@ namespace rC {
             try {
               if (strNames.Contains(line.Split(' ')[1].Split('>').First())) {
                 if (line.Split('>').Last().ToLower().StartsWith("$read") == false) {
-                  strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = line.Split('>')[2].Split('\"')[1].Split('\"').First();
-
+                  if(line.Contains("\"")){
+                    strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = line.Split('>')[2].Split('\"')[1].Split('\"').First();
+                  }else{
+                    
+                      strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = strValues[strNames.IndexOf(line.Split('>')[2])];
+                    
+                  }
                 } else if (line.Split('>').Last().ToLower().Split(' ')[0] == "$readkey") {
                   if (Console.KeyAvailable) {
                     strValues[strNames.IndexOf(line.Split(' ')[1].Split('>').First())] = Console.ReadKey().Key.ToString();
@@ -624,6 +629,7 @@ namespace rC {
 
             } catch (Exception exc) {
               int errorLine = code.IndexOf(line);
+              Console.WriteLine(line);
               Console.WriteLine($"Invalid Syntax (Line {errorLine++}) Exception: " + exc);
             }
             if (line.ToLower().Contains("add") != true) {
