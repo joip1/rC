@@ -336,9 +336,7 @@ namespace rC {
 
                     to__compile.Add(start[i]);
                   } 
-                    else if (start[i] != "" && start[i] != " " && start[i] != "\n") {
-                      break;
-                    }
+                    break;
 
                 }
                 
@@ -508,9 +506,7 @@ namespace rC {
                     if (start[i].StartsWith(indent_if) || start[i].StartsWith("    ")) {
                       to__compile.Add(start[i]);
                     } else {
-                      if (start[i] != "" && start[i] != " " && start[i] != "\n") {
-                        break;
-                      }
+                      break;
                     }
 
                   }
@@ -770,9 +766,7 @@ namespace rC {
                   
 
                 } else {
-                  if (start[i] != "" && start[i] != " " && start[i] != "\n") {
-                    break;
-                  }
+                  break;
                 }
 
               }
@@ -852,9 +846,7 @@ namespace rC {
                 func_content.Add(start[i]);
 
               } else {
-                if (start[i] != "" && start[i] != " " && start[i] != "\n") {
-                  break;
-                }
+                break;
               }
 
             }
