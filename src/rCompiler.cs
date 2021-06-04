@@ -10,6 +10,32 @@ using System.Diagnostics;
 
 namespace rC {
   public class rCompiler {
+    //added with ubuntu
+    //fix: 
+    //TODO: MAKE TRY / CATCH STATEMENTS
+    //new to docs == for // readline // color //num cursor_x >> set, cursor_y >> set;
+    //write,read,delete,create file
+    //numToStr(str>>num)
+    //TODO - add import files
+
+    //define "=" : ">>" 
+    //include "hea
+
+    public static void Compile(
+      List < string > code,
+      List < string > numberNames,
+      List < float > numberValues,
+      List < string > strNames,
+      List < string > strValues,
+      List < string > references,
+      List < string > strListNames,
+      List < List < string >> strListValues,
+      List < string > numListNames,
+      List < List < float >> numListValues,
+      List < List < string >> lines_for_functions,
+      List < string > names_for_functions,
+      List < string > definers_to_replace,
+      List < string > defined_to_replace) {
 
       /*
       define =:>>
@@ -301,7 +327,11 @@ namespace rC {
                 List < string > start = code.GetRange(_index, code.Count - _index);
 
                 List < string > to__compile = new List < string > ();
-                 to__compile.Add("    ");
+                 if(line.Split(':')[2]!=""){
+                to__compile.Add(line.Split(':')[2]);
+              }
+              name = "";
+              to__compile.Add("    ");
                 
                 for (int i = 1; i < start.Count; i++) {
 
@@ -475,7 +505,11 @@ namespace rC {
                   List < string > start = code.GetRange(_index, code.Count - _index);
 
                   to__compile = new List < string > ();
-                   to__compile.Add("    ");
+                  if(line.Split(':')[2]!=""){
+                to__compile.Add(line.Split(':')[2]);
+              }
+              name = "";
+              to__compile.Add("    ");
                   for (int i = 1; i < start.Count; i++) {
 
                     //  Console.WriteLine(start[i]);
@@ -721,11 +755,8 @@ namespace rC {
                   }, StringSplitOptions.None).Last().Split(':')[0])]);
                 }
               }
-              if (line.Contains('"')) {
-                name = line.Split('"')[1].Split('"').First().Split(':').First();
-              } else {
-                name = "";
-              }
+
+              name = "";
               //              indent = "    ";
             } catch (Exception exc) {
               Console.WriteLine(exc);
@@ -741,8 +772,12 @@ namespace rC {
               //::4
               List < string > start = code.GetRange(_index, code.Count - _index);
               to__compile = new List < string > ();
-              to__compile.Add("    ");
               
+              if(line.Split(':')[2]!=""){
+                to__compile.Add(line.Split(':')[2]);
+              }
+              
+              to__compile.Add("    ");
 
               for (int i = 1; i < start.Count; i++) {
                 //  Console.WriteLine(start[i]);
@@ -757,10 +792,6 @@ namespace rC {
                 }
 
               }
-              try{
-              to__compile.Add(line.Split(':')[2]);
-              }catch{
-              }
             
               for (int i = 0; i < to__compile.Count; i++) {
 
@@ -774,11 +805,14 @@ namespace rC {
                   } catch {}
                 }
               }
-            } catch {
+            } catch (Exception exc){
 
               if (code.Contains("suppress_errors()") == false) {
                 Console.WriteLine("Incorrect/Missing end statement for for loop: " + name);
 
+              }
+              if(code.Contains("show_exceptions()")==true){
+                Console.WriteLine(exc);
               }
             }
             for (int x = 0; x < range; x++) {
@@ -864,6 +898,11 @@ namespace rC {
                 } catch {}
               }
             }
+            if(line.Split(':')[1]!=""){
+                func_content.Add(line.Split(':')[1]);
+              }
+              
+              func_content.Add("    ");
             lines_for_functions.Add(func_content);
             //Compile(compileAfter, numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions, definers_to_replace, defined_to_replace);
             continue;
@@ -1927,5 +1966,6 @@ namespace rC {
 
       }
     }
+
   }
 }
