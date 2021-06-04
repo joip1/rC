@@ -10,32 +10,6 @@ using System.Diagnostics;
 
 namespace rC {
   public class rCompiler {
-    //added with ubuntu
-    //fix: 
-    //TODO: MAKE TRY / CATCH STATEMENTS
-    //new to docs == for // readline // color //num cursor_x >> set, cursor_y >> set;
-    //write,read,delete,create file
-    //numToStr(str>>num)
-    //TODO - add import files
-
-    //define "=" : ">>" 
-    //include "hea
-
-    public static void Compile(
-      List < string > code,
-      List < string > numberNames,
-      List < float > numberValues,
-      List < string > strNames,
-      List < string > strValues,
-      List < string > references,
-      List < string > strListNames,
-      List < List < string >> strListValues,
-      List < string > numListNames,
-      List < List < float >> numListValues,
-      List < List < string >> lines_for_functions,
-      List < string > names_for_functions,
-      List < string > definers_to_replace,
-      List < string > defined_to_replace) {
 
       /*
       define =:>>
@@ -336,7 +310,9 @@ namespace rC {
 
                     to__compile.Add(start[i]);
                   } else{
-                    break;
+                    if(start[i]!=""){
+                      break;
+                    }
                   }
                 }
                 
@@ -506,7 +482,10 @@ namespace rC {
                     if (start[i].StartsWith(indent_if) || start[i].StartsWith("    ")) {
                       to__compile.Add(start[i]);
                     } else {
+                      
+                      if(start[i]!=""){
                       break;
+                    }
                     }
 
                   }
@@ -772,7 +751,9 @@ namespace rC {
                   
 
                 } else {
-                  break;
+                  if(start[i]!=""){
+                      break;
+                    }
                 }
 
               }
@@ -852,7 +833,9 @@ namespace rC {
                 func_content.Add(start[i]);
 
               } else {
-                break;
+                if(start[i]!=""){
+                      break;
+                    }
               }
 
             }
@@ -1944,6 +1927,5 @@ namespace rC {
 
       }
     }
-
   }
 }
