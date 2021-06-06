@@ -111,11 +111,20 @@ namespace rC {
           foreach(var func_name in names_for_functions) {
 
             if (line.Contains(func_name + "(") && line.StartsWith(indent_if) == false && line.StartsWith("    ")==false) {
-                List < string > add_args = line.Split(new [] {
-                  func_name
-                }, StringSplitOptions.None)[1].Split('(')[1].Split(')')[0].Split(new [] {
+                List < string > add_args = new List<string>();
+                if (line.Contains(func_name+"(")){
+                  add_args = line.Split(new [] {
+                  func_name+"("
+                }, StringSplitOptions.None)[1].Split(')')[0].Split(new [] {
                 ";;"
               }, StringSplitOptions.None).ToList();
+                }else if(line.Contains(func_name + " (")){
+                  add_args = line.Split(new [] {
+                  func_name+" ("
+                }, StringSplitOptions.None)[1].Split(')')[0].Split(new [] {
+                ";;"
+              }, StringSplitOptions.None).ToList();
+                }
               _Compile(add_args);
               if (strNames.Contains("return")) {
                 strValues[strNames.IndexOf("return")] = "";
