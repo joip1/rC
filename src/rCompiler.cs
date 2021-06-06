@@ -908,7 +908,11 @@ namespace rC {
               }
             }
             if(line.Split(':')[1]!=""){
+                if(line.Split(':')[1].StartsWith(" ")){
+                  func_content.Add(line.Split(':')[1].Split(' ')[1]);
+                }else{
                 func_content.Add(line.Split(':')[1]);
+                }
               }
               
               func_content.Add("    ");
