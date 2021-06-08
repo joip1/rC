@@ -593,7 +593,7 @@ namespace rC {
               foreach(var nametoCheck in namesToCheck) {
                 try {
                   if (nametoCheck == name || nametoCheck == "{" + name || nametoCheck == name + "}" || nametoCheck == "{" + name + "}") {
-                    Console.Write(Convert.ToDouble(numberValues[numberNames.IndexOf(name)]).ToString("F99").Trim('0'));
+                    Console.Write(Convert.ToDouble(numberValues[numberNames.IndexOf(name)]).ToString("0." + new string('#', 339)));
                   }
                 } catch {
                   Console.WriteLine("Invalid Syntax on Line " + code.IndexOf(line));
