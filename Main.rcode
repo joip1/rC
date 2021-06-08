@@ -1,6 +1,4 @@
-num e >>10000
-while num:e>0:
-    Write "Hi"
-    --e;
-
+num i >>2123123123
+i*1212712892373123123123123
+WriteNum {i}
 exit()

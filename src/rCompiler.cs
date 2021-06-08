@@ -40,6 +40,8 @@ namespace rC {
       /*
       define =:>>
       // definers_to_replace
+      //doubleValue.ToString("0." + new string('#', 339))
+
       // defined_to
 
       //to return something just declare a variable named "return", like "str return >>x"
@@ -591,7 +593,7 @@ namespace rC {
               foreach(var nametoCheck in namesToCheck) {
                 try {
                   if (nametoCheck == name || nametoCheck == "{" + name || nametoCheck == name + "}" || nametoCheck == "{" + name + "}") {
-                    Console.Write(numberValues[numberNames.IndexOf(name)]);
+                    Console.Write(Convert.ToDouble(numberValues[numberNames.IndexOf(name)]).ToString("F99").Trim('0'));
                   }
                 } catch {
                   Console.WriteLine("Invalid Syntax on Line " + code.IndexOf(line));
