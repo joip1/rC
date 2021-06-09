@@ -48,6 +48,8 @@ namespace rC {
       */
 
       string current_line = "";
+
+      int current_line_index = 0;
       List < int > pixelX = new List < int > ();
       List < int > pixelY = new List < int > ();
       List < ConsoleColor > pixelColors = new List < ConsoleColor > ();
@@ -91,7 +93,7 @@ namespace rC {
 
           string line = code[_index];
           current_line = line;
-
+          current_line_index++;
           if (definers_to_replace.Count > 0) {
             for (int i = 0; i < definers_to_replace.Count; i++) {
               if (line.Contains(definers_to_replace[i])) {
@@ -1959,7 +1961,7 @@ namespace rC {
           }
         }
       } catch (Exception exc) {
-        string f = current_line;
+        string f = code[current_line_index];
         bool except_errors = code.Contains("suppress_errors()");
         bool show_exceptions = code.Contains("show_exceptions()");
         if (show_exceptions) {
@@ -1968,7 +1970,7 @@ namespace rC {
         if (except_errors == true) {
 
         } else {
-          Console.WriteLine("Error while running the following: " + f);
+          Console.WriteLine("(Line "+(current_line_index+1).ToString()+") - "+ "Error -> " + f);
         }
       }
 
