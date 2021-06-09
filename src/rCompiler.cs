@@ -102,6 +102,26 @@ namespace rC {
               }
             }
           }
+
+            if (line.Contains('$')) {
+            foreach(var string_var in strNames) {
+              try {
+                string toReplace = "$" + string_var + "$";
+                line = line.Replace(toReplace, strValues[strNames.IndexOf(string_var)]);
+      
+              } catch {}
+            }
+            foreach(var num_var in numberNames) {
+              try {
+                string toReplace = "$" + num_var + "$";
+                line = line.Replace(toReplace, numberValues[numberNames.IndexOf(num_var)].ToString());
+
+              } catch {
+
+              }
+            }
+
+          }
           if(line.Split(' ').First()=="continue"){
             continue;
           }
@@ -196,24 +216,7 @@ namespace rC {
               strValues[strNames.IndexOf("keyavailable")] = "False";
             }
           }
-          if (line.Contains('$')) {
-            foreach(var string_var in strNames) {
-              try {
-                string toReplace = "$" + string_var + "$";
-                line = line.Replace(toReplace, strValues[strNames.IndexOf(string_var)]);
-              } catch {}
-            }
-            foreach(var num_var in numberNames) {
-              try {
-                string toReplace = "$" + num_var + "$";
-                line = line.Replace(toReplace, numberValues[numberNames.IndexOf(num_var)].ToString());
-
-              } catch {
-
-              }
-            }
-
-          }
+        
           if (line.StartsWith("define ")) {
             // define "=":">>"
             if (definers_to_replace.Contains(line.Split(':')[0].Split('"')[1]) == false) {
@@ -1881,7 +1884,7 @@ namespace rC {
               continue;
 
             }
-
+            code[_index] = line;
             //usage: replace:f; with:d; str:string;
             if (line.ToLower().StartsWith("replace")) {
               string toReplace = line.Split(new [] {
