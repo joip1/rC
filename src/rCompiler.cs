@@ -1961,7 +1961,7 @@ namespace rC {
           }
         }
       } catch (Exception exc) {
-        string f = code[current_line_index];
+        string f = code[current_line_index-1];
         bool except_errors = code.Contains("suppress_errors()");
         bool show_exceptions = code.Contains("show_exceptions()");
         if (show_exceptions) {
@@ -1970,7 +1970,7 @@ namespace rC {
         if (except_errors == true) {
 
         } else {
-          Console.WriteLine("(Line "+(current_line_index+1).ToString()+") - "+ "Error -> " + f);
+          Console.WriteLine("(Line "+(current_line_index).ToString()+") - "+ "Error -> " + f);
         }
       }
 
