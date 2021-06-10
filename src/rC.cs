@@ -24,13 +24,12 @@ namespace rC
         static void Main(string[] args)
         {
             string readline;
-            string default_main = "#!/usr/bin/rC\n"+
-"\nfunction main(){\n"+
+            string default_main = "#!/usr/bin/mono /usr/bin/rC\n"+
+"\nfunction main():\n"+
 "    Write \"Hello World!\"\n"+
-"}main;\n"+
+"\n"+
 "\n"+
 "main()\n"+
-"newln\n"+
 "exit()\n";
             List<string> codeLines = new List<string>();
             string[] varTypes = new string[] { "number", "str", "save(this)", "Write", "#", "WriteStr", "WriteNum", "sleep", "for", "color", "compile_lines", "if", "pixel", "import", "CreateFile", "toLower", "toUpper" };

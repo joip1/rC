@@ -5,3 +5,10 @@ C:\Users\Rodrigo\source\repos\rC\obj\Debug\rC.csprojAssemblyReference.cache
 C:\Users\Rodrigo\source\repos\rC\obj\Debug\rC.csproj.CoreCompileInputs.cache
 C:\Users\Rodrigo\source\repos\rC\obj\Debug\rC.exe
 C:\Users\Rodrigo\source\repos\rC\obj\Debug\rC.pdb
+C:\Users\Rodrigo\Desktop\rcDev\rC\src\obj\Debug\rC.csprojAssemblyReference.cache
+C:\Users\Rodrigo\Desktop\rcDev\rC\src\obj\Debug\rC.csproj.CoreCompileInputs.cache
+C:\Users\Rodrigo\Desktop\rcDev\rC\src\obj\Debug\rC.exe
+C:\Users\Rodrigo\Desktop\rcDev\rC\src\obj\Debug\rC.pdb
+C:\Users\Rodrigo\Desktop\rcDev\rC\src\bin\Debug\rC.exe.config
+C:\Users\Rodrigo\Desktop\rcDev\rC\src\bin\Debug\rC.exe
+C:\Users\Rodrigo\Desktop\rcDev\rC\src\bin\Debug\rC.pdb

@@ -861,7 +861,7 @@ namespace rC {
             } catch {
               Console.WriteLine($"{line} : Error Starting Thread");
             }
-
+          continue;
           }
 
           if (line.StartsWith("function ")) {
@@ -961,6 +961,7 @@ namespace rC {
             } catch {
               Console.WriteLine("Fatal error, line: " + code.IndexOf(line));
             }
+            continue;
           }
           if (line.ToLower().StartsWith("updatestrlistvalue")) {
             //updateStrListValue(MyList[x])
@@ -975,6 +976,7 @@ namespace rC {
             } catch {
               Console.WriteLine("Fatal error on line: " + code.IndexOf(line));
             }
+            continue;
           }
           if (line.ToLower().StartsWith("updatenumlistvalue")) {
             //updateStrListValue(MyList[x])
@@ -989,6 +991,7 @@ namespace rC {
             } catch {
               Console.WriteLine("Fatal error on line: " + code.IndexOf(line));
             }
+            continue;
           }
           if (line.ToLower().StartsWith("sqrt")) {
 
@@ -1022,6 +1025,7 @@ namespace rC {
                 }
               }
             }
+            continue;
           }
           if (line.StartsWith("list(num)")) {
             numListNames.Add(line.Split(')')[1].Split('\"')[1].Split('\"').First());
@@ -1042,7 +1046,7 @@ namespace rC {
                 }
               }
             }
-
+            continue;
           }
           foreach(var listName in strListNames) {
             // if(line.Contains(listName) && line.Contains('[')){
@@ -1106,6 +1110,7 @@ namespace rC {
                 }
               }
             }
+            continue;
           }
           foreach(var listName in numListNames) {
             if (line.StartsWith(listName + ".IndexOf:")) {
@@ -1145,6 +1150,7 @@ namespace rC {
                 }
               }
             }
+            continue;
           }
           if (line.ToLower().StartsWith("lnval(") || line.StartsWith("lnval (")) {
             int index = 0;
@@ -1552,7 +1558,7 @@ namespace rC {
                   }, StringSplitOptions.None).Last().Split(')').First().ToLower();
                 }
               }
-
+              continue;
             } else if (line.StartsWith("toLower (") && line.Contains(")") && line.Contains(">>") == false) {
               try {
                 strValues[strNames.IndexOf(line.Split(new [] {
@@ -1563,6 +1569,7 @@ namespace rC {
               } catch {
 
               }
+              continue;
             }
 
             //toUpper
@@ -1651,7 +1658,7 @@ namespace rC {
                 } else if (color == "yellow") {
                   pixelColors.Add(ConsoleColor.Yellow);
                 }
-
+                continue;
               }
               if (line.ToLower().StartsWith("pixel.drawchar")) {
                 try {
@@ -1699,6 +1706,7 @@ namespace rC {
                 } catch {
                   Console.WriteLine("Invalid Syntax In Line " + code.IndexOf(line));
                 }
+                continue;
               }
             }
             if (references.Contains("process")) {
