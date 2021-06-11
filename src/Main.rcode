@@ -1,0 +1,20 @@
+(multiline)str i >>"""
+    sasd
+
+
+
+
+
+
+
+    Write "hi"
+"""
+
+show_exceptions()
+WriteStr {i}
+#Output:
+#i
+#ho
+#f
+
+exit()

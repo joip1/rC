@@ -10,6 +10,12 @@ using System.Diagnostics;
 
 namespace rC {
   public class rCompiler {
+
+    // (multiline)str i >>"""
+    //  hi
+    //  ho
+    //"""
+    //MUST HAVE TAB INDENT
     //added with ubuntu
     //fix: 
     //TODO: MAKE TRY / CATCH STATEMENTS
@@ -402,6 +408,46 @@ namespace rC {
               }
             
                 _Compile(else_val);
+            }
+            continue;
+          }else if(line.StartsWith("(multiline)")){
+            string final_str = "";
+            string first_line = line.Split(new [] {"\"\"\""}, StringSplitOptions.None)[1];
+            string name = line.Split(new [] {"str "},StringSplitOptions.None)[1].Split('>').First().Replace(" ","");
+            final_str+=first_line;
+            /*
+            0 asd
+            1 """
+            2 """
+            3 asdasd
+            4 asdasd
+            L = 5
+            */
+            List<string> start_check = code.GetRange(_index+1, code.Count-_index-1);
+            if (start_check.Contains("\"\"\"") ==false){
+              Console.WriteLine("Unmatched \"\"\" at line: "+_index+1);
+              Environment.Exit(1);
+            }else{
+              foreach(var __line in start_check.GetRange(0, start_check.IndexOf("\"\"\""))){
+                string __line_indented = "";
+                if(__line.StartsWith("    ")){ 
+                  __line_indented = __line.Substring("    ".Length);
+                }else if(__line.StartsWith(indent_if)){
+                  __line_indented = __line.Substring(indent_if.Length);
+                }else{
+                  if (__line != "" && __line != "\n"){
+                  Console.WriteLine("Error: All the Content inside a multiline str must be indented to prevent non expected code execution");
+                  }
+                  Environment.Exit(1);
+                }
+                final_str+="\n"+__line_indented;
+              }
+            }
+            if(strNames.Contains(name)){
+              strValues[strNames.IndexOf(name)] = final_str;
+            }else{
+              strNames.Add(name);
+              strValues.Add(final_str);
             }
             continue;
           } else if (line.StartsWith("while ")) {
