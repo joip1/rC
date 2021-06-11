@@ -393,6 +393,9 @@ namespace rC {
               for (int i = 0; i < start.Count; i++)
               {
                   if(start[i].StartsWith("else:")){
+                      if(start[i].Split(':')[1]!=""){
+                        else_val.Add(start[i].Split(':')[1]); 
+                      }
                       List<string> else_start = start.GetRange(i, start.Count-i);
                       for (int p = 1; p < else_start.Count; p++)
                       {
