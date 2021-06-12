@@ -561,9 +561,11 @@ namespace rC {
                   __line_indented = __line.Substring(indent_if.Length);
                 }else{
                   if (__line != "" && __line != "\n"){
-                  Console.WriteLine("Error: All the Content inside a multiline str must be indented to prevent non expected code execution");
+                    Console.WriteLine("Error: All the Content inside a multiline str must be indented to prevent non expected code execution");
+                    Environment.Exit(1);
                   }
-                  Environment.Exit(1);
+                   
+
                 }
                 final_str+="\n"+__line_indented;
               }
