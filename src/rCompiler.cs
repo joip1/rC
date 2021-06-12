@@ -224,6 +224,111 @@ namespace rC {
               numberValues.Add(numListValues[numListNames.IndexOf(numList)].Count);
             }
           }
+
+           foreach(var listName in strListNames) {
+            // if(line.Contains(listName) && line.Contains('[')){
+            //   // try{
+            //     string toParse = line.Split(new []{listName},StringSplitOptions.None)[1].Split(']')[0];
+            //     toParse = listName+toParse+']';
+            //     int indx = 0;
+            //     string isNum = toParse.Split('[')[1].Split(']')[0];
+            //     if(numberNames.Contains(isNum)){
+            //       indx = Convert.ToInt32(numberValues[numberNames.IndexOf(isNum)]);
+            //     }else{
+            //       indx = Convert.ToInt32(isNum);
+            //     }
+            //      if(strNames.Contains(toParse)){
+            //        strValues[strNames.IndexOf(toParse)] = strListValues[strListNames.IndexOf(listName)][indx]; 
+            //      }else{
+
+            //        strNames.Add(toParse);
+            //        Console.WriteLine(strListNames.Count());
+            //      }
+            // }catch{
+            //   Console.WriteLine("Error at line: "+line);
+            // }
+            // }
+
+            if (line.StartsWith(listName + ".IndexOf:")) {
+              try {
+                string stringToGetIndex = "";
+                //MyList.IndexOf:"Something"; to:num
+                if (line.Contains('"')) {
+                  stringToGetIndex = line.Split(new [] {
+                    "IndexOf:"
+                  }, StringSplitOptions.None).Last().Split('"')[1].Split('"').First().Split(';').First();
+                } else {
+                  stringToGetIndex = strValues[strNames.IndexOf(line.Split(new [] {
+                    "IndexOf:"
+                  }, StringSplitOptions.None).Last().Split(';').First())];
+                }
+                numberValues[numberNames.IndexOf(line.Split(new [] {
+                  "to:"
+                }, StringSplitOptions.None).Last().Split(';').First())] = strListValues[strListNames.IndexOf(listName)].IndexOf(stringToGetIndex);
+              } catch {
+                Console.WriteLine("Fatal Error, Line: " + code.IndexOf(line));
+              }
+
+            }
+
+            if (line.StartsWith(listName + ".RemoveAt")) {
+              int index = 0;
+              if (numberNames.Contains(line.Split('(')[1].Split(')')[0])) {
+                index = Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split('(')[1].Split(')')[0])]);
+              } else {
+                index = Convert.ToInt32(line.Split('(')[1].Split(')')[0]);
+              }
+              strListValues[strListNames.IndexOf(listName)].RemoveAt(index);
+            }
+            foreach(var name in strNames) {
+              if (name.ToLower().StartsWith(listName.ToLower() + ".add")) {
+                if (strListValues[strListNames.IndexOf(listName)].Contains(strValues[strNames.IndexOf(name)]) == false) {
+                  strListValues[strListNames.IndexOf(listName)].Add(strValues[strNames.IndexOf(name)]);
+                }
+              }
+            }
+            continue;
+          }
+          foreach(var listName in numListNames) {
+            if (line.StartsWith(listName + ".IndexOf:")) {
+              try {
+                string stringToGetIndex = "";
+                //MyList.IndexOf:"Something"; to:num
+                if (line.Contains('"')) {
+                  stringToGetIndex = line.Split(new [] {
+                    "IndexOf:"
+                  }, StringSplitOptions.None).Last().Split('"')[1].Split('"').First().Split(';').First();
+                } else {
+                  stringToGetIndex = strValues[strNames.IndexOf(line.Split(new [] {
+                    "IndexOf:"
+                  }, StringSplitOptions.None).Last().Split(';').First())];
+                }
+                numberValues[numberNames.IndexOf(line.Split(new [] {
+                  "to"
+                }, StringSplitOptions.None).Last().Split(';').First())] = numListValues[numListNames.IndexOf(listName)].IndexOf(float.Parse(stringToGetIndex));
+              } catch {
+                throw new Exception("Fatal error on line: " + code.IndexOf(line));
+              }
+
+            }
+            if (line.StartsWith(listName + ".RemoveAt")) {
+              int index = 0;
+              if (numberNames.Contains(line.Split('(')[1].Split(')')[0])) {
+                index = Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split('(')[1].Split(')')[0])]);
+              } else {
+                index = Convert.ToInt32(line.Split('(')[1].Split(')')[0]);
+              }
+              numListValues[numListNames.IndexOf(listName)].RemoveAt(index);
+            }
+            foreach(var name in numberNames) {
+              if (name.ToLower().StartsWith(listName.ToLower() + ".add")) {
+                if (numListValues[numListNames.IndexOf(listName)].Contains(numberValues[numberNames.IndexOf(name)]) == false) {
+                  numListValues[numListNames.IndexOf(listName)].Add(numberValues[numberNames.IndexOf(name)]);
+                }
+              }
+            }
+            continue;
+          }
           if (strNames.Contains("keyavailable") == false) {
             if (Console.KeyAvailable == true) {
               strNames.Add("keyavailable");
@@ -1114,110 +1219,7 @@ namespace rC {
             }
             continue;
           }
-          foreach(var listName in strListNames) {
-            // if(line.Contains(listName) && line.Contains('[')){
-            //   // try{
-            //     string toParse = line.Split(new []{listName},StringSplitOptions.None)[1].Split(']')[0];
-            //     toParse = listName+toParse+']';
-            //     int indx = 0;
-            //     string isNum = toParse.Split('[')[1].Split(']')[0];
-            //     if(numberNames.Contains(isNum)){
-            //       indx = Convert.ToInt32(numberValues[numberNames.IndexOf(isNum)]);
-            //     }else{
-            //       indx = Convert.ToInt32(isNum);
-            //     }
-            //      if(strNames.Contains(toParse)){
-            //        strValues[strNames.IndexOf(toParse)] = strListValues[strListNames.IndexOf(listName)][indx]; 
-            //      }else{
-
-            //        strNames.Add(toParse);
-            //        Console.WriteLine(strListNames.Count());
-            //      }
-            // }catch{
-            //   Console.WriteLine("Error at line: "+line);
-            // }
-            // }
-
-            if (line.StartsWith(listName + ".IndexOf:")) {
-              try {
-                string stringToGetIndex = "";
-                //MyList.IndexOf:"Something"; to:num
-                if (line.Contains('"')) {
-                  stringToGetIndex = line.Split(new [] {
-                    "IndexOf:"
-                  }, StringSplitOptions.None).Last().Split('"')[1].Split('"').First().Split(';').First();
-                } else {
-                  stringToGetIndex = strValues[strNames.IndexOf(line.Split(new [] {
-                    "IndexOf:"
-                  }, StringSplitOptions.None).Last().Split(';').First())];
-                }
-                numberValues[numberNames.IndexOf(line.Split(new [] {
-                  "to:"
-                }, StringSplitOptions.None).Last().Split(';').First())] = strListValues[strListNames.IndexOf(listName)].IndexOf(stringToGetIndex);
-              } catch {
-                Console.WriteLine("Fatal Error, Line: " + code.IndexOf(line));
-              }
-
-            }
-
-            if (line.StartsWith(listName + ".RemoveAt")) {
-              int index = 0;
-              if (numberNames.Contains(line.Split('(')[1].Split(')')[0])) {
-                index = Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split('(')[1].Split(')')[0])]);
-              } else {
-                index = Convert.ToInt32(line.Split('(')[1].Split(')')[0]);
-              }
-              strListValues[strListNames.IndexOf(listName)].RemoveAt(index);
-            }
-            foreach(var name in strNames) {
-              if (name.ToLower().StartsWith(listName.ToLower() + ".add")) {
-                if (strListValues[strListNames.IndexOf(listName)].Contains(strValues[strNames.IndexOf(name)]) == false) {
-                  strListValues[strListNames.IndexOf(listName)].Add(strValues[strNames.IndexOf(name)]);
-                }
-              }
-            }
-            continue;
-          }
-          foreach(var listName in numListNames) {
-            if (line.StartsWith(listName + ".IndexOf:")) {
-              try {
-                string stringToGetIndex = "";
-                //MyList.IndexOf:"Something"; to:num
-                if (line.Contains('"')) {
-                  stringToGetIndex = line.Split(new [] {
-                    "IndexOf:"
-                  }, StringSplitOptions.None).Last().Split('"')[1].Split('"').First().Split(';').First();
-                } else {
-                  stringToGetIndex = strValues[strNames.IndexOf(line.Split(new [] {
-                    "IndexOf:"
-                  }, StringSplitOptions.None).Last().Split(';').First())];
-                }
-                numberValues[numberNames.IndexOf(line.Split(new [] {
-                  "to"
-                }, StringSplitOptions.None).Last().Split(';').First())] = numListValues[numListNames.IndexOf(listName)].IndexOf(float.Parse(stringToGetIndex));
-              } catch {
-                throw new Exception("Fatal error on line: " + code.IndexOf(line));
-              }
-
-            }
-            if (line.StartsWith(listName + ".RemoveAt")) {
-              int index = 0;
-              if (numberNames.Contains(line.Split('(')[1].Split(')')[0])) {
-                index = Convert.ToInt32(numberValues[numberNames.IndexOf(line.Split('(')[1].Split(')')[0])]);
-              } else {
-                index = Convert.ToInt32(line.Split('(')[1].Split(')')[0]);
-              }
-              numListValues[numListNames.IndexOf(listName)].RemoveAt(index);
-            }
-            foreach(var name in numberNames) {
-              if (name.ToLower().StartsWith(listName.ToLower() + ".add")) {
-                if (numListValues[numListNames.IndexOf(listName)].Contains(numberValues[numberNames.IndexOf(name)]) == false) {
-                  numListValues[numListNames.IndexOf(listName)].Add(numberValues[numberNames.IndexOf(name)]);
-                }
-              }
-            }
-            continue;
-          }
+         
           if (line.ToLower().StartsWith("lnval(") || line.StartsWith("lnval (")) {
             int index = 0;
             try {
