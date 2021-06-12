@@ -207,6 +207,23 @@ namespace rC {
           if (is_continue) {
             continue;
           }
+
+           foreach(var stringList in strListNames) {
+            if (numberNames.Contains(stringList + ".length")) {
+              numberValues[numberNames.IndexOf(stringList + ".length")] = strListValues[strListNames.IndexOf(stringList)].Count;
+            } else {
+              numberNames.Add(stringList + ".length");
+              numberValues.Add(strListValues[strListNames.IndexOf(stringList)].Count);
+            }
+          }
+          foreach(var numList in numListNames) {
+            if (numberNames.Contains(numList + ".length")) {
+              numberValues[numberNames.IndexOf(numList + ".length")] = numListValues[numListNames.IndexOf(numList)].Count;
+            } else {
+              numberNames.Add(numList + ".length");
+              numberValues.Add(numListValues[numListNames.IndexOf(numList)].Count);
+            }
+          }
           if (strNames.Contains("keyavailable") == false) {
             if (Console.KeyAvailable == true) {
               strNames.Add("keyavailable");
@@ -393,6 +410,9 @@ namespace rC {
               for (int i = 0; i < start.Count; i++)
               {
                   if(start[i].StartsWith("else:")){
+                      if(start[i].Split(':')[1]!=""){
+                        else_val.Add(start[i].Split(':')[1]); 
+                      }
                       List<string> else_start = start.GetRange(i, start.Count-i);
                       for (int p = 1; p < else_start.Count; p++)
                       {
@@ -1244,22 +1264,7 @@ namespace rC {
             continue;
           }
 
-          foreach(var stringList in strListNames) {
-            if (numberNames.Contains(stringList + ".length")) {
-              numberValues[numberNames.IndexOf(stringList + ".length")] = strListValues[strListNames.IndexOf(stringList)].Count;
-            } else {
-              numberNames.Add(stringList + ".length");
-              numberValues.Add(strListValues[strListNames.IndexOf(stringList)].Count);
-            }
-          }
-          foreach(var numList in numListNames) {
-            if (numberNames.Contains(numList + ".length")) {
-              numberValues[numberNames.IndexOf(numList + ".length")] = numListValues[numListNames.IndexOf(numList)].Count;
-            } else {
-              numberNames.Add(numList + ".length");
-              numberValues.Add(numListValues[numListNames.IndexOf(numList)].Count);
-            }
-          }
+         
 
           if (line.StartsWith("numToStr")) {
 
