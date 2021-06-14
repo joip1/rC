@@ -1340,10 +1340,12 @@ namespace rC {
               }
               Console.CursorTop = Convert.ToInt32(numberValues[numberNames.IndexOf("cursor_y")]);
             }
-            if (line == "exit()") {
+            if (line == "exit(0)" || line=="exit()") {
               Environment.Exit(0);
               continue;
-            } else if (line.StartsWith("screen_width >>")) {
+            }else if(line=="exit(1)") {
+				Environment.Exit(1);
+			} else if (line.StartsWith("screen_width >>")) {
               try {
                 numberValues[numberNames.IndexOf("screen_width")] = Convert.ToInt32(line.Split('>').Last());
               } catch {
