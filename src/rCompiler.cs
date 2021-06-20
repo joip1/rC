@@ -169,11 +169,9 @@ namespace rC {
 
               Compile(lines_for_functions[names_for_functions.IndexOf(func_name)], numberNames, numberValues, strNames, strValues, references, strListNames, strListValues, numListNames, numListValues, lines_for_functions, names_for_functions, definers_to_replace, defined_to_replace);
               //str x >>f(2)
-              string func_call = func_name + line.Split(new [] {
-                func_name
-              }, StringSplitOptions.None)[1].Split('(')[0] + line.Split(new [] {
-                func_name
-              }, StringSplitOptions.None)[1].Split(')')[0] + ")";;
+              string func_call = func_name +"("+ line.Split(new [] {
+                func_name + "("
+              }, StringSplitOptions.None)[1].Split(')')[0]+")";
               if (strNames.Contains("return")) {
                 if (strNames.Contains(func_call)) {
                   strValues[strNames.IndexOf(func_call)] = strValues[strNames.IndexOf("return")];
@@ -918,6 +916,9 @@ namespace rC {
               }
             } catch {
               int errorLine = code.IndexOf(line);
+              // foreach(var n in numberNames){
+              //   Console.WriteLine(n);
+              // }
               Console.WriteLine($"Invalid Syntax (Line {errorLine--})");
             }
             continue;
