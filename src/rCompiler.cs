@@ -116,8 +116,7 @@ namespace rC {
             foreach(var string_var in strNames) {
               try {
                 string toReplace = "$" + string_var + "$";
-                line = line.Replace(toReplace, strValues[strNames.IndexOf(string_var)]);
-      
+                line = line.Replace(toReplace, strValues[strNames.IndexOf(string_var)]).Replace("*greater_than*", ">");
               } catch {}
             }
             foreach(var num_var in numberNames) {
