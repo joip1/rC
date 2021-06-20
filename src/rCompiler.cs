@@ -102,6 +102,9 @@ namespace rC {
           current_line_index++;
           if (definers_to_replace.Count > 0) {
             for (int i = 0; i < definers_to_replace.Count; i++) {
+              if (definers_to_replace[i].Contains("*colon*")){
+                definers_to_replace[i] = definers_to_replace[i].Replace("*colon*", ":");
+              }
               if (line.Contains(definers_to_replace[i])) {
                 line = line.Replace(definers_to_replace[i], defined_to_replace[i]);
                 code[_index] = line;
@@ -283,6 +286,9 @@ namespace rC {
               strListValues[strListNames.IndexOf(listName)].RemoveAt(index);
             }
             foreach(var name in strNames) {
+              if(strValues[strNames.IndexOf(name)].Contains("*greater_than*")){
+                strValues[strNames.IndexOf(name)] = strValues[strNames.IndexOf(name)].Replace("*greater_than*", ">");
+              }
               if (name.ToLower().StartsWith(listName.ToLower() + ".add")) {
                 if (strListValues[strListNames.IndexOf(listName)].Contains(strValues[strNames.IndexOf(name)]) == false) {
                   strListValues[strListNames.IndexOf(listName)].Add(strValues[strNames.IndexOf(name)]);
@@ -356,6 +362,11 @@ namespace rC {
             if (defined_to_replace.Contains(line.Split(':')[1].Split('"')[1]) == false) {
               defined_to_replace.Add(line.Split(':')[1].Split('"')[1]);
             }
+            for(int i = 0;i<defined_to_replace.Count;i++){
+              if (defined_to_replace[i].Contains("*colon*")){
+                  defined_to_replace[i] = defined_to_replace[i].Replace("*colon*", ":");
+                }
+             } 
 
           }
           if (line.StartsWith("++")) {
