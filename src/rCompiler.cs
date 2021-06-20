@@ -139,7 +139,7 @@ namespace rC {
           }
           bool is_continue = false;
           foreach(var func_name in names_for_functions) {
-
+            //add(num x: 3;;num y:4)
             if (line.Contains(func_name + "(") && line.StartsWith(indent_if) == false && line.StartsWith("    ")==false) {
                 List < string > add_args = new List<string>();
                 if (line.Contains(func_name+"(")){
@@ -154,6 +154,10 @@ namespace rC {
                 }, StringSplitOptions.None)[1].Split(')')[0].Split(new [] {
                 ";;"
               }, StringSplitOptions.None).ToList();
+                }
+                for (int i = 0; i < add_args.Count; i++)
+                {
+                  add_args[i] = add_args[i].Replace(":", " >>");
                 }
               _Compile(add_args);
               if (strNames.Contains("return")) {
@@ -806,15 +810,19 @@ namespace rC {
 
                 if (line.Split('>').Last().ToLower().StartsWith("$read") == false) {
                   strNames.Add(line.Split(' ')[1].Split('>').First());
-                  if (line.Split('>')[2].Contains('"')) {
+                  if (line.Split('>')[2].Replace(" ", "")[0] == '"') {
                     strValues.Add(line.Split('>')[2].Split('\"')[1].Split('\"').First());
                   } else {
                     try {
-
+                
                       strValues.Add(strValues[strNames.IndexOf(line.Split('>')[2])]);
+                    
+                    } catch(Exception e) {
 
-                    } catch {
                       Console.WriteLine("Error: " + line);
+                      if(code.Contains("show_exceptions()")){
+                        Console.WriteLine(e);
+                      }
                     }
                   }
                 } else if (line.Split('>').Last().ToLower() == "$readkey") {
@@ -1340,12 +1348,10 @@ namespace rC {
               }
               Console.CursorTop = Convert.ToInt32(numberValues[numberNames.IndexOf("cursor_y")]);
             }
-            if (line == "exit(0)" || line=="exit()") {
+            if (line == "exit()") {
               Environment.Exit(0);
               continue;
-            }else if(line=="exit(1)") {
-				Environment.Exit(1);
-			} else if (line.StartsWith("screen_width >>")) {
+            } else if (line.StartsWith("screen_width >>")) {
               try {
                 numberValues[numberNames.IndexOf("screen_width")] = Convert.ToInt32(line.Split('>').Last());
               } catch {
