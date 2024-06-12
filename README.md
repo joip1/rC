@@ -7,7 +7,6 @@ bash requirements.sh
 bash install_linux.sh     
 ```
 
-Open Source Programming Language Created By Rodrigo Cabaço =) This is a free and totaly open source compiler with rC built-in. Feel free to use it!
 
 newest update:     
 Added a bunch of fixes;      
